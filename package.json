@@ -1,0 +1,10 @@
+{
+  "name": "fixgraph",
+  "private": true,
+  "scripts": {
+    "validate": "python scripts/validate_graph.py --all",
+    "simulate": "python scripts/simulate_paths.py --all",
+    "dev:backend": "cd backend && npm run start:dev",
+    "dev:frontend": "cd frontend && npm run dev"
+  }
+}
