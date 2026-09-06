@@ -1,0 +1,553 @@
+[
+  {
+    "chunk_id": "manual_Samsung_WashingMachine_OID84209_p45_c1",
+    "device_category": "Washing Machine",
+    "brand": "Samsung",
+    "model": "OID84209",
+    "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+    "page": 45,
+    "content": "If the washing machine does not start, verify the following checks and actions: Ensure the washing machine is plugged in. Ensure the door is properly closed. Ensure the water taps are open. Make sure to press Start/Pause to start the washing machine. Make sure Child Lock is not activated. Before the washing machine starts to fill, it will make a series of clicking noises to check the door lock and does a quick drain. Check the fuse or reset the circuit breaker.",
+    "embedding": null,
+    "metadata": {
+      "symptom": "Does not start",
+      "possible_cause": "Unplugged power, door open, water taps closed, Start/Pause not pressed, Child Lock activated, or blown fuse/circuit breaker.",
+      "solution": "1. Make sure the washing machine is plugged in.\n2. Make sure the door is properly closed.\n3. Make sure the water taps are open.\n4. Make sure to press Start/Pause to start the washing machine.\n5. Make sure Child Lock is not activated.\n6. Check the fuse or reset the circuit breaker.",
+      "severity": "medium",
+      "safety_warning": "Check the fuse or reset the circuit breaker.",
+      "difficulty": "easy"
+    },
+    "created_at": null
+  },
+  {
+    "chunk_id": "manual_Samsung_WashingMachine_OID84209_p45_c2",
+    "device_category": "Washing Machine",
+    "brand": "Samsung",
+    "model": "OID84209",
+    "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+    "page": 45,
+    "content": "If water supply is insufficient, or no water is supplied to the washing machine, check and perform the following actions: Fully open the water tap. Make sure the door is properly closed. Make sure the water supply hose is not frozen. Make sure the water supply hose is not kinked or clogged. Make sure there is sufficient water pressure.",
+    "embedding": null,
+    "metadata": {
+      "symptom": "Water supply is insufficient, or no water is supplied",
+      "possible_cause": "Water tap closed, door open, water supply hose frozen, kinked, or clogged, or insufficient water pressure.",
+      "solution": "1. Fully open the water tap.\n2. Make sure the door is properly closed.\n3. Make sure the water supply hose is not frozen.\n4. Make sure the water supply hose is not kinked or clogged.\n5. Make sure there is sufficient water pressure.",
+      "severity": "medium",
+      "safety_warning": null,
+      "difficulty": "easy"
+    },
+    "created_at": null
+  },
+  {
+    "chunk_id": "manual_Samsung_WashingMachine_OID84209_p45_c3",
+    "device_category": "Washing Machine",
+    "brand": "Samsung",
+    "model": "OID84209",
+    "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+    "page": 45,
+    "content": "If detergent remains in the detergent drawer after a cycle, take the following steps: Make sure the washing machine is running with sufficient water pressure. Make sure the detergent is added to the centre of the detergent drawer. Make sure the rinse cap is inserted properly. If using granular detergent, make sure the detergent selector is in the upper position. Remove the rinse cap and clean the detergent drawer.",
+    "embedding": null,
+    "metadata": {
+      "symptom": "After a cycle, detergent remains in the detergent drawer",
+      "possible_cause": "Insufficient water pressure, detergent placed incorrectly, rinse cap improperly inserted, incorrect granular detergent selector position, or dirty drawer/rinse cap.",
+      "solution": "1. Make sure the washing machine is running with sufficient water pressure.\n2. Make sure the detergent is added to the centre of the detergent drawer.\n3. Make sure the rinse cap is inserted properly.\n4. If using granular detergent, make sure the detergent selector is in the upper position.\n5. Remove the rinse cap and clean the detergent drawer.",
+      "severity": "low",
+      "safety_warning": null,
+      "difficulty": "easy"
+    },
+    "created_at": null
+  },
+  {
+    "chunk_id": "manual_Samsung_WashingMachine_OID84209_p45_c4",
+    "device_category": "Washing Machine",
+    "brand": "Samsung",
+    "model": "OID84209",
+    "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+    "page": 45,
+    "content": "If the washing machine experiences excessive vibrations or makes noise, check the following: Make sure the washing machine is installed on a level, solid floor that is not slippery. If the floor is not level, use the levelling feet to adjust the height of the washing machine. Make sure the shipping bolts are removed. Make sure the washing machine is not contacting any other object. Make sure the laundry load is balanced. The motor can cause noise during normal operation. Overalls or metal-decorated clothes can cause noise while being washed, which is normal. Metal objects such as coins can cause noise; after washing, remove these objects from the drum or filter case.",
+    "embedding": null,
+    "metadata": {
+      "symptom": "Excessive vibrations or makes noise",
+      "possible_cause": "Unlevel or slippery floor, unremoved shipping bolts, contact with other objects, unbalanced laundry load, normal motor operation, overalls or metal-decorated clothes, or loose metal objects like coins.",
+      "solution": "1. Make sure the washing machine is installed on a level, solid floor that is not slippery. If the floor is not level, use the levelling feet to adjust the height of the washing machine.\n2. Make sure the shipping bolts are removed.\n3. Make sure the washing machine is not contacting any other object.\n4. Make sure the laundry load is balanced.\n5. Remove metal objects such as coins from the drum or filter case after washing.",
+      "severity": "medium",
+      "safety_warning": null,
+      "difficulty": "easy"
+    },
+    "created_at": null
+  },
+  {
+    "chunk_id": "manual_Samsung_WashingMachine_OID84209_p46_c5",
+    "device_category": "Washing Machine",
+    "brand": "Samsung",
+    "model": "OID84209",
+    "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+    "page": 46,
+    "content": "If the washing machine does not drain and/or spin, follow these steps: Make sure the drain hose is straightened all the way to the drain system. If you encounter a drain restriction, call for service. Make sure the debris filter is not clogged. Close the door and press Start/Pause. For your safety, the washing machine will not tumble or spin unless the door is closed. Make sure the drain hose is not frozen or clogged. Make sure the drain hose is connected to a drain system that is not clogged. If the washing machine is not supplied with sufficient power, the washing machine temporarily will not drain or spin. As soon as the washing machine regains sufficient power, it will operate normally.",
+    "embedding": null,
+    "metadata": {
+      "symptom": "Does not drain and/ or spin",
+      "possible_cause": "Drain restriction, clogged debris filter, open door, frozen or clogged drain hose, clogged drain system, or insufficient power supply.",
+      "solution": "1. Make sure the drain hose is straightened all the way to the drain system. If you encounter a drain restriction, call for service.\n2. Make sure the debris filter is not clogged.\n3. Close the door and press Start/Pause.\n4. Make sure the drain hose is not frozen or clogged.\n5. Make sure the drain hose is connected to a drain system that is not clogged.",
+      "severity": "medium",
+      "safety_warning": "For your safety, the washing machine will not tumble or spin unless the door is closed.",
+      "difficulty": "medium"
+    },
+    "created_at": null
+  },
+  {
+    "chunk_id": "manual_Samsung_WashingMachine_OID84209_p46_c6",
+    "device_category": "Washing Machine",
+    "brand": "Samsung",
+    "model": "OID84209",
+    "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+    "page": 46,
+    "content": "If spinning does not work on the washing machine, check the following steps: Make sure laundry is spread out evenly in the drum. Make sure the washing machine is placed on a flat, stable surface.",
+    "embedding": null,
+    "metadata": {
+      "symptom": "Spinning does not work",
+      "possible_cause": "Unevenly spread laundry or unstable surface.",
+      "solution": "1. Make sure laundry is spread out evenly.\n2. Make sure the washing machine is on a flat, stable surface.",
+      "severity": "medium",
+      "safety_warning": null,
+      "difficulty": "easy"
+    },
+    "created_at": null
+  },
+  {
+    "chunk_id": "manual_Samsung_WashingMachine_OID84209_p46_c7",
+    "device_category": "Washing Machine",
+    "brand": "Samsung",
+    "model": "OID84209",
+    "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+    "page": 46,
+    "content": "If the door does not open on the washing machine, take the following steps: Press Start/Pause to stop the washing machine. It may take a few moments for the door lock mechanism to disengage. Make sure all the water in the drum is drained. The door may not open if water remains in the drum; drain the drum and open the door manually. Make sure the door lock light is off, which turns off after the washing machine has drained.",
+    "embedding": null,
+    "metadata": {
+      "symptom": "The door does not open",
+      "possible_cause": "Active door lock mechanism, water remaining in the drum, or door lock light is on.",
+      "solution": "1. Press Start/Pause to stop the washing machine.\n2. Allow a few moments for the door lock mechanism to disengage.\n3. Make sure all water in the drum is drained; drain the drum and open the door manually if water remains.\n4. Make sure the door lock light is off.",
+      "severity": "medium",
+      "safety_warning": null,
+      "difficulty": "easy"
+    },
+    "created_at": null
+  },
+  {
+    "chunk_id": "manual_Samsung_WashingMachine_OID84209_p46_c8",
+    "device_category": "Washing Machine",
+    "brand": "Samsung",
+    "model": "OID84209",
+    "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+    "page": 46,
+    "content": "If excessive suds occur during a wash cycle, perform the following troubleshooting steps: Make sure you use the recommended types of detergent as appropriate. Use high efficiency (HE) detergent to prevent oversudsing. Reduce the detergent amount for soft water, small loads, or lightly soiled loads. Non-HE detergent is not recommended.",
+    "embedding": null,
+    "metadata": {
+      "symptom": "Excessive suds",
+      "possible_cause": "Use of non-HE detergent or excessive detergent for soft water, small loads, or lightly soiled loads.",
+      "solution": "1. Make sure you use the recommended types of detergent as appropriate.\n2. Use high efficiency (HE) detergent to prevent oversudsing.\n3. Reduce the detergent amount for soft water, small loads, or lightly soiled loads.",
+      "severity": "low",
+      "safety_warning": null,
+      "difficulty": "easy"
+    },
+    "created_at": null
+  },
+  {
+    "chunk_id": "manual_Samsung_WashingMachine_OID84209_p46_c9",
+    "device_category": "Washing Machine",
+    "brand": "Samsung",
+    "model": "OID84209",
+    "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+    "page": 46,
+    "content": "If you cannot apply additional detergent, perform this check: Make sure the remaining amount of detergent and fabric softener is not over the limit.",
+    "embedding": null,
+    "metadata": {
+      "symptom": "Cannot apply additional detergent",
+      "possible_cause": "Remaining amount of detergent and fabric softener is over the limit.",
+      "solution": "1. Make sure the remaining amount of detergent and fabric softener is not over the limit.",
+      "severity": "low",
+      "safety_warning": null,
+      "difficulty": "easy"
+    },
+    "created_at": null
+  },
+  {
+    "chunk_id": "manual_Samsung_WashingMachine_OID84209_p46_c10",
+    "device_category": "Washing Machine",
+    "brand": "Samsung",
+    "model": "OID84209",
+    "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+    "page": 46,
+    "content": "If the washing machine stops during operation, check the following troubleshooting actions: Plug the power cord into a live electrical outlet. Check the fuse or reset the circuit breaker. Close the door and press the Start/Pause button to start the washing machine. For your safety, the washing machine will not tumble or spin unless the door is closed. Before the washing machine starts to fill, it will make a series of clicking noises to check the door lock and does a quick drain. There may be a pause or soak period in the cycle; wait briefly and the washing machine may start. Make sure the mesh filter of the water supply hose at the water taps are not clogged and clean it periodically. If the washing machine is not supplied with sufficient power, the washing machine temporarily will not drain or spin; as soon as it regains sufficient power, it will operate normally.",
+    "embedding": null,
+    "metadata": {
+      "symptom": "Stops",
+      "possible_cause": "Unplugged power cord, blown fuse/tripped circuit breaker, open door, pause or soak period in cycle, clogged mesh filter at water taps, or insufficient power supply.",
+      "solution": "1. Plug the power cord into a live electrical outlet.\n2. Check the fuse or reset the circuit breaker.\n3. Close the door and press the Start/Pause button to start the washing machine.\n4. Wait briefly if the cycle is in a pause or soak period.\n5. Check and clean the mesh filter of the water supply hose at the water taps periodically.",
+      "severity": "medium",
+      "safety_warning": "Plug the power cord into a live electrical outlet. Check the fuse or reset the circuit breaker. For your safety, the washing machine will not tumble or spin unless the door is closed.",
+      "difficulty": "easy"
+    },
+    "created_at": null
+  },
+  {
+    "chunk_id": "manual_Samsung_WashingMachine_OID84209_p47_c11",
+    "device_category": "Washing Machine",
+    "brand": "Samsung",
+    "model": "OID84209",
+    "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+    "page": 47,
+    "content": "If the washing machine fills with the wrong water temperature, take the following actions: Fully open both taps. Make sure the temperature selection is correct. Make sure the hoses are connected to the correct taps and flush water lines. Make sure the water heater is set to supply a minimum 120 °F (49 °C) hot water at the tap, and check the water heater capacity and recovery rate. Disconnect the hoses and clean the mesh filter as it may be clogged. While the washing machine fills, the water temperature may change as the automatic temperature control feature checks incoming water temperature. While the washing machine fills, you may notice just hot and/or just cold water going through the dispenser when cold or warm temperatures are selected; this is a normal function of the automatic temperature control feature.",
+    "embedding": null,
+    "metadata": {
+      "symptom": "Fills with the wrong water temperature",
+      "possible_cause": "Taps not fully open, incorrect temperature selection, hoses connected to wrong taps, water heater set below 120 °F (49 °C), clogged mesh filter, or normal operation of automatic temperature control.",
+      "solution": "1. Fully open both taps.\n2. Make sure the temperature selection is correct.\n3. Make sure the hoses are connected to the correct taps and flush water lines.\n4. Make sure the water heater is set to supply a minimum 120 °F (49 °C) hot water at the tap. Also, check the water heater capacity and recovery rate.\n5. Disconnect the hoses and clean the mesh filter.",
+      "severity": "low",
+      "safety_warning": "Make sure the water heater is set to supply a minimum 120 °F (49 °C) hot water at the tap.",
+      "difficulty": "medium"
+    },
+    "created_at": null
+  },
+  {
+    "chunk_id": "manual_Samsung_WashingMachine_OID84209_p47_c12",
+    "device_category": "Washing Machine",
+    "brand": "Samsung",
+    "model": "OID84209",
+    "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+    "page": 47,
+    "content": "If the load is wet at the end of a cycle, check and perform the following troubleshooting steps: Use the High or Extra High spin speed. Use high efficiency (HE) detergent to reduce oversudsing. If the load is too small (one or two items), it may become unbalanced and not spin completely. Make sure the drain hose is not kinked or clogged.",
+    "embedding": null,
+    "metadata": {
+      "symptom": "Load is wet at the end of a cycle",
+      "possible_cause": "Low spin speed setting, oversudsing from non-HE detergent, small load becoming unbalanced, or kinked/clogged drain hose.",
+      "solution": "1. Use the High or Extra High spin speed.\n2. Use high efficiency (HE) detergent to reduce oversudsing.\n3. Avoid small loads (one or two items) that may become unbalanced.\n4. Make sure the drain hose is not kinked or clogged.",
+      "severity": "low",
+      "safety_warning": null,
+      "difficulty": "easy"
+    },
+    "created_at": null
+  },
+  {
+    "chunk_id": "manual_Samsung_WashingMachine_OID84209_p47_c13",
+    "device_category": "Washing Machine",
+    "brand": "Samsung",
+    "model": "OID84209",
+    "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+    "page": 47,
+    "content": "If the washing machine leaks water, follow these checks and actions: Make sure the door is properly closed. Make sure all hose connections are tight. Make sure the end of the drain hose is correctly inserted and secured to the drain system. Avoid overloading. Use high efficiency (HE) detergent to prevent oversudsing. Check if there is something stuck between the door and the diaphragm; if something is stuck between the door and the diaphragm, it may cause a leak or damage to the diaphragm.",
+    "embedding": null,
+    "metadata": {
+      "symptom": "Leaks water",
+      "possible_cause": "Door not properly closed, loose hose connections, drain hose improperly inserted/secured, overloading, oversudsing, or object stuck between door and diaphragm.",
+      "solution": "1. Make sure the door is properly closed.\n2. Make sure all hose connections are tight.\n3. Make sure the end of the drain hose is correctly inserted and secured to the drain system.\n4. Avoid overloading.\n5. Use high efficiency (HE) detergent to prevent oversudsing.\n6. Check if there is something stuck between the door and the diaphragm and remove it.",
+      "severity": "medium",
+      "safety_warning": null,
+      "difficulty": "easy"
+    },
+    "created_at": null
+  },
+  {
+    "chunk_id": "manual_Samsung_WashingMachine_OID84209_p47_c14",
+    "device_category": "Washing Machine",
+    "brand": "Samsung",
+    "model": "OID84209",
+    "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+    "page": 47,
+    "content": "If the washing machine has odours, follow these cleaning steps: Excessive suds collect in recesses and can cause foul odours. Run cleansing cycles to sanitize periodically. Clean the door seal (diaphragm). Dry the washing machine interior after a cycle has finished.",
+    "embedding": null,
+    "metadata": {
+      "symptom": "Has odours",
+      "possible_cause": "Excessive suds collecting in recesses.",
+      "solution": "1. Run cleansing cycles to sanitize periodically.\n2. Clean the door seal (diaphragm).\n3. Dry the washing machine interior after a cycle has finished.",
+      "severity": "low",
+      "safety_warning": null,
+      "difficulty": "easy"
+    },
+    "created_at": null
+  },
+  {
+    "chunk_id": "manual_Samsung_WashingMachine_OID84209_p47_c15",
+    "device_category": "Washing Machine",
+    "brand": "Samsung",
+    "model": "OID84209",
+    "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+    "page": 47,
+    "content": "If no bubbles are seen in Bubble models, consider the following information: Overloading may screen bubbles. Severely contaminated laundry may not generate bubbles.",
+    "embedding": null,
+    "metadata": {
+      "symptom": "No bubbles are seen (Bubble models only)",
+      "possible_cause": "Overloading or severely contaminated laundry.",
+      "solution": "1. Avoid overloading the washing machine.\n2. Note that severely contaminated laundry may inherently not generate bubbles.",
+      "severity": "low",
+      "safety_warning": null,
+      "difficulty": "easy"
+    },
+    "created_at": null
+  },
+  {
+    "chunk_id": "manual_Samsung_WashingMachine_OID84209_p47_c16",
+    "device_category": "Washing Machine",
+    "brand": "Samsung",
+    "model": "OID84209",
+    "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+    "page": 47,
+    "content": "If there is an increased time of washing, note that the actual washing time may differ from the estimated time initially displayed on the control panel upon cycle selection.",
+    "embedding": null,
+    "metadata": {
+      "symptom": "Increased time of washing",
+      "possible_cause": "Normal operational difference between actual washing time and initial estimated display time.",
+      "solution": "1. Note that actual washing time may naturally differ from the initial estimated display time.",
+      "severity": "low",
+      "safety_warning": null,
+      "difficulty": "easy"
+    },
+    "created_at": null
+  },
+  {
+    "chunk_id": "manual_Samsung_WashingMachine_OID84209_p48_c17",
+    "device_category": "Washing Machine",
+    "brand": "Samsung",
+    "model": "OID84209",
+    "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+    "page": 48,
+    "content": "If there are stains on the clothes after washing, follow these guidelines: Do not pour fabric softener directly onto your clothes. Applying it directly to clothing can leave stains (for example, oily spots or ingrained dirt) that might be difficult to remove. If a problem persists, contact a service center; the number of the service center is on the label attached to the product.",
+    "embedding": null,
+    "metadata": {
+      "symptom": "Stains on the clothes",
+      "possible_cause": "Pouring fabric softener directly onto clothing.",
+      "solution": "1. Do not pour fabric softener directly onto your clothes.\n2. If the problem persists, contact a service center using the number on the product label.",
+      "severity": "low",
+      "safety_warning": null,
+      "difficulty": "easy"
+    },
+    "created_at": null
+  },
+  {
+    "chunk_id": "manual_Samsung_WashingMachine_OID84209_p48_c18",
+    "device_category": "Washing Machine",
+    "brand": "Samsung",
+    "model": "OID84209",
+    "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+    "page": 48,
+    "content": "When information code 4C is displayed on the screen, water is not supplied. Follow these suggestions: Make sure the water taps are open. Make sure the water hoses are not clogged. Make sure the water taps are not frozen. Make sure the washing machine is running with sufficient water pressure. Make sure that the cold water tap and the hot water tap are properly connected. Clean the mesh filter as it may be clogged.",
+    "embedding": null,
+    "metadata": {
+      "symptom": "Information code 4C - Water is not supplied",
+      "possible_cause": "Closed water taps, clogged or frozen water hoses, insufficient water pressure, improperly connected hot/cold taps, or clogged mesh filter.",
+      "solution": "1. Make sure the water taps are open.\n2. Make sure the water hoses are not clogged.\n3. Make sure the water taps are not frozen.\n4. Make sure the washing machine is running with sufficient water pressure.\n5. Make sure that the cold water tap and the hot water tap are properly connected.\n6. Clean the mesh filter as it may be clogged.",
+      "severity": "medium",
+      "safety_warning": null,
+      "difficulty": "easy"
+    },
+    "created_at": null
+  },
+  {
+    "chunk_id": "manual_Samsung_WashingMachine_OID84209_p48_c19",
+    "device_category": "Washing Machine",
+    "brand": "Samsung",
+    "model": "OID84209",
+    "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+    "page": 48,
+    "content": "When information code 5C is displayed on the screen, water is not draining. Follow these suggestions: Make sure the drain hose is not frozen or clogged. Make sure the drain hose is positioned correctly, depending on the connection type. Clean the debris filter as it may be clogged. Make sure the drain hose is straightened all the way to the drain system. If the information code remains, contact a customer service centre.",
+    "embedding": null,
+    "metadata": {
+      "symptom": "Information code 5C - Water is not draining",
+      "possible_cause": "Frozen, clogged, or incorrectly positioned drain hose, clogged debris filter, or drain hose not fully straightened.",
+      "solution": "1. Make sure the drain hose is not frozen or clogged.\n2. Make sure the drain hose is positioned correctly, depending on the connection type.\n3. Clean the debris filter as it may be clogged.\n4. Make sure the drain hose is straightened all the way to the drain system.\n5. If the information code remains, contact a customer service centre.",
+      "severity": "medium",
+      "safety_warning": null,
+      "difficulty": "easy"
+    },
+    "created_at": null
+  },
+  {
+    "chunk_id": "manual_Samsung_WashingMachine_OID84209_p48_c20",
+    "device_category": "Washing Machine",
+    "brand": "Samsung",
+    "model": "OID84209",
+    "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+    "page": 48,
+    "content": "When information code dC is displayed on the screen, the washing machine is operating with the door open. Take these actions: Make sure the door is properly closed. Make sure laundry is not caught in the door.",
+    "embedding": null,
+    "metadata": {
+      "symptom": "Information code dC - Operating the washing machine with the door open",
+      "possible_cause": "Door not properly closed or laundry caught in the door.",
+      "solution": "1. Make sure the door is properly closed.\n2. Make sure laundry is not caught in the door.",
+      "severity": "medium",
+      "safety_warning": null,
+      "difficulty": "easy"
+    },
+    "created_at": null
+  },
+  {
+    "chunk_id": "manual_Samsung_WashingMachine_OID84209_p48_c21",
+    "device_category": "Washing Machine",
+    "brand": "Samsung",
+    "model": "OID84209",
+    "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+    "page": 48,
+    "content": "When information code dC1 is displayed on the screen, the door cannot be locked. Try these suggestions: Make sure the door is properly closed. Turn off the washing machine, and then turn it on again. If the information code remains, contact a customer service centre.",
+    "embedding": null,
+    "metadata": {
+      "symptom": "Information code dC1 - Door cannot be locked",
+      "possible_cause": "Door not properly closed or door lock failure.",
+      "solution": "1. Make sure the door is properly closed.\n2. Turn off the washing machine, and then turn it on again.\n3. If the information code remains, contact a customer service centre.",
+      "severity": "medium",
+      "safety_warning": null,
+      "difficulty": "easy"
+    },
+    "created_at": null
+  },
+  {
+    "chunk_id": "manual_Samsung_WashingMachine_OID84209_p48_c22",
+    "device_category": "Washing Machine",
+    "brand": "Samsung",
+    "model": "OID84209",
+    "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+    "page": 48,
+    "content": "When information code OC is displayed on the screen, water has overflowed. Take these actions: Restart after spinning. If the information code remains on the display, contact a local Samsung service centre.",
+    "embedding": null,
+    "metadata": {
+      "symptom": "Information code OC - Water is overflowed",
+      "possible_cause": "Water overflow.",
+      "solution": "1. Restart after spinning.\n2. If the information code remains on the display, contact a local Samsung service centre.",
+      "severity": "high",
+      "safety_warning": null,
+      "difficulty": "medium"
+    },
+    "created_at": null
+  },
+  {
+    "chunk_id": "manual_Samsung_WashingMachine_OID84209_p48_c23",
+    "device_category": "Washing Machine",
+    "brand": "Samsung",
+    "model": "OID84209",
+    "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+    "page": 48,
+    "content": "When information code LC is displayed on the screen, check the drain hose. Follow these steps: Make sure the end of the drain hose is not placed on the floor. Make sure the drain hose is not clogged. If the information code remains, contact a customer service centre.",
+    "embedding": null,
+    "metadata": {
+      "symptom": "Information code LC - Check the drain hose",
+      "possible_cause": "Drain hose end placed on the floor or drain hose clogged.",
+      "solution": "1. Make sure the end of the drain hose is not placed on the floor.\n2. Make sure the drain hose is not clogged.\n3. If the information code remains, contact a customer service centre.",
+      "severity": "medium",
+      "safety_warning": null,
+      "difficulty": "easy"
+    },
+    "created_at": null
+  },
+  {
+    "chunk_id": "manual_Samsung_WashingMachine_OID84209_p48_c24",
+    "device_category": "Washing Machine",
+    "brand": "Samsung",
+    "model": "OID84209",
+    "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+    "page": 48,
+    "content": "When information code 3C is displayed on the screen, check the motor for operation. Try these actions: Try restarting the cycle. If the information code remains, contact a customer service centre.",
+    "embedding": null,
+    "metadata": {
+      "symptom": "Information code 3C - Check the motor for operation",
+      "possible_cause": "Motor operation failure.",
+      "solution": "1. Try restarting the cycle.\n2. If the information code remains, contact a customer service centre.",
+      "severity": "high",
+      "safety_warning": null,
+      "difficulty": "medium"
+    },
+    "created_at": null
+  },
+  {
+    "chunk_id": "manual_Samsung_WashingMachine_OID84209_p48_c25",
+    "device_category": "Washing Machine",
+    "brand": "Samsung",
+    "model": "OID84209",
+    "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+    "page": 48,
+    "content": "When information code TC1 is displayed on the screen, the water heating temperature sensor needs to be checked. Action required: If the information code remains, contact a customer service centre.",
+    "embedding": null,
+    "metadata": {
+      "symptom": "Information code TC1 - Water heating temperature sensor needs to be checked",
+      "possible_cause": "Water heating temperature sensor issue.",
+      "solution": "1. If the information code remains, contact a customer service centre.",
+      "severity": "high",
+      "safety_warning": "Water heating temperature sensor needs to be checked.",
+      "difficulty": "hard"
+    },
+    "created_at": null
+  },
+  {
+    "chunk_id": "manual_Samsung_WashingMachine_OID84209_p50_c26",
+    "device_category": "Washing Machine",
+    "brand": "Samsung",
+    "model": "OID84209",
+    "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+    "page": 50,
+    "content": "When information code HC is displayed on the screen, perform a high temperature heating check. Action required: If the information code remains, contact a customer service centre.",
+    "embedding": null,
+    "metadata": {
+      "symptom": "Information code HC - High temperature heating check",
+      "possible_cause": "High temperature heating issue.",
+      "solution": "1. If the information code remains, contact a customer service centre.",
+      "severity": "high",
+      "safety_warning": "High temperature heating check.",
+      "difficulty": "hard"
+    },
+    "created_at": null
+  },
+  {
+    "chunk_id": "manual_Samsung_WashingMachine_OID84209_p50_c27",
+    "device_category": "Washing Machine",
+    "brand": "Samsung",
+    "model": "OID84209",
+    "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+    "page": 50,
+    "content": "When information code 1C is displayed on the screen, the Water Level sensor is not working properly. Follow these actions: Try power off and restarting the cycle. If the information code remains, contact a customer service centre.",
+    "embedding": null,
+    "metadata": {
+      "symptom": "Information code 1C - The Water Level sensor is not working properly",
+      "possible_cause": "Water Level sensor malfunction.",
+      "solution": "1. Try power off and restarting the cycle.\n2. If the information code remains, contact a customer service centre.",
+      "severity": "high",
+      "safety_warning": null,
+      "difficulty": "medium"
+    },
+    "created_at": null
+  },
+  {
+    "chunk_id": "manual_Samsung_WashingMachine_OID84209_p50_c28",
+    "device_category": "Washing Machine",
+    "brand": "Samsung",
+    "model": "OID84209",
+    "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+    "page": 50,
+    "content": "When information code AC is displayed on the screen, check communications between main and sub PBAs. Take these actions: Try power off and restarting the cycle. If the information code remains, contact a customer service centre.",
+    "embedding": null,
+    "metadata": {
+      "symptom": "Information code AC - Check communications between main and sub PBAs",
+      "possible_cause": "Communication failure between main and sub PBAs.",
+      "solution": "1. Try power off and restarting the cycle.\n2. If the information code remains, contact a customer service centre.",
+      "severity": "high",
+      "safety_warning": null,
+      "difficulty": "medium"
+    },
+    "created_at": null
+  },
+  {
+    "chunk_id": "manual_Samsung_WashingMachine_OID84209_p50_c29",
+    "device_category": "Washing Machine",
+    "brand": "Samsung",
+    "model": "OID84209",
+    "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+    "page": 50,
+    "content": "When information code AC6 is displayed on the screen, perform an inverter communication check. Action required: If the information code remains, contact a customer service centre. Note that if any information code keeps appearing on the screen, contact a local Samsung service centre.",
+    "embedding": null,
+    "metadata": {
+      "symptom": "Information code AC6 - Inverter communication check",
+      "possible_cause": "Inverter communication issue.",
+      "solution": "1. If the information code remains, contact a customer service centre.",
+      "severity": "high",
+      "safety_warning": null,
+      "difficulty": "hard"
+    },
+    "created_at": null
+  }
+]

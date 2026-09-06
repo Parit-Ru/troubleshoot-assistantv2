@@ -1,0 +1,28 @@
+{
+  "embedding_model": "paraphrase-multilingual-MiniLM-L12-v2",
+  "labels": [
+    "checkpoint",
+    "escalation",
+    "instruction",
+    "resolution"
+  ],
+  "excluded_labels": [
+    "input"
+  ],
+  "excluded_reason": "'input' type มีเพียง 1 ตัวอย่าง ไม่พอสำหรับ stratified k-fold CV",
+  "n_splits_cv": 5,
+  "cv_accuracy_mean": 0.8198830409356725,
+  "cv_accuracy_std": 0.07770519411402614,
+  "cv_accuracy_per_fold": [
+    0.8421052631578947,
+    0.7894736842105263,
+    0.6842105263157895,
+    0.8947368421052632,
+    0.8888888888888888
+  ],
+  "baseline_accuracy": 0.43617021276595747,
+  "tfidf_cv_accuracy_mean": 0.6590643274853801,
+  "training_data_count": 94,
+  "sklearn_version": "1.6.1",
+  "sentence_transformers_version": "5.4.1"
+}

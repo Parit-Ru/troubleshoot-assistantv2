@@ -10,3 +10,12 @@ __pycache__/
 
 .DS_Store
 *.log
+
+# Python virtual environment
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]

@@ -1,0 +1,3803 @@
+{
+  "schema_version": 2,
+  "manual_id": "samsung_oid84209",
+  "device_category": "Washing Machine",
+  "brand": "Samsung",
+  "model_pattern": "OID84209",
+  "source_manual": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+  "generated_by": "convert_with_classifier.py",
+  "classifier_model": "paraphrase-multilingual-MiniLM-L12-v2",
+  "classifier_cv_accuracy": 0.8198830409356725,
+  "confidence_threshold": 0.6,
+  "review_status": "pending_manual_review",
+  "count": 29,
+  "graphs": [
+    {
+      "schema_version": 2,
+      "graph_id": "oid84209_start",
+      "device_category": "Washing Machine",
+      "brand": "Samsung",
+      "model_pattern": "OID84209",
+      "entry_symptom": "Does not start",
+      "entry_symptom_th": "",
+      "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+      "page_range": [
+        45,
+        45
+      ],
+      "source_chunk_id": "manual_Samsung_WashingMachine_OID84209_p45_c1",
+      "severity": "medium",
+      "difficulty": "easy",
+      "possible_cause": "Unplugged power, door open, water taps closed, Start/Pause not pressed, Child Lock activated, or blown fuse/circuit breaker.",
+      "generated_by": "convert_with_classifier.py",
+      "review_status": "pending_manual_review",
+      "conversion_notes": [
+        "โมเดลจำแนกขั้นตอน 1 รายการ ว่าไม่ใช่ instruction ผู้พัฒนาควรตรวจสอบความเหมาะสม"
+      ],
+      "classification_log": [
+        {
+          "text": "Make sure the washing machine is plugged in.",
+          "predicted_type": "instruction",
+          "confidence": 0.8924,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Does not start"
+        },
+        {
+          "text": "Make sure the door is properly closed.",
+          "predicted_type": "checkpoint",
+          "confidence": 0.671,
+          "accepted": true,
+          "final_type": "checkpoint",
+          "graph_symptom": "Does not start"
+        },
+        {
+          "text": "Make sure the water taps are open.",
+          "predicted_type": "instruction",
+          "confidence": 0.8698,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Does not start"
+        },
+        {
+          "text": "Make sure to press Start/Pause to start the washing machine.",
+          "predicted_type": "instruction",
+          "confidence": 0.899,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Does not start"
+        },
+        {
+          "text": "Make sure Child Lock is not activated.",
+          "predicted_type": "instruction",
+          "confidence": 0.8876,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Does not start"
+        },
+        {
+          "text": "Check the fuse or reset the circuit breaker.",
+          "predicted_type": "instruction",
+          "confidence": 0.7417,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Does not start"
+        }
+      ],
+      "entry_node": "n1",
+      "nodes": [
+        {
+          "node_id": "n1",
+          "type": "checkpoint",
+          "question": "อาการที่พบตรงกับ \"Does not start\" ใช่หรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดยืนยันอาการ สร้างโดยสคริปต์แปลง ไม่ได้มาจากคู่มือโดยตรง",
+          "on_yes": "s1",
+          "on_no": "n_escalate_mismatch"
+        },
+        {
+          "node_id": "s1",
+          "type": "instruction",
+          "content": "Make sure the washing machine is plugged in.",
+          "safety_critical": false,
+          "next": "c1"
+        },
+        {
+          "node_id": "c1",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s2"
+        },
+        {
+          "node_id": "s2",
+          "type": "instruction",
+          "content": "Make sure the door is properly closed.",
+          "safety_critical": false,
+          "next": "c2"
+        },
+        {
+          "node_id": "c2",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s3"
+        },
+        {
+          "node_id": "s3",
+          "type": "instruction",
+          "content": "Make sure the water taps are open.",
+          "safety_critical": false,
+          "next": "c3"
+        },
+        {
+          "node_id": "c3",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s4"
+        },
+        {
+          "node_id": "s4",
+          "type": "instruction",
+          "content": "Make sure to press Start/Pause to start the washing machine.",
+          "safety_critical": false,
+          "next": "c4"
+        },
+        {
+          "node_id": "c4",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s5"
+        },
+        {
+          "node_id": "s5",
+          "type": "instruction",
+          "content": "Make sure Child Lock is not activated.",
+          "safety_critical": false,
+          "next": "c5"
+        },
+        {
+          "node_id": "c5",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s6"
+        },
+        {
+          "node_id": "s6",
+          "type": "instruction",
+          "content": "Check the fuse or reset the circuit breaker.",
+          "safety_critical": true,
+          "next": "c6",
+          "safety_warning": "Check the fuse or reset the circuit breaker.",
+          "author_note": "safety_warning จับคู่กับขั้นตอนนี้โดยสคริปต์ ผู้พัฒนาต้องตรวจสอบอีกครั้ง"
+        },
+        {
+          "node_id": "c6",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "n_escalate"
+        },
+        {
+          "node_id": "n_resolved",
+          "type": "resolution",
+          "content": "ปัญหา \"Does not start\" ได้รับการแก้ไขเรียบร้อยแล้ว",
+          "outcome_kind": "user_fixed"
+        },
+        {
+          "node_id": "n_escalate",
+          "type": "escalation",
+          "content": "ดำเนินการตามขั้นตอนในคู่มือครบทุกข้อแล้วแต่ยังไม่สามารถแก้ปัญหาได้ แนะนำให้ติดต่อศูนย์บริการ Samsung พร้อมแจ้งรุ่นเครื่อง อาการที่พบ และขั้นตอนที่ได้ลองทำไปแล้ว",
+          "outcome_kind": "handoff_unknown"
+        },
+        {
+          "node_id": "n_escalate_mismatch",
+          "type": "escalation",
+          "content": "อาการที่พบไม่ตรงกับหัวข้อนี้ในคู่มือ แนะนำให้ตรวจสอบอาการอีกครั้ง หรือติดต่อศูนย์บริการ Samsung พร้อมอธิบายอาการที่พบโดยละเอียด",
+          "outcome_kind": "handoff_unknown"
+        }
+      ]
+    },
+    {
+      "schema_version": 2,
+      "graph_id": "oid84209_water_supply_insufficient_no_water_supplied",
+      "device_category": "Washing Machine",
+      "brand": "Samsung",
+      "model_pattern": "OID84209",
+      "entry_symptom": "Water supply is insufficient, or no water is supplied",
+      "entry_symptom_th": "",
+      "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+      "page_range": [
+        45,
+        45
+      ],
+      "source_chunk_id": "manual_Samsung_WashingMachine_OID84209_p45_c2",
+      "severity": "medium",
+      "difficulty": "easy",
+      "possible_cause": "Water tap closed, door open, water supply hose frozen, kinked, or clogged, or insufficient water pressure.",
+      "generated_by": "convert_with_classifier.py",
+      "review_status": "pending_manual_review",
+      "conversion_notes": [
+        "โมเดลจำแนกขั้นตอน 1 รายการ ว่าไม่ใช่ instruction ผู้พัฒนาควรตรวจสอบความเหมาะสม"
+      ],
+      "classification_log": [
+        {
+          "text": "Fully open the water tap.",
+          "predicted_type": "instruction",
+          "confidence": 0.9246,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Water supply is insufficient, or no water is supplied"
+        },
+        {
+          "text": "Make sure the door is properly closed.",
+          "predicted_type": "checkpoint",
+          "confidence": 0.671,
+          "accepted": true,
+          "final_type": "checkpoint",
+          "graph_symptom": "Water supply is insufficient, or no water is supplied"
+        },
+        {
+          "text": "Make sure the water supply hose is not frozen.",
+          "predicted_type": "instruction",
+          "confidence": 0.8318,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Water supply is insufficient, or no water is supplied"
+        },
+        {
+          "text": "Make sure the water supply hose is not kinked or clogged.",
+          "predicted_type": "instruction",
+          "confidence": 0.812,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Water supply is insufficient, or no water is supplied"
+        },
+        {
+          "text": "Make sure there is sufficient water pressure.",
+          "predicted_type": "resolution",
+          "confidence": 0.4994,
+          "accepted": false,
+          "final_type": "instruction",
+          "graph_symptom": "Water supply is insufficient, or no water is supplied"
+        }
+      ],
+      "entry_node": "n1",
+      "nodes": [
+        {
+          "node_id": "n1",
+          "type": "checkpoint",
+          "question": "อาการที่พบตรงกับ \"Water supply is insufficient, or no water is supplied\" ใช่หรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดยืนยันอาการ สร้างโดยสคริปต์แปลง ไม่ได้มาจากคู่มือโดยตรง",
+          "on_yes": "s1",
+          "on_no": "n_escalate_mismatch"
+        },
+        {
+          "node_id": "s1",
+          "type": "instruction",
+          "content": "Fully open the water tap.",
+          "safety_critical": false,
+          "next": "c1"
+        },
+        {
+          "node_id": "c1",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s2"
+        },
+        {
+          "node_id": "s2",
+          "type": "instruction",
+          "content": "Make sure the door is properly closed.",
+          "safety_critical": false,
+          "next": "c2"
+        },
+        {
+          "node_id": "c2",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s3"
+        },
+        {
+          "node_id": "s3",
+          "type": "instruction",
+          "content": "Make sure the water supply hose is not frozen.",
+          "safety_critical": false,
+          "next": "c3"
+        },
+        {
+          "node_id": "c3",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s4"
+        },
+        {
+          "node_id": "s4",
+          "type": "instruction",
+          "content": "Make sure the water supply hose is not kinked or clogged.",
+          "safety_critical": false,
+          "next": "c4"
+        },
+        {
+          "node_id": "c4",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s5"
+        },
+        {
+          "node_id": "s5",
+          "type": "instruction",
+          "content": "Make sure there is sufficient water pressure.",
+          "safety_critical": false,
+          "next": "c5"
+        },
+        {
+          "node_id": "c5",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "n_escalate"
+        },
+        {
+          "node_id": "n_resolved",
+          "type": "resolution",
+          "content": "ปัญหา \"Water supply is insufficient, or no water is supplied\" ได้รับการแก้ไขเรียบร้อยแล้ว",
+          "outcome_kind": "user_fixed"
+        },
+        {
+          "node_id": "n_escalate",
+          "type": "escalation",
+          "content": "ดำเนินการตามขั้นตอนในคู่มือครบทุกข้อแล้วแต่ยังไม่สามารถแก้ปัญหาได้ แนะนำให้ติดต่อศูนย์บริการ Samsung พร้อมแจ้งรุ่นเครื่อง อาการที่พบ และขั้นตอนที่ได้ลองทำไปแล้ว",
+          "outcome_kind": "handoff_unknown"
+        },
+        {
+          "node_id": "n_escalate_mismatch",
+          "type": "escalation",
+          "content": "อาการที่พบไม่ตรงกับหัวข้อนี้ในคู่มือ แนะนำให้ตรวจสอบอาการอีกครั้ง หรือติดต่อศูนย์บริการ Samsung พร้อมอธิบายอาการที่พบโดยละเอียด",
+          "outcome_kind": "handoff_unknown"
+        }
+      ]
+    },
+    {
+      "schema_version": 2,
+      "graph_id": "oid84209_after_cycle_detergent_remains_detergent_drawer",
+      "device_category": "Washing Machine",
+      "brand": "Samsung",
+      "model_pattern": "OID84209",
+      "entry_symptom": "After a cycle, detergent remains in the detergent drawer",
+      "entry_symptom_th": "",
+      "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+      "page_range": [
+        45,
+        45
+      ],
+      "source_chunk_id": "manual_Samsung_WashingMachine_OID84209_p45_c3",
+      "severity": "low",
+      "difficulty": "easy",
+      "possible_cause": "Insufficient water pressure, detergent placed incorrectly, rinse cap improperly inserted, incorrect granular detergent selector position, or dirty drawer/rinse cap.",
+      "generated_by": "convert_with_classifier.py",
+      "review_status": "pending_manual_review",
+      "conversion_notes": [],
+      "classification_log": [
+        {
+          "text": "Make sure the washing machine is running with sufficient water pressure.",
+          "predicted_type": "instruction",
+          "confidence": 0.9094,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "After a cycle, detergent remains in the detergent drawer"
+        },
+        {
+          "text": "Make sure the detergent is added to the centre of the detergent drawer.",
+          "predicted_type": "instruction",
+          "confidence": 0.8419,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "After a cycle, detergent remains in the detergent drawer"
+        },
+        {
+          "text": "Make sure the rinse cap is inserted properly.",
+          "predicted_type": "resolution",
+          "confidence": 0.4539,
+          "accepted": false,
+          "final_type": "instruction",
+          "graph_symptom": "After a cycle, detergent remains in the detergent drawer"
+        },
+        {
+          "text": "If using granular detergent, make sure the detergent selector is in the upper position.",
+          "predicted_type": "instruction",
+          "confidence": 0.5447,
+          "accepted": false,
+          "final_type": "instruction",
+          "graph_symptom": "After a cycle, detergent remains in the detergent drawer"
+        },
+        {
+          "text": "Remove the rinse cap and clean the detergent drawer.",
+          "predicted_type": "instruction",
+          "confidence": 0.8694,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "After a cycle, detergent remains in the detergent drawer"
+        }
+      ],
+      "entry_node": "n1",
+      "nodes": [
+        {
+          "node_id": "n1",
+          "type": "checkpoint",
+          "question": "อาการที่พบตรงกับ \"After a cycle, detergent remains in the detergent drawer\" ใช่หรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดยืนยันอาการ สร้างโดยสคริปต์แปลง ไม่ได้มาจากคู่มือโดยตรง",
+          "on_yes": "s1",
+          "on_no": "n_escalate_mismatch"
+        },
+        {
+          "node_id": "s1",
+          "type": "instruction",
+          "content": "Make sure the washing machine is running with sufficient water pressure.",
+          "safety_critical": false,
+          "next": "c1"
+        },
+        {
+          "node_id": "c1",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s2"
+        },
+        {
+          "node_id": "s2",
+          "type": "instruction",
+          "content": "Make sure the detergent is added to the centre of the detergent drawer.",
+          "safety_critical": false,
+          "next": "c2"
+        },
+        {
+          "node_id": "c2",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s3"
+        },
+        {
+          "node_id": "s3",
+          "type": "instruction",
+          "content": "Make sure the rinse cap is inserted properly.",
+          "safety_critical": false,
+          "next": "c3"
+        },
+        {
+          "node_id": "c3",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s4"
+        },
+        {
+          "node_id": "s4",
+          "type": "instruction",
+          "content": "If using granular detergent, make sure the detergent selector is in the upper position.",
+          "safety_critical": false,
+          "next": "c4"
+        },
+        {
+          "node_id": "c4",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s5"
+        },
+        {
+          "node_id": "s5",
+          "type": "instruction",
+          "content": "Remove the rinse cap and clean the detergent drawer.",
+          "safety_critical": false,
+          "next": "c5"
+        },
+        {
+          "node_id": "c5",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "n_escalate"
+        },
+        {
+          "node_id": "n_resolved",
+          "type": "resolution",
+          "content": "ปัญหา \"After a cycle, detergent remains in the detergent drawer\" ได้รับการแก้ไขเรียบร้อยแล้ว",
+          "outcome_kind": "user_fixed"
+        },
+        {
+          "node_id": "n_escalate",
+          "type": "escalation",
+          "content": "ดำเนินการตามขั้นตอนในคู่มือครบทุกข้อแล้วแต่ยังไม่สามารถแก้ปัญหาได้ แนะนำให้ติดต่อศูนย์บริการ Samsung พร้อมแจ้งรุ่นเครื่อง อาการที่พบ และขั้นตอนที่ได้ลองทำไปแล้ว",
+          "outcome_kind": "handoff_unknown"
+        },
+        {
+          "node_id": "n_escalate_mismatch",
+          "type": "escalation",
+          "content": "อาการที่พบไม่ตรงกับหัวข้อนี้ในคู่มือ แนะนำให้ตรวจสอบอาการอีกครั้ง หรือติดต่อศูนย์บริการ Samsung พร้อมอธิบายอาการที่พบโดยละเอียด",
+          "outcome_kind": "handoff_unknown"
+        }
+      ]
+    },
+    {
+      "schema_version": 2,
+      "graph_id": "oid84209_excessive_vibrations_makes_noise",
+      "device_category": "Washing Machine",
+      "brand": "Samsung",
+      "model_pattern": "OID84209",
+      "entry_symptom": "Excessive vibrations or makes noise",
+      "entry_symptom_th": "",
+      "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+      "page_range": [
+        45,
+        45
+      ],
+      "source_chunk_id": "manual_Samsung_WashingMachine_OID84209_p45_c4",
+      "severity": "medium",
+      "difficulty": "easy",
+      "possible_cause": "Unlevel or slippery floor, unremoved shipping bolts, contact with other objects, unbalanced laundry load, normal motor operation, overalls or metal-decorated clothes, or loose metal objects like coins.",
+      "generated_by": "convert_with_classifier.py",
+      "review_status": "pending_manual_review",
+      "conversion_notes": [],
+      "classification_log": [
+        {
+          "text": "Make sure the washing machine is installed on a level, solid floor that is not slippery. If the floor is not level, use the levelling feet to adjust the height of the washing machine.",
+          "predicted_type": "instruction",
+          "confidence": 0.8204,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Excessive vibrations or makes noise"
+        },
+        {
+          "text": "Make sure the shipping bolts are removed.",
+          "predicted_type": "instruction",
+          "confidence": 0.8681,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Excessive vibrations or makes noise"
+        },
+        {
+          "text": "Make sure the washing machine is not contacting any other object.",
+          "predicted_type": "instruction",
+          "confidence": 0.9653,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Excessive vibrations or makes noise"
+        },
+        {
+          "text": "Make sure the laundry load is balanced.",
+          "predicted_type": "instruction",
+          "confidence": 0.606,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Excessive vibrations or makes noise"
+        },
+        {
+          "text": "Remove metal objects such as coins from the drum or filter case after washing.",
+          "predicted_type": "instruction",
+          "confidence": 0.9561,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Excessive vibrations or makes noise"
+        }
+      ],
+      "entry_node": "n1",
+      "nodes": [
+        {
+          "node_id": "n1",
+          "type": "checkpoint",
+          "question": "อาการที่พบตรงกับ \"Excessive vibrations or makes noise\" ใช่หรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดยืนยันอาการ สร้างโดยสคริปต์แปลง ไม่ได้มาจากคู่มือโดยตรง",
+          "on_yes": "s1",
+          "on_no": "n_escalate_mismatch"
+        },
+        {
+          "node_id": "s1",
+          "type": "instruction",
+          "content": "Make sure the washing machine is installed on a level, solid floor that is not slippery. If the floor is not level, use the levelling feet to adjust the height of the washing machine.",
+          "safety_critical": false,
+          "next": "c1"
+        },
+        {
+          "node_id": "c1",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s2"
+        },
+        {
+          "node_id": "s2",
+          "type": "instruction",
+          "content": "Make sure the shipping bolts are removed.",
+          "safety_critical": false,
+          "next": "c2"
+        },
+        {
+          "node_id": "c2",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s3"
+        },
+        {
+          "node_id": "s3",
+          "type": "instruction",
+          "content": "Make sure the washing machine is not contacting any other object.",
+          "safety_critical": false,
+          "next": "c3"
+        },
+        {
+          "node_id": "c3",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s4"
+        },
+        {
+          "node_id": "s4",
+          "type": "instruction",
+          "content": "Make sure the laundry load is balanced.",
+          "safety_critical": false,
+          "next": "c4"
+        },
+        {
+          "node_id": "c4",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s5"
+        },
+        {
+          "node_id": "s5",
+          "type": "instruction",
+          "content": "Remove metal objects such as coins from the drum or filter case after washing.",
+          "safety_critical": false,
+          "next": "c5"
+        },
+        {
+          "node_id": "c5",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "n_escalate"
+        },
+        {
+          "node_id": "n_resolved",
+          "type": "resolution",
+          "content": "ปัญหา \"Excessive vibrations or makes noise\" ได้รับการแก้ไขเรียบร้อยแล้ว",
+          "outcome_kind": "user_fixed"
+        },
+        {
+          "node_id": "n_escalate",
+          "type": "escalation",
+          "content": "ดำเนินการตามขั้นตอนในคู่มือครบทุกข้อแล้วแต่ยังไม่สามารถแก้ปัญหาได้ แนะนำให้ติดต่อศูนย์บริการ Samsung พร้อมแจ้งรุ่นเครื่อง อาการที่พบ และขั้นตอนที่ได้ลองทำไปแล้ว",
+          "outcome_kind": "handoff_unknown"
+        },
+        {
+          "node_id": "n_escalate_mismatch",
+          "type": "escalation",
+          "content": "อาการที่พบไม่ตรงกับหัวข้อนี้ในคู่มือ แนะนำให้ตรวจสอบอาการอีกครั้ง หรือติดต่อศูนย์บริการ Samsung พร้อมอธิบายอาการที่พบโดยละเอียด",
+          "outcome_kind": "handoff_unknown"
+        }
+      ]
+    },
+    {
+      "schema_version": 2,
+      "graph_id": "oid84209_drain_spin",
+      "device_category": "Washing Machine",
+      "brand": "Samsung",
+      "model_pattern": "OID84209",
+      "entry_symptom": "Does not drain and/ or spin",
+      "entry_symptom_th": "",
+      "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+      "page_range": [
+        46,
+        46
+      ],
+      "source_chunk_id": "manual_Samsung_WashingMachine_OID84209_p46_c5",
+      "severity": "medium",
+      "difficulty": "medium",
+      "possible_cause": "Drain restriction, clogged debris filter, open door, frozen or clogged drain hose, clogged drain system, or insufficient power supply.",
+      "generated_by": "convert_with_classifier.py",
+      "review_status": "pending_manual_review",
+      "conversion_notes": [],
+      "classification_log": [
+        {
+          "text": "Make sure the drain hose is straightened all the way to the drain system. If you encounter a drain restriction, call for service.",
+          "predicted_type": "instruction",
+          "confidence": 0.5347,
+          "accepted": false,
+          "final_type": "instruction",
+          "graph_symptom": "Does not drain and/ or spin"
+        },
+        {
+          "text": "Make sure the debris filter is not clogged.",
+          "predicted_type": "instruction",
+          "confidence": 0.6678,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Does not drain and/ or spin"
+        },
+        {
+          "text": "Close the door and press Start/Pause.",
+          "predicted_type": "checkpoint",
+          "confidence": 0.5261,
+          "accepted": false,
+          "final_type": "instruction",
+          "graph_symptom": "Does not drain and/ or spin"
+        },
+        {
+          "text": "Make sure the drain hose is not frozen or clogged.",
+          "predicted_type": "instruction",
+          "confidence": 0.829,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Does not drain and/ or spin"
+        },
+        {
+          "text": "Make sure the drain hose is connected to a drain system that is not clogged.",
+          "predicted_type": "instruction",
+          "confidence": 0.8541,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Does not drain and/ or spin"
+        }
+      ],
+      "entry_node": "n1",
+      "nodes": [
+        {
+          "node_id": "n1",
+          "type": "checkpoint",
+          "question": "อาการที่พบตรงกับ \"Does not drain and/ or spin\" ใช่หรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดยืนยันอาการ สร้างโดยสคริปต์แปลง ไม่ได้มาจากคู่มือโดยตรง",
+          "on_yes": "s1",
+          "on_no": "n_escalate_mismatch"
+        },
+        {
+          "node_id": "s1",
+          "type": "instruction",
+          "content": "Make sure the drain hose is straightened all the way to the drain system. If you encounter a drain restriction, call for service.",
+          "safety_critical": false,
+          "next": "c1"
+        },
+        {
+          "node_id": "c1",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s2"
+        },
+        {
+          "node_id": "s2",
+          "type": "instruction",
+          "content": "Make sure the debris filter is not clogged.",
+          "safety_critical": false,
+          "next": "c2"
+        },
+        {
+          "node_id": "c2",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s3"
+        },
+        {
+          "node_id": "s3",
+          "type": "instruction",
+          "content": "Close the door and press Start/Pause.",
+          "safety_critical": false,
+          "next": "c3"
+        },
+        {
+          "node_id": "c3",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s4"
+        },
+        {
+          "node_id": "s4",
+          "type": "instruction",
+          "content": "Make sure the drain hose is not frozen or clogged.",
+          "safety_critical": false,
+          "next": "c4"
+        },
+        {
+          "node_id": "c4",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s5"
+        },
+        {
+          "node_id": "s5",
+          "type": "instruction",
+          "content": "Make sure the drain hose is connected to a drain system that is not clogged.",
+          "safety_critical": false,
+          "next": "c5"
+        },
+        {
+          "node_id": "c5",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "n_escalate"
+        },
+        {
+          "node_id": "n_resolved",
+          "type": "resolution",
+          "content": "ปัญหา \"Does not drain and/ or spin\" ได้รับการแก้ไขเรียบร้อยแล้ว",
+          "outcome_kind": "user_fixed"
+        },
+        {
+          "node_id": "n_escalate",
+          "type": "escalation",
+          "content": "ดำเนินการตามขั้นตอนในคู่มือครบทุกข้อแล้วแต่ยังไม่สามารถแก้ปัญหาได้ แนะนำให้ติดต่อศูนย์บริการ Samsung พร้อมแจ้งรุ่นเครื่อง อาการที่พบ และขั้นตอนที่ได้ลองทำไปแล้ว",
+          "outcome_kind": "handoff_unknown"
+        },
+        {
+          "node_id": "n_escalate_mismatch",
+          "type": "escalation",
+          "content": "อาการที่พบไม่ตรงกับหัวข้อนี้ในคู่มือ แนะนำให้ตรวจสอบอาการอีกครั้ง หรือติดต่อศูนย์บริการ Samsung พร้อมอธิบายอาการที่พบโดยละเอียด",
+          "outcome_kind": "handoff_unknown"
+        }
+      ]
+    },
+    {
+      "schema_version": 2,
+      "graph_id": "oid84209_spinning_work",
+      "device_category": "Washing Machine",
+      "brand": "Samsung",
+      "model_pattern": "OID84209",
+      "entry_symptom": "Spinning does not work",
+      "entry_symptom_th": "",
+      "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+      "page_range": [
+        46,
+        46
+      ],
+      "source_chunk_id": "manual_Samsung_WashingMachine_OID84209_p46_c6",
+      "severity": "medium",
+      "difficulty": "easy",
+      "possible_cause": "Unevenly spread laundry or unstable surface.",
+      "generated_by": "convert_with_classifier.py",
+      "review_status": "pending_manual_review",
+      "conversion_notes": [],
+      "classification_log": [
+        {
+          "text": "Make sure laundry is spread out evenly.",
+          "predicted_type": "instruction",
+          "confidence": 0.8244,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Spinning does not work"
+        },
+        {
+          "text": "Make sure the washing machine is on a flat, stable surface.",
+          "predicted_type": "instruction",
+          "confidence": 0.9105,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Spinning does not work"
+        }
+      ],
+      "entry_node": "n1",
+      "nodes": [
+        {
+          "node_id": "n1",
+          "type": "checkpoint",
+          "question": "อาการที่พบตรงกับ \"Spinning does not work\" ใช่หรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดยืนยันอาการ สร้างโดยสคริปต์แปลง ไม่ได้มาจากคู่มือโดยตรง",
+          "on_yes": "s1",
+          "on_no": "n_escalate_mismatch"
+        },
+        {
+          "node_id": "s1",
+          "type": "instruction",
+          "content": "Make sure laundry is spread out evenly.",
+          "safety_critical": false,
+          "next": "c1"
+        },
+        {
+          "node_id": "c1",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s2"
+        },
+        {
+          "node_id": "s2",
+          "type": "instruction",
+          "content": "Make sure the washing machine is on a flat, stable surface.",
+          "safety_critical": false,
+          "next": "c2"
+        },
+        {
+          "node_id": "c2",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "n_escalate"
+        },
+        {
+          "node_id": "n_resolved",
+          "type": "resolution",
+          "content": "ปัญหา \"Spinning does not work\" ได้รับการแก้ไขเรียบร้อยแล้ว",
+          "outcome_kind": "user_fixed"
+        },
+        {
+          "node_id": "n_escalate",
+          "type": "escalation",
+          "content": "ดำเนินการตามขั้นตอนในคู่มือครบทุกข้อแล้วแต่ยังไม่สามารถแก้ปัญหาได้ แนะนำให้ติดต่อศูนย์บริการ Samsung พร้อมแจ้งรุ่นเครื่อง อาการที่พบ และขั้นตอนที่ได้ลองทำไปแล้ว",
+          "outcome_kind": "handoff_unknown"
+        },
+        {
+          "node_id": "n_escalate_mismatch",
+          "type": "escalation",
+          "content": "อาการที่พบไม่ตรงกับหัวข้อนี้ในคู่มือ แนะนำให้ตรวจสอบอาการอีกครั้ง หรือติดต่อศูนย์บริการ Samsung พร้อมอธิบายอาการที่พบโดยละเอียด",
+          "outcome_kind": "handoff_unknown"
+        }
+      ]
+    },
+    {
+      "schema_version": 2,
+      "graph_id": "oid84209_door_open",
+      "device_category": "Washing Machine",
+      "brand": "Samsung",
+      "model_pattern": "OID84209",
+      "entry_symptom": "The door does not open",
+      "entry_symptom_th": "",
+      "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+      "page_range": [
+        46,
+        46
+      ],
+      "source_chunk_id": "manual_Samsung_WashingMachine_OID84209_p46_c7",
+      "severity": "medium",
+      "difficulty": "easy",
+      "possible_cause": "Active door lock mechanism, water remaining in the drum, or door lock light is on.",
+      "generated_by": "convert_with_classifier.py",
+      "review_status": "pending_manual_review",
+      "conversion_notes": [],
+      "classification_log": [
+        {
+          "text": "Press Start/Pause to stop the washing machine.",
+          "predicted_type": "instruction",
+          "confidence": 0.8559,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "The door does not open"
+        },
+        {
+          "text": "Allow a few moments for the door lock mechanism to disengage.",
+          "predicted_type": "checkpoint",
+          "confidence": 0.4607,
+          "accepted": false,
+          "final_type": "instruction",
+          "graph_symptom": "The door does not open"
+        },
+        {
+          "text": "Make sure all water in the drum is drained; drain the drum and open the door manually if water remains.",
+          "predicted_type": "instruction",
+          "confidence": 0.8981,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "The door does not open"
+        },
+        {
+          "text": "Make sure the door lock light is off.",
+          "predicted_type": "instruction",
+          "confidence": 0.6602,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "The door does not open"
+        }
+      ],
+      "entry_node": "n1",
+      "nodes": [
+        {
+          "node_id": "n1",
+          "type": "checkpoint",
+          "question": "อาการที่พบตรงกับ \"The door does not open\" ใช่หรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดยืนยันอาการ สร้างโดยสคริปต์แปลง ไม่ได้มาจากคู่มือโดยตรง",
+          "on_yes": "s1",
+          "on_no": "n_escalate_mismatch"
+        },
+        {
+          "node_id": "s1",
+          "type": "instruction",
+          "content": "Press Start/Pause to stop the washing machine.",
+          "safety_critical": false,
+          "next": "c1"
+        },
+        {
+          "node_id": "c1",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s2"
+        },
+        {
+          "node_id": "s2",
+          "type": "instruction",
+          "content": "Allow a few moments for the door lock mechanism to disengage.",
+          "safety_critical": false,
+          "next": "c2"
+        },
+        {
+          "node_id": "c2",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s3"
+        },
+        {
+          "node_id": "s3",
+          "type": "instruction",
+          "content": "Make sure all water in the drum is drained; drain the drum and open the door manually if water remains.",
+          "safety_critical": false,
+          "next": "c3"
+        },
+        {
+          "node_id": "c3",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s4"
+        },
+        {
+          "node_id": "s4",
+          "type": "instruction",
+          "content": "Make sure the door lock light is off.",
+          "safety_critical": false,
+          "next": "c4"
+        },
+        {
+          "node_id": "c4",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "n_escalate"
+        },
+        {
+          "node_id": "n_resolved",
+          "type": "resolution",
+          "content": "ปัญหา \"The door does not open\" ได้รับการแก้ไขเรียบร้อยแล้ว",
+          "outcome_kind": "user_fixed"
+        },
+        {
+          "node_id": "n_escalate",
+          "type": "escalation",
+          "content": "ดำเนินการตามขั้นตอนในคู่มือครบทุกข้อแล้วแต่ยังไม่สามารถแก้ปัญหาได้ แนะนำให้ติดต่อศูนย์บริการ Samsung พร้อมแจ้งรุ่นเครื่อง อาการที่พบ และขั้นตอนที่ได้ลองทำไปแล้ว",
+          "outcome_kind": "handoff_unknown"
+        },
+        {
+          "node_id": "n_escalate_mismatch",
+          "type": "escalation",
+          "content": "อาการที่พบไม่ตรงกับหัวข้อนี้ในคู่มือ แนะนำให้ตรวจสอบอาการอีกครั้ง หรือติดต่อศูนย์บริการ Samsung พร้อมอธิบายอาการที่พบโดยละเอียด",
+          "outcome_kind": "handoff_unknown"
+        }
+      ]
+    },
+    {
+      "schema_version": 2,
+      "graph_id": "oid84209_excessive_suds",
+      "device_category": "Washing Machine",
+      "brand": "Samsung",
+      "model_pattern": "OID84209",
+      "entry_symptom": "Excessive suds",
+      "entry_symptom_th": "",
+      "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+      "page_range": [
+        46,
+        46
+      ],
+      "source_chunk_id": "manual_Samsung_WashingMachine_OID84209_p46_c8",
+      "severity": "low",
+      "difficulty": "easy",
+      "possible_cause": "Use of non-HE detergent or excessive detergent for soft water, small loads, or lightly soiled loads.",
+      "generated_by": "convert_with_classifier.py",
+      "review_status": "pending_manual_review",
+      "conversion_notes": [],
+      "classification_log": [
+        {
+          "text": "Make sure you use the recommended types of detergent as appropriate.",
+          "predicted_type": "instruction",
+          "confidence": 0.5952,
+          "accepted": false,
+          "final_type": "instruction",
+          "graph_symptom": "Excessive suds"
+        },
+        {
+          "text": "Use high efficiency (HE) detergent to prevent oversudsing.",
+          "predicted_type": "resolution",
+          "confidence": 0.5313,
+          "accepted": false,
+          "final_type": "instruction",
+          "graph_symptom": "Excessive suds"
+        },
+        {
+          "text": "Reduce the detergent amount for soft water, small loads, or lightly soiled loads.",
+          "predicted_type": "instruction",
+          "confidence": 0.8975,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Excessive suds"
+        }
+      ],
+      "entry_node": "n1",
+      "nodes": [
+        {
+          "node_id": "n1",
+          "type": "checkpoint",
+          "question": "อาการที่พบตรงกับ \"Excessive suds\" ใช่หรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดยืนยันอาการ สร้างโดยสคริปต์แปลง ไม่ได้มาจากคู่มือโดยตรง",
+          "on_yes": "s1",
+          "on_no": "n_escalate_mismatch"
+        },
+        {
+          "node_id": "s1",
+          "type": "instruction",
+          "content": "Make sure you use the recommended types of detergent as appropriate.",
+          "safety_critical": false,
+          "next": "c1"
+        },
+        {
+          "node_id": "c1",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s2"
+        },
+        {
+          "node_id": "s2",
+          "type": "instruction",
+          "content": "Use high efficiency (HE) detergent to prevent oversudsing.",
+          "safety_critical": false,
+          "next": "c2"
+        },
+        {
+          "node_id": "c2",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s3"
+        },
+        {
+          "node_id": "s3",
+          "type": "instruction",
+          "content": "Reduce the detergent amount for soft water, small loads, or lightly soiled loads.",
+          "safety_critical": false,
+          "next": "c3"
+        },
+        {
+          "node_id": "c3",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "n_escalate"
+        },
+        {
+          "node_id": "n_resolved",
+          "type": "resolution",
+          "content": "ปัญหา \"Excessive suds\" ได้รับการแก้ไขเรียบร้อยแล้ว",
+          "outcome_kind": "user_fixed"
+        },
+        {
+          "node_id": "n_escalate",
+          "type": "escalation",
+          "content": "ดำเนินการตามขั้นตอนในคู่มือครบทุกข้อแล้วแต่ยังไม่สามารถแก้ปัญหาได้ แนะนำให้ติดต่อศูนย์บริการ Samsung พร้อมแจ้งรุ่นเครื่อง อาการที่พบ และขั้นตอนที่ได้ลองทำไปแล้ว",
+          "outcome_kind": "handoff_unknown"
+        },
+        {
+          "node_id": "n_escalate_mismatch",
+          "type": "escalation",
+          "content": "อาการที่พบไม่ตรงกับหัวข้อนี้ในคู่มือ แนะนำให้ตรวจสอบอาการอีกครั้ง หรือติดต่อศูนย์บริการ Samsung พร้อมอธิบายอาการที่พบโดยละเอียด",
+          "outcome_kind": "handoff_unknown"
+        }
+      ]
+    },
+    {
+      "schema_version": 2,
+      "graph_id": "oid84209_cannot_apply_additional_detergent",
+      "device_category": "Washing Machine",
+      "brand": "Samsung",
+      "model_pattern": "OID84209",
+      "entry_symptom": "Cannot apply additional detergent",
+      "entry_symptom_th": "",
+      "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+      "page_range": [
+        46,
+        46
+      ],
+      "source_chunk_id": "manual_Samsung_WashingMachine_OID84209_p46_c9",
+      "severity": "low",
+      "difficulty": "easy",
+      "possible_cause": "Remaining amount of detergent and fabric softener is over the limit.",
+      "generated_by": "convert_with_classifier.py",
+      "review_status": "pending_manual_review",
+      "conversion_notes": [],
+      "classification_log": [
+        {
+          "text": "Make sure the remaining amount of detergent and fabric softener is not over the limit.",
+          "predicted_type": "instruction",
+          "confidence": 0.672,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Cannot apply additional detergent"
+        }
+      ],
+      "entry_node": "n1",
+      "nodes": [
+        {
+          "node_id": "n1",
+          "type": "checkpoint",
+          "question": "อาการที่พบตรงกับ \"Cannot apply additional detergent\" ใช่หรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดยืนยันอาการ สร้างโดยสคริปต์แปลง ไม่ได้มาจากคู่มือโดยตรง",
+          "on_yes": "s1",
+          "on_no": "n_escalate_mismatch"
+        },
+        {
+          "node_id": "s1",
+          "type": "instruction",
+          "content": "Make sure the remaining amount of detergent and fabric softener is not over the limit.",
+          "safety_critical": false,
+          "next": "c1"
+        },
+        {
+          "node_id": "c1",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "n_escalate"
+        },
+        {
+          "node_id": "n_resolved",
+          "type": "resolution",
+          "content": "ปัญหา \"Cannot apply additional detergent\" ได้รับการแก้ไขเรียบร้อยแล้ว",
+          "outcome_kind": "user_fixed"
+        },
+        {
+          "node_id": "n_escalate",
+          "type": "escalation",
+          "content": "ดำเนินการตามขั้นตอนในคู่มือครบทุกข้อแล้วแต่ยังไม่สามารถแก้ปัญหาได้ แนะนำให้ติดต่อศูนย์บริการ Samsung พร้อมแจ้งรุ่นเครื่อง อาการที่พบ และขั้นตอนที่ได้ลองทำไปแล้ว",
+          "outcome_kind": "handoff_unknown"
+        },
+        {
+          "node_id": "n_escalate_mismatch",
+          "type": "escalation",
+          "content": "อาการที่พบไม่ตรงกับหัวข้อนี้ในคู่มือ แนะนำให้ตรวจสอบอาการอีกครั้ง หรือติดต่อศูนย์บริการ Samsung พร้อมอธิบายอาการที่พบโดยละเอียด",
+          "outcome_kind": "handoff_unknown"
+        }
+      ]
+    },
+    {
+      "schema_version": 2,
+      "graph_id": "oid84209_stops",
+      "device_category": "Washing Machine",
+      "brand": "Samsung",
+      "model_pattern": "OID84209",
+      "entry_symptom": "Stops",
+      "entry_symptom_th": "",
+      "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+      "page_range": [
+        46,
+        46
+      ],
+      "source_chunk_id": "manual_Samsung_WashingMachine_OID84209_p46_c10",
+      "severity": "medium",
+      "difficulty": "easy",
+      "possible_cause": "Unplugged power cord, blown fuse/tripped circuit breaker, open door, pause or soak period in cycle, clogged mesh filter at water taps, or insufficient power supply.",
+      "generated_by": "convert_with_classifier.py",
+      "review_status": "pending_manual_review",
+      "conversion_notes": [
+        "โมเดลจำแนกขั้นตอน 1 รายการ ว่าไม่ใช่ instruction ผู้พัฒนาควรตรวจสอบความเหมาะสม"
+      ],
+      "classification_log": [
+        {
+          "text": "Plug the power cord into a live electrical outlet.",
+          "predicted_type": "instruction",
+          "confidence": 0.9888,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Stops"
+        },
+        {
+          "text": "Check the fuse or reset the circuit breaker.",
+          "predicted_type": "instruction",
+          "confidence": 0.7417,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Stops"
+        },
+        {
+          "text": "Close the door and press the Start/Pause button to start the washing machine.",
+          "predicted_type": "instruction",
+          "confidence": 0.9513,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Stops"
+        },
+        {
+          "text": "Wait briefly if the cycle is in a pause or soak period.",
+          "predicted_type": "checkpoint",
+          "confidence": 0.8598,
+          "accepted": true,
+          "final_type": "checkpoint",
+          "graph_symptom": "Stops"
+        },
+        {
+          "text": "Check and clean the mesh filter of the water supply hose at the water taps periodically.",
+          "predicted_type": "instruction",
+          "confidence": 0.9514,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Stops"
+        }
+      ],
+      "entry_node": "n1",
+      "nodes": [
+        {
+          "node_id": "n1",
+          "type": "checkpoint",
+          "question": "อาการที่พบตรงกับ \"Stops\" ใช่หรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดยืนยันอาการ สร้างโดยสคริปต์แปลง ไม่ได้มาจากคู่มือโดยตรง",
+          "on_yes": "s1",
+          "on_no": "n_escalate_mismatch"
+        },
+        {
+          "node_id": "s1",
+          "type": "instruction",
+          "content": "Plug the power cord into a live electrical outlet.",
+          "safety_critical": true,
+          "next": "c1",
+          "safety_warning": "Plug the power cord into a live electrical outlet. Check the fuse or reset the circuit breaker. For your safety, the washing machine will not tumble or spin unless the door is closed.",
+          "author_note": "safety_warning จับคู่กับขั้นตอนนี้โดยสคริปต์ ผู้พัฒนาต้องตรวจสอบอีกครั้ง"
+        },
+        {
+          "node_id": "c1",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s2"
+        },
+        {
+          "node_id": "s2",
+          "type": "instruction",
+          "content": "Check the fuse or reset the circuit breaker.",
+          "safety_critical": false,
+          "next": "c2"
+        },
+        {
+          "node_id": "c2",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s3"
+        },
+        {
+          "node_id": "s3",
+          "type": "instruction",
+          "content": "Close the door and press the Start/Pause button to start the washing machine.",
+          "safety_critical": false,
+          "next": "c3"
+        },
+        {
+          "node_id": "c3",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s4"
+        },
+        {
+          "node_id": "s4",
+          "type": "instruction",
+          "content": "Wait briefly if the cycle is in a pause or soak period.",
+          "safety_critical": false,
+          "next": "c4"
+        },
+        {
+          "node_id": "c4",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s5"
+        },
+        {
+          "node_id": "s5",
+          "type": "instruction",
+          "content": "Check and clean the mesh filter of the water supply hose at the water taps periodically.",
+          "safety_critical": false,
+          "next": "c5"
+        },
+        {
+          "node_id": "c5",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "n_escalate"
+        },
+        {
+          "node_id": "n_resolved",
+          "type": "resolution",
+          "content": "ปัญหา \"Stops\" ได้รับการแก้ไขเรียบร้อยแล้ว",
+          "outcome_kind": "user_fixed"
+        },
+        {
+          "node_id": "n_escalate",
+          "type": "escalation",
+          "content": "ดำเนินการตามขั้นตอนในคู่มือครบทุกข้อแล้วแต่ยังไม่สามารถแก้ปัญหาได้ แนะนำให้ติดต่อศูนย์บริการ Samsung พร้อมแจ้งรุ่นเครื่อง อาการที่พบ และขั้นตอนที่ได้ลองทำไปแล้ว",
+          "outcome_kind": "handoff_unknown"
+        },
+        {
+          "node_id": "n_escalate_mismatch",
+          "type": "escalation",
+          "content": "อาการที่พบไม่ตรงกับหัวข้อนี้ในคู่มือ แนะนำให้ตรวจสอบอาการอีกครั้ง หรือติดต่อศูนย์บริการ Samsung พร้อมอธิบายอาการที่พบโดยละเอียด",
+          "outcome_kind": "handoff_unknown"
+        }
+      ]
+    },
+    {
+      "schema_version": 2,
+      "graph_id": "oid84209_fills_wrong_water_temperature",
+      "device_category": "Washing Machine",
+      "brand": "Samsung",
+      "model_pattern": "OID84209",
+      "entry_symptom": "Fills with the wrong water temperature",
+      "entry_symptom_th": "",
+      "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+      "page_range": [
+        47,
+        47
+      ],
+      "source_chunk_id": "manual_Samsung_WashingMachine_OID84209_p47_c11",
+      "severity": "low",
+      "difficulty": "medium",
+      "possible_cause": "Taps not fully open, incorrect temperature selection, hoses connected to wrong taps, water heater set below 120 °F (49 °C), clogged mesh filter, or normal operation of automatic temperature control.",
+      "generated_by": "convert_with_classifier.py",
+      "review_status": "pending_manual_review",
+      "conversion_notes": [],
+      "classification_log": [
+        {
+          "text": "Fully open both taps.",
+          "predicted_type": "instruction",
+          "confidence": 0.8442,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Fills with the wrong water temperature"
+        },
+        {
+          "text": "Make sure the temperature selection is correct.",
+          "predicted_type": "checkpoint",
+          "confidence": 0.5299,
+          "accepted": false,
+          "final_type": "instruction",
+          "graph_symptom": "Fills with the wrong water temperature"
+        },
+        {
+          "text": "Make sure the hoses are connected to the correct taps and flush water lines.",
+          "predicted_type": "instruction",
+          "confidence": 0.8803,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Fills with the wrong water temperature"
+        },
+        {
+          "text": "Make sure the water heater is set to supply a minimum 120 °F (49 °C) hot water at the tap. Also, check the water heater capacity and recovery rate.",
+          "predicted_type": "instruction",
+          "confidence": 0.876,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Fills with the wrong water temperature"
+        },
+        {
+          "text": "Disconnect the hoses and clean the mesh filter.",
+          "predicted_type": "instruction",
+          "confidence": 0.9708,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Fills with the wrong water temperature"
+        }
+      ],
+      "entry_node": "n1",
+      "nodes": [
+        {
+          "node_id": "n1",
+          "type": "checkpoint",
+          "question": "อาการที่พบตรงกับ \"Fills with the wrong water temperature\" ใช่หรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดยืนยันอาการ สร้างโดยสคริปต์แปลง ไม่ได้มาจากคู่มือโดยตรง",
+          "on_yes": "s1",
+          "on_no": "n_escalate_mismatch"
+        },
+        {
+          "node_id": "s1",
+          "type": "instruction",
+          "content": "Fully open both taps.",
+          "safety_critical": false,
+          "next": "c1"
+        },
+        {
+          "node_id": "c1",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s2"
+        },
+        {
+          "node_id": "s2",
+          "type": "instruction",
+          "content": "Make sure the temperature selection is correct.",
+          "safety_critical": false,
+          "next": "c2"
+        },
+        {
+          "node_id": "c2",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s3"
+        },
+        {
+          "node_id": "s3",
+          "type": "instruction",
+          "content": "Make sure the hoses are connected to the correct taps and flush water lines.",
+          "safety_critical": false,
+          "next": "c3"
+        },
+        {
+          "node_id": "c3",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s4"
+        },
+        {
+          "node_id": "s4",
+          "type": "instruction",
+          "content": "Make sure the water heater is set to supply a minimum 120 °F (49 °C) hot water at the tap. Also, check the water heater capacity and recovery rate.",
+          "safety_critical": true,
+          "next": "c4",
+          "safety_warning": "Make sure the water heater is set to supply a minimum 120 °F (49 °C) hot water at the tap.",
+          "author_note": "safety_warning จับคู่กับขั้นตอนนี้โดยสคริปต์ ผู้พัฒนาต้องตรวจสอบอีกครั้ง"
+        },
+        {
+          "node_id": "c4",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s5"
+        },
+        {
+          "node_id": "s5",
+          "type": "instruction",
+          "content": "Disconnect the hoses and clean the mesh filter.",
+          "safety_critical": false,
+          "next": "c5"
+        },
+        {
+          "node_id": "c5",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "n_escalate"
+        },
+        {
+          "node_id": "n_resolved",
+          "type": "resolution",
+          "content": "ปัญหา \"Fills with the wrong water temperature\" ได้รับการแก้ไขเรียบร้อยแล้ว",
+          "outcome_kind": "user_fixed"
+        },
+        {
+          "node_id": "n_escalate",
+          "type": "escalation",
+          "content": "ดำเนินการตามขั้นตอนในคู่มือครบทุกข้อแล้วแต่ยังไม่สามารถแก้ปัญหาได้ แนะนำให้ติดต่อศูนย์บริการ Samsung พร้อมแจ้งรุ่นเครื่อง อาการที่พบ และขั้นตอนที่ได้ลองทำไปแล้ว",
+          "outcome_kind": "handoff_unknown"
+        },
+        {
+          "node_id": "n_escalate_mismatch",
+          "type": "escalation",
+          "content": "อาการที่พบไม่ตรงกับหัวข้อนี้ในคู่มือ แนะนำให้ตรวจสอบอาการอีกครั้ง หรือติดต่อศูนย์บริการ Samsung พร้อมอธิบายอาการที่พบโดยละเอียด",
+          "outcome_kind": "handoff_unknown"
+        }
+      ]
+    },
+    {
+      "schema_version": 2,
+      "graph_id": "oid84209_load_wet_end_cycle",
+      "device_category": "Washing Machine",
+      "brand": "Samsung",
+      "model_pattern": "OID84209",
+      "entry_symptom": "Load is wet at the end of a cycle",
+      "entry_symptom_th": "",
+      "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+      "page_range": [
+        47,
+        47
+      ],
+      "source_chunk_id": "manual_Samsung_WashingMachine_OID84209_p47_c12",
+      "severity": "low",
+      "difficulty": "easy",
+      "possible_cause": "Low spin speed setting, oversudsing from non-HE detergent, small load becoming unbalanced, or kinked/clogged drain hose.",
+      "generated_by": "convert_with_classifier.py",
+      "review_status": "pending_manual_review",
+      "conversion_notes": [],
+      "classification_log": [
+        {
+          "text": "Use the High or Extra High spin speed.",
+          "predicted_type": "instruction",
+          "confidence": 0.776,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Load is wet at the end of a cycle"
+        },
+        {
+          "text": "Use high efficiency (HE) detergent to reduce oversudsing.",
+          "predicted_type": "resolution",
+          "confidence": 0.5485,
+          "accepted": false,
+          "final_type": "instruction",
+          "graph_symptom": "Load is wet at the end of a cycle"
+        },
+        {
+          "text": "Avoid small loads (one or two items) that may become unbalanced.",
+          "predicted_type": "instruction",
+          "confidence": 0.9573,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Load is wet at the end of a cycle"
+        },
+        {
+          "text": "Make sure the drain hose is not kinked or clogged.",
+          "predicted_type": "instruction",
+          "confidence": 0.8047,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Load is wet at the end of a cycle"
+        }
+      ],
+      "entry_node": "n1",
+      "nodes": [
+        {
+          "node_id": "n1",
+          "type": "checkpoint",
+          "question": "อาการที่พบตรงกับ \"Load is wet at the end of a cycle\" ใช่หรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดยืนยันอาการ สร้างโดยสคริปต์แปลง ไม่ได้มาจากคู่มือโดยตรง",
+          "on_yes": "s1",
+          "on_no": "n_escalate_mismatch"
+        },
+        {
+          "node_id": "s1",
+          "type": "instruction",
+          "content": "Use the High or Extra High spin speed.",
+          "safety_critical": false,
+          "next": "c1"
+        },
+        {
+          "node_id": "c1",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s2"
+        },
+        {
+          "node_id": "s2",
+          "type": "instruction",
+          "content": "Use high efficiency (HE) detergent to reduce oversudsing.",
+          "safety_critical": false,
+          "next": "c2"
+        },
+        {
+          "node_id": "c2",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s3"
+        },
+        {
+          "node_id": "s3",
+          "type": "instruction",
+          "content": "Avoid small loads (one or two items) that may become unbalanced.",
+          "safety_critical": false,
+          "next": "c3"
+        },
+        {
+          "node_id": "c3",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s4"
+        },
+        {
+          "node_id": "s4",
+          "type": "instruction",
+          "content": "Make sure the drain hose is not kinked or clogged.",
+          "safety_critical": false,
+          "next": "c4"
+        },
+        {
+          "node_id": "c4",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "n_escalate"
+        },
+        {
+          "node_id": "n_resolved",
+          "type": "resolution",
+          "content": "ปัญหา \"Load is wet at the end of a cycle\" ได้รับการแก้ไขเรียบร้อยแล้ว",
+          "outcome_kind": "user_fixed"
+        },
+        {
+          "node_id": "n_escalate",
+          "type": "escalation",
+          "content": "ดำเนินการตามขั้นตอนในคู่มือครบทุกข้อแล้วแต่ยังไม่สามารถแก้ปัญหาได้ แนะนำให้ติดต่อศูนย์บริการ Samsung พร้อมแจ้งรุ่นเครื่อง อาการที่พบ และขั้นตอนที่ได้ลองทำไปแล้ว",
+          "outcome_kind": "handoff_unknown"
+        },
+        {
+          "node_id": "n_escalate_mismatch",
+          "type": "escalation",
+          "content": "อาการที่พบไม่ตรงกับหัวข้อนี้ในคู่มือ แนะนำให้ตรวจสอบอาการอีกครั้ง หรือติดต่อศูนย์บริการ Samsung พร้อมอธิบายอาการที่พบโดยละเอียด",
+          "outcome_kind": "handoff_unknown"
+        }
+      ]
+    },
+    {
+      "schema_version": 2,
+      "graph_id": "oid84209_leaks_water",
+      "device_category": "Washing Machine",
+      "brand": "Samsung",
+      "model_pattern": "OID84209",
+      "entry_symptom": "Leaks water",
+      "entry_symptom_th": "",
+      "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+      "page_range": [
+        47,
+        47
+      ],
+      "source_chunk_id": "manual_Samsung_WashingMachine_OID84209_p47_c13",
+      "severity": "medium",
+      "difficulty": "easy",
+      "possible_cause": "Door not properly closed, loose hose connections, drain hose improperly inserted/secured, overloading, oversudsing, or object stuck between door and diaphragm.",
+      "generated_by": "convert_with_classifier.py",
+      "review_status": "pending_manual_review",
+      "conversion_notes": [
+        "โมเดลจำแนกขั้นตอน 1 รายการ ว่าไม่ใช่ instruction ผู้พัฒนาควรตรวจสอบความเหมาะสม"
+      ],
+      "classification_log": [
+        {
+          "text": "Make sure the door is properly closed.",
+          "predicted_type": "checkpoint",
+          "confidence": 0.671,
+          "accepted": true,
+          "final_type": "checkpoint",
+          "graph_symptom": "Leaks water"
+        },
+        {
+          "text": "Make sure all hose connections are tight.",
+          "predicted_type": "instruction",
+          "confidence": 0.9634,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Leaks water"
+        },
+        {
+          "text": "Make sure the end of the drain hose is correctly inserted and secured to the drain system.",
+          "predicted_type": "instruction",
+          "confidence": 0.6228,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Leaks water"
+        },
+        {
+          "text": "Avoid overloading.",
+          "predicted_type": "instruction",
+          "confidence": 0.8978,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Leaks water"
+        },
+        {
+          "text": "Use high efficiency (HE) detergent to prevent oversudsing.",
+          "predicted_type": "resolution",
+          "confidence": 0.5313,
+          "accepted": false,
+          "final_type": "instruction",
+          "graph_symptom": "Leaks water"
+        },
+        {
+          "text": "Check if there is something stuck between the door and the diaphragm and remove it.",
+          "predicted_type": "instruction",
+          "confidence": 0.5764,
+          "accepted": false,
+          "final_type": "instruction",
+          "graph_symptom": "Leaks water"
+        }
+      ],
+      "entry_node": "n1",
+      "nodes": [
+        {
+          "node_id": "n1",
+          "type": "checkpoint",
+          "question": "อาการที่พบตรงกับ \"Leaks water\" ใช่หรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดยืนยันอาการ สร้างโดยสคริปต์แปลง ไม่ได้มาจากคู่มือโดยตรง",
+          "on_yes": "s1",
+          "on_no": "n_escalate_mismatch"
+        },
+        {
+          "node_id": "s1",
+          "type": "instruction",
+          "content": "Make sure the door is properly closed.",
+          "safety_critical": false,
+          "next": "c1"
+        },
+        {
+          "node_id": "c1",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s2"
+        },
+        {
+          "node_id": "s2",
+          "type": "instruction",
+          "content": "Make sure all hose connections are tight.",
+          "safety_critical": false,
+          "next": "c2"
+        },
+        {
+          "node_id": "c2",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s3"
+        },
+        {
+          "node_id": "s3",
+          "type": "instruction",
+          "content": "Make sure the end of the drain hose is correctly inserted and secured to the drain system.",
+          "safety_critical": false,
+          "next": "c3"
+        },
+        {
+          "node_id": "c3",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s4"
+        },
+        {
+          "node_id": "s4",
+          "type": "instruction",
+          "content": "Avoid overloading.",
+          "safety_critical": false,
+          "next": "c4"
+        },
+        {
+          "node_id": "c4",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s5"
+        },
+        {
+          "node_id": "s5",
+          "type": "instruction",
+          "content": "Use high efficiency (HE) detergent to prevent oversudsing.",
+          "safety_critical": false,
+          "next": "c5"
+        },
+        {
+          "node_id": "c5",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s6"
+        },
+        {
+          "node_id": "s6",
+          "type": "instruction",
+          "content": "Check if there is something stuck between the door and the diaphragm and remove it.",
+          "safety_critical": false,
+          "next": "c6"
+        },
+        {
+          "node_id": "c6",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "n_escalate"
+        },
+        {
+          "node_id": "n_resolved",
+          "type": "resolution",
+          "content": "ปัญหา \"Leaks water\" ได้รับการแก้ไขเรียบร้อยแล้ว",
+          "outcome_kind": "user_fixed"
+        },
+        {
+          "node_id": "n_escalate",
+          "type": "escalation",
+          "content": "ดำเนินการตามขั้นตอนในคู่มือครบทุกข้อแล้วแต่ยังไม่สามารถแก้ปัญหาได้ แนะนำให้ติดต่อศูนย์บริการ Samsung พร้อมแจ้งรุ่นเครื่อง อาการที่พบ และขั้นตอนที่ได้ลองทำไปแล้ว",
+          "outcome_kind": "handoff_unknown"
+        },
+        {
+          "node_id": "n_escalate_mismatch",
+          "type": "escalation",
+          "content": "อาการที่พบไม่ตรงกับหัวข้อนี้ในคู่มือ แนะนำให้ตรวจสอบอาการอีกครั้ง หรือติดต่อศูนย์บริการ Samsung พร้อมอธิบายอาการที่พบโดยละเอียด",
+          "outcome_kind": "handoff_unknown"
+        }
+      ]
+    },
+    {
+      "schema_version": 2,
+      "graph_id": "oid84209_has_odours",
+      "device_category": "Washing Machine",
+      "brand": "Samsung",
+      "model_pattern": "OID84209",
+      "entry_symptom": "Has odours",
+      "entry_symptom_th": "",
+      "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+      "page_range": [
+        47,
+        47
+      ],
+      "source_chunk_id": "manual_Samsung_WashingMachine_OID84209_p47_c14",
+      "severity": "low",
+      "difficulty": "easy",
+      "possible_cause": "Excessive suds collecting in recesses.",
+      "generated_by": "convert_with_classifier.py",
+      "review_status": "pending_manual_review",
+      "conversion_notes": [],
+      "classification_log": [
+        {
+          "text": "Run cleansing cycles to sanitize periodically.",
+          "predicted_type": "instruction",
+          "confidence": 0.7568,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Has odours"
+        },
+        {
+          "text": "Clean the door seal (diaphragm).",
+          "predicted_type": "checkpoint",
+          "confidence": 0.5417,
+          "accepted": false,
+          "final_type": "instruction",
+          "graph_symptom": "Has odours"
+        },
+        {
+          "text": "Dry the washing machine interior after a cycle has finished.",
+          "predicted_type": "instruction",
+          "confidence": 0.7537,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Has odours"
+        }
+      ],
+      "entry_node": "n1",
+      "nodes": [
+        {
+          "node_id": "n1",
+          "type": "checkpoint",
+          "question": "อาการที่พบตรงกับ \"Has odours\" ใช่หรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดยืนยันอาการ สร้างโดยสคริปต์แปลง ไม่ได้มาจากคู่มือโดยตรง",
+          "on_yes": "s1",
+          "on_no": "n_escalate_mismatch"
+        },
+        {
+          "node_id": "s1",
+          "type": "instruction",
+          "content": "Run cleansing cycles to sanitize periodically.",
+          "safety_critical": false,
+          "next": "c1"
+        },
+        {
+          "node_id": "c1",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s2"
+        },
+        {
+          "node_id": "s2",
+          "type": "instruction",
+          "content": "Clean the door seal (diaphragm).",
+          "safety_critical": false,
+          "next": "c2"
+        },
+        {
+          "node_id": "c2",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s3"
+        },
+        {
+          "node_id": "s3",
+          "type": "instruction",
+          "content": "Dry the washing machine interior after a cycle has finished.",
+          "safety_critical": false,
+          "next": "c3"
+        },
+        {
+          "node_id": "c3",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "n_escalate"
+        },
+        {
+          "node_id": "n_resolved",
+          "type": "resolution",
+          "content": "ปัญหา \"Has odours\" ได้รับการแก้ไขเรียบร้อยแล้ว",
+          "outcome_kind": "user_fixed"
+        },
+        {
+          "node_id": "n_escalate",
+          "type": "escalation",
+          "content": "ดำเนินการตามขั้นตอนในคู่มือครบทุกข้อแล้วแต่ยังไม่สามารถแก้ปัญหาได้ แนะนำให้ติดต่อศูนย์บริการ Samsung พร้อมแจ้งรุ่นเครื่อง อาการที่พบ และขั้นตอนที่ได้ลองทำไปแล้ว",
+          "outcome_kind": "handoff_unknown"
+        },
+        {
+          "node_id": "n_escalate_mismatch",
+          "type": "escalation",
+          "content": "อาการที่พบไม่ตรงกับหัวข้อนี้ในคู่มือ แนะนำให้ตรวจสอบอาการอีกครั้ง หรือติดต่อศูนย์บริการ Samsung พร้อมอธิบายอาการที่พบโดยละเอียด",
+          "outcome_kind": "handoff_unknown"
+        }
+      ]
+    },
+    {
+      "schema_version": 2,
+      "graph_id": "oid84209_no_bubbles_seen_bubble_models_only",
+      "device_category": "Washing Machine",
+      "brand": "Samsung",
+      "model_pattern": "OID84209",
+      "entry_symptom": "No bubbles are seen (Bubble models only)",
+      "entry_symptom_th": "",
+      "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+      "page_range": [
+        47,
+        47
+      ],
+      "source_chunk_id": "manual_Samsung_WashingMachine_OID84209_p47_c15",
+      "severity": "low",
+      "difficulty": "easy",
+      "possible_cause": "Overloading or severely contaminated laundry.",
+      "generated_by": "convert_with_classifier.py",
+      "review_status": "pending_manual_review",
+      "conversion_notes": [],
+      "classification_log": [
+        {
+          "text": "Avoid overloading the washing machine.",
+          "predicted_type": "instruction",
+          "confidence": 0.9695,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "No bubbles are seen (Bubble models only)"
+        },
+        {
+          "text": "Note that severely contaminated laundry may inherently not generate bubbles.",
+          "predicted_type": "instruction",
+          "confidence": 0.4363,
+          "accepted": false,
+          "final_type": "instruction",
+          "graph_symptom": "No bubbles are seen (Bubble models only)"
+        }
+      ],
+      "entry_node": "n1",
+      "nodes": [
+        {
+          "node_id": "n1",
+          "type": "checkpoint",
+          "question": "อาการที่พบตรงกับ \"No bubbles are seen (Bubble models only)\" ใช่หรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดยืนยันอาการ สร้างโดยสคริปต์แปลง ไม่ได้มาจากคู่มือโดยตรง",
+          "on_yes": "s1",
+          "on_no": "n_escalate_mismatch"
+        },
+        {
+          "node_id": "s1",
+          "type": "instruction",
+          "content": "Avoid overloading the washing machine.",
+          "safety_critical": false,
+          "next": "c1"
+        },
+        {
+          "node_id": "c1",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s2"
+        },
+        {
+          "node_id": "s2",
+          "type": "instruction",
+          "content": "Note that severely contaminated laundry may inherently not generate bubbles.",
+          "safety_critical": false,
+          "next": "c2"
+        },
+        {
+          "node_id": "c2",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "n_escalate"
+        },
+        {
+          "node_id": "n_resolved",
+          "type": "resolution",
+          "content": "ปัญหา \"No bubbles are seen (Bubble models only)\" ได้รับการแก้ไขเรียบร้อยแล้ว",
+          "outcome_kind": "user_fixed"
+        },
+        {
+          "node_id": "n_escalate",
+          "type": "escalation",
+          "content": "ดำเนินการตามขั้นตอนในคู่มือครบทุกข้อแล้วแต่ยังไม่สามารถแก้ปัญหาได้ แนะนำให้ติดต่อศูนย์บริการ Samsung พร้อมแจ้งรุ่นเครื่อง อาการที่พบ และขั้นตอนที่ได้ลองทำไปแล้ว",
+          "outcome_kind": "handoff_unknown"
+        },
+        {
+          "node_id": "n_escalate_mismatch",
+          "type": "escalation",
+          "content": "อาการที่พบไม่ตรงกับหัวข้อนี้ในคู่มือ แนะนำให้ตรวจสอบอาการอีกครั้ง หรือติดต่อศูนย์บริการ Samsung พร้อมอธิบายอาการที่พบโดยละเอียด",
+          "outcome_kind": "handoff_unknown"
+        }
+      ]
+    },
+    {
+      "schema_version": 2,
+      "graph_id": "oid84209_increased_time_washing",
+      "device_category": "Washing Machine",
+      "brand": "Samsung",
+      "model_pattern": "OID84209",
+      "entry_symptom": "Increased time of washing",
+      "entry_symptom_th": "",
+      "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+      "page_range": [
+        47,
+        47
+      ],
+      "source_chunk_id": "manual_Samsung_WashingMachine_OID84209_p47_c16",
+      "severity": "low",
+      "difficulty": "easy",
+      "possible_cause": "Normal operational difference between actual washing time and initial estimated display time.",
+      "generated_by": "convert_with_classifier.py",
+      "review_status": "pending_manual_review",
+      "conversion_notes": [
+        "โมเดลจำแนกขั้นตอน 1 รายการ ว่าไม่ใช่ instruction ผู้พัฒนาควรตรวจสอบความเหมาะสม"
+      ],
+      "classification_log": [
+        {
+          "text": "Note that actual washing time may naturally differ from the initial estimated display time.",
+          "predicted_type": "checkpoint",
+          "confidence": 0.8493,
+          "accepted": true,
+          "final_type": "checkpoint",
+          "graph_symptom": "Increased time of washing"
+        }
+      ],
+      "entry_node": "n1",
+      "nodes": [
+        {
+          "node_id": "n1",
+          "type": "checkpoint",
+          "question": "อาการที่พบตรงกับ \"Increased time of washing\" ใช่หรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดยืนยันอาการ สร้างโดยสคริปต์แปลง ไม่ได้มาจากคู่มือโดยตรง",
+          "on_yes": "s1",
+          "on_no": "n_escalate_mismatch"
+        },
+        {
+          "node_id": "s1",
+          "type": "instruction",
+          "content": "Note that actual washing time may naturally differ from the initial estimated display time.",
+          "safety_critical": false,
+          "next": "c1"
+        },
+        {
+          "node_id": "c1",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "n_escalate"
+        },
+        {
+          "node_id": "n_resolved",
+          "type": "resolution",
+          "content": "ปัญหา \"Increased time of washing\" ได้รับการแก้ไขเรียบร้อยแล้ว",
+          "outcome_kind": "user_fixed"
+        },
+        {
+          "node_id": "n_escalate",
+          "type": "escalation",
+          "content": "ดำเนินการตามขั้นตอนในคู่มือครบทุกข้อแล้วแต่ยังไม่สามารถแก้ปัญหาได้ แนะนำให้ติดต่อศูนย์บริการ Samsung พร้อมแจ้งรุ่นเครื่อง อาการที่พบ และขั้นตอนที่ได้ลองทำไปแล้ว",
+          "outcome_kind": "handoff_unknown"
+        },
+        {
+          "node_id": "n_escalate_mismatch",
+          "type": "escalation",
+          "content": "อาการที่พบไม่ตรงกับหัวข้อนี้ในคู่มือ แนะนำให้ตรวจสอบอาการอีกครั้ง หรือติดต่อศูนย์บริการ Samsung พร้อมอธิบายอาการที่พบโดยละเอียด",
+          "outcome_kind": "handoff_unknown"
+        }
+      ]
+    },
+    {
+      "schema_version": 2,
+      "graph_id": "oid84209_stains_clothes",
+      "device_category": "Washing Machine",
+      "brand": "Samsung",
+      "model_pattern": "OID84209",
+      "entry_symptom": "Stains on the clothes",
+      "entry_symptom_th": "",
+      "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+      "page_range": [
+        48,
+        48
+      ],
+      "source_chunk_id": "manual_Samsung_WashingMachine_OID84209_p48_c17",
+      "severity": "low",
+      "difficulty": "easy",
+      "possible_cause": "Pouring fabric softener directly onto clothing.",
+      "generated_by": "convert_with_classifier.py",
+      "review_status": "pending_manual_review",
+      "conversion_notes": [
+        "โมเดลจำแนกขั้นตอน 1 รายการ ว่าไม่ใช่ instruction ผู้พัฒนาควรตรวจสอบความเหมาะสม"
+      ],
+      "classification_log": [
+        {
+          "text": "Do not pour fabric softener directly onto your clothes.",
+          "predicted_type": "instruction",
+          "confidence": 0.9353,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Stains on the clothes"
+        },
+        {
+          "text": "If the problem persists, contact a service center using the number on the product label.",
+          "predicted_type": "escalation",
+          "confidence": 0.6463,
+          "accepted": true,
+          "final_type": "escalation",
+          "graph_symptom": "Stains on the clothes"
+        }
+      ],
+      "entry_node": "n1",
+      "nodes": [
+        {
+          "node_id": "n1",
+          "type": "checkpoint",
+          "question": "อาการที่พบตรงกับ \"Stains on the clothes\" ใช่หรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดยืนยันอาการ สร้างโดยสคริปต์แปลง ไม่ได้มาจากคู่มือโดยตรง",
+          "on_yes": "s1",
+          "on_no": "n_escalate_mismatch"
+        },
+        {
+          "node_id": "s1",
+          "type": "instruction",
+          "content": "Do not pour fabric softener directly onto your clothes.",
+          "safety_critical": false,
+          "next": "c1"
+        },
+        {
+          "node_id": "c1",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "n_escalate"
+        },
+        {
+          "node_id": "n_resolved",
+          "type": "resolution",
+          "content": "ปัญหา \"Stains on the clothes\" ได้รับการแก้ไขเรียบร้อยแล้ว",
+          "outcome_kind": "user_fixed"
+        },
+        {
+          "node_id": "n_escalate",
+          "type": "escalation",
+          "content": "If the problem persists, contact a service center using the number on the product label.",
+          "outcome_kind": "handoff_informed",
+          "author_note": "ข้อความมาจากคู่มือโดยตรง โมเดลจำแนกว่าเป็นการส่งต่อช่าง"
+        },
+        {
+          "node_id": "n_escalate_mismatch",
+          "type": "escalation",
+          "content": "อาการที่พบไม่ตรงกับหัวข้อนี้ในคู่มือ แนะนำให้ตรวจสอบอาการอีกครั้ง หรือติดต่อศูนย์บริการ Samsung พร้อมอธิบายอาการที่พบโดยละเอียด",
+          "outcome_kind": "handoff_unknown"
+        }
+      ]
+    },
+    {
+      "schema_version": 2,
+      "graph_id": "oid84209_information_code_4c_water_supplied",
+      "device_category": "Washing Machine",
+      "brand": "Samsung",
+      "model_pattern": "OID84209",
+      "entry_symptom": "Information code 4C - Water is not supplied",
+      "entry_symptom_th": "",
+      "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+      "page_range": [
+        48,
+        48
+      ],
+      "source_chunk_id": "manual_Samsung_WashingMachine_OID84209_p48_c18",
+      "severity": "medium",
+      "difficulty": "easy",
+      "possible_cause": "Closed water taps, clogged or frozen water hoses, insufficient water pressure, improperly connected hot/cold taps, or clogged mesh filter.",
+      "generated_by": "convert_with_classifier.py",
+      "review_status": "pending_manual_review",
+      "conversion_notes": [],
+      "classification_log": [
+        {
+          "text": "Make sure the water taps are open.",
+          "predicted_type": "instruction",
+          "confidence": 0.8698,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Information code 4C - Water is not supplied"
+        },
+        {
+          "text": "Make sure the water hoses are not clogged.",
+          "predicted_type": "instruction",
+          "confidence": 0.8393,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Information code 4C - Water is not supplied"
+        },
+        {
+          "text": "Make sure the water taps are not frozen.",
+          "predicted_type": "instruction",
+          "confidence": 0.8029,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Information code 4C - Water is not supplied"
+        },
+        {
+          "text": "Make sure the washing machine is running with sufficient water pressure.",
+          "predicted_type": "instruction",
+          "confidence": 0.9094,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Information code 4C - Water is not supplied"
+        },
+        {
+          "text": "Make sure that the cold water tap and the hot water tap are properly connected.",
+          "predicted_type": "instruction",
+          "confidence": 0.7932,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Information code 4C - Water is not supplied"
+        },
+        {
+          "text": "Clean the mesh filter as it may be clogged.",
+          "predicted_type": "instruction",
+          "confidence": 0.9558,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Information code 4C - Water is not supplied"
+        }
+      ],
+      "entry_node": "n1",
+      "nodes": [
+        {
+          "node_id": "n1",
+          "type": "checkpoint",
+          "question": "อาการที่พบตรงกับ \"Information code 4C - Water is not supplied\" ใช่หรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดยืนยันอาการ สร้างโดยสคริปต์แปลง ไม่ได้มาจากคู่มือโดยตรง",
+          "on_yes": "s1",
+          "on_no": "n_escalate_mismatch"
+        },
+        {
+          "node_id": "s1",
+          "type": "instruction",
+          "content": "Make sure the water taps are open.",
+          "safety_critical": false,
+          "next": "c1"
+        },
+        {
+          "node_id": "c1",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s2"
+        },
+        {
+          "node_id": "s2",
+          "type": "instruction",
+          "content": "Make sure the water hoses are not clogged.",
+          "safety_critical": false,
+          "next": "c2"
+        },
+        {
+          "node_id": "c2",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s3"
+        },
+        {
+          "node_id": "s3",
+          "type": "instruction",
+          "content": "Make sure the water taps are not frozen.",
+          "safety_critical": false,
+          "next": "c3"
+        },
+        {
+          "node_id": "c3",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s4"
+        },
+        {
+          "node_id": "s4",
+          "type": "instruction",
+          "content": "Make sure the washing machine is running with sufficient water pressure.",
+          "safety_critical": false,
+          "next": "c4"
+        },
+        {
+          "node_id": "c4",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s5"
+        },
+        {
+          "node_id": "s5",
+          "type": "instruction",
+          "content": "Make sure that the cold water tap and the hot water tap are properly connected.",
+          "safety_critical": false,
+          "next": "c5"
+        },
+        {
+          "node_id": "c5",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s6"
+        },
+        {
+          "node_id": "s6",
+          "type": "instruction",
+          "content": "Clean the mesh filter as it may be clogged.",
+          "safety_critical": false,
+          "next": "c6"
+        },
+        {
+          "node_id": "c6",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "n_escalate"
+        },
+        {
+          "node_id": "n_resolved",
+          "type": "resolution",
+          "content": "ปัญหา \"Information code 4C - Water is not supplied\" ได้รับการแก้ไขเรียบร้อยแล้ว",
+          "outcome_kind": "user_fixed"
+        },
+        {
+          "node_id": "n_escalate",
+          "type": "escalation",
+          "content": "ดำเนินการตามขั้นตอนในคู่มือครบทุกข้อแล้วแต่ยังไม่สามารถแก้ปัญหาได้ แนะนำให้ติดต่อศูนย์บริการ Samsung พร้อมแจ้งรุ่นเครื่อง อาการที่พบ และขั้นตอนที่ได้ลองทำไปแล้ว",
+          "outcome_kind": "handoff_unknown"
+        },
+        {
+          "node_id": "n_escalate_mismatch",
+          "type": "escalation",
+          "content": "อาการที่พบไม่ตรงกับหัวข้อนี้ในคู่มือ แนะนำให้ตรวจสอบอาการอีกครั้ง หรือติดต่อศูนย์บริการ Samsung พร้อมอธิบายอาการที่พบโดยละเอียด",
+          "outcome_kind": "handoff_unknown"
+        }
+      ]
+    },
+    {
+      "schema_version": 2,
+      "graph_id": "oid84209_information_code_5c_water_draining",
+      "device_category": "Washing Machine",
+      "brand": "Samsung",
+      "model_pattern": "OID84209",
+      "entry_symptom": "Information code 5C - Water is not draining",
+      "entry_symptom_th": "",
+      "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+      "page_range": [
+        48,
+        48
+      ],
+      "source_chunk_id": "manual_Samsung_WashingMachine_OID84209_p48_c19",
+      "severity": "medium",
+      "difficulty": "easy",
+      "possible_cause": "Frozen, clogged, or incorrectly positioned drain hose, clogged debris filter, or drain hose not fully straightened.",
+      "generated_by": "convert_with_classifier.py",
+      "review_status": "pending_manual_review",
+      "conversion_notes": [],
+      "classification_log": [
+        {
+          "text": "Make sure the drain hose is not frozen or clogged.",
+          "predicted_type": "instruction",
+          "confidence": 0.829,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Information code 5C - Water is not draining"
+        },
+        {
+          "text": "Make sure the drain hose is positioned correctly, depending on the connection type.",
+          "predicted_type": "checkpoint",
+          "confidence": 0.556,
+          "accepted": false,
+          "final_type": "instruction",
+          "graph_symptom": "Information code 5C - Water is not draining"
+        },
+        {
+          "text": "Clean the debris filter as it may be clogged.",
+          "predicted_type": "instruction",
+          "confidence": 0.8277,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Information code 5C - Water is not draining"
+        },
+        {
+          "text": "Make sure the drain hose is straightened all the way to the drain system.",
+          "predicted_type": "instruction",
+          "confidence": 0.6238,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Information code 5C - Water is not draining"
+        },
+        {
+          "text": "If the information code remains, contact a customer service centre.",
+          "predicted_type": "instruction",
+          "confidence": 0.3068,
+          "accepted": false,
+          "final_type": "instruction",
+          "graph_symptom": "Information code 5C - Water is not draining"
+        }
+      ],
+      "entry_node": "n1",
+      "nodes": [
+        {
+          "node_id": "n1",
+          "type": "checkpoint",
+          "question": "อาการที่พบตรงกับ \"Information code 5C - Water is not draining\" ใช่หรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดยืนยันอาการ สร้างโดยสคริปต์แปลง ไม่ได้มาจากคู่มือโดยตรง",
+          "on_yes": "s1",
+          "on_no": "n_escalate_mismatch"
+        },
+        {
+          "node_id": "s1",
+          "type": "instruction",
+          "content": "Make sure the drain hose is not frozen or clogged.",
+          "safety_critical": false,
+          "next": "c1"
+        },
+        {
+          "node_id": "c1",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s2"
+        },
+        {
+          "node_id": "s2",
+          "type": "instruction",
+          "content": "Make sure the drain hose is positioned correctly, depending on the connection type.",
+          "safety_critical": false,
+          "next": "c2"
+        },
+        {
+          "node_id": "c2",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s3"
+        },
+        {
+          "node_id": "s3",
+          "type": "instruction",
+          "content": "Clean the debris filter as it may be clogged.",
+          "safety_critical": false,
+          "next": "c3"
+        },
+        {
+          "node_id": "c3",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s4"
+        },
+        {
+          "node_id": "s4",
+          "type": "instruction",
+          "content": "Make sure the drain hose is straightened all the way to the drain system.",
+          "safety_critical": false,
+          "next": "c4"
+        },
+        {
+          "node_id": "c4",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s5"
+        },
+        {
+          "node_id": "s5",
+          "type": "instruction",
+          "content": "If the information code remains, contact a customer service centre.",
+          "safety_critical": false,
+          "next": "c5"
+        },
+        {
+          "node_id": "c5",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "n_escalate"
+        },
+        {
+          "node_id": "n_resolved",
+          "type": "resolution",
+          "content": "ปัญหา \"Information code 5C - Water is not draining\" ได้รับการแก้ไขเรียบร้อยแล้ว",
+          "outcome_kind": "user_fixed"
+        },
+        {
+          "node_id": "n_escalate",
+          "type": "escalation",
+          "content": "ดำเนินการตามขั้นตอนในคู่มือครบทุกข้อแล้วแต่ยังไม่สามารถแก้ปัญหาได้ แนะนำให้ติดต่อศูนย์บริการ Samsung พร้อมแจ้งรุ่นเครื่อง อาการที่พบ และขั้นตอนที่ได้ลองทำไปแล้ว",
+          "outcome_kind": "handoff_unknown"
+        },
+        {
+          "node_id": "n_escalate_mismatch",
+          "type": "escalation",
+          "content": "อาการที่พบไม่ตรงกับหัวข้อนี้ในคู่มือ แนะนำให้ตรวจสอบอาการอีกครั้ง หรือติดต่อศูนย์บริการ Samsung พร้อมอธิบายอาการที่พบโดยละเอียด",
+          "outcome_kind": "handoff_unknown"
+        }
+      ]
+    },
+    {
+      "schema_version": 2,
+      "graph_id": "oid84209_information_code_dc_operating_washing_machine",
+      "device_category": "Washing Machine",
+      "brand": "Samsung",
+      "model_pattern": "OID84209",
+      "entry_symptom": "Information code dC - Operating the washing machine with the door open",
+      "entry_symptom_th": "",
+      "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+      "page_range": [
+        48,
+        48
+      ],
+      "source_chunk_id": "manual_Samsung_WashingMachine_OID84209_p48_c20",
+      "severity": "medium",
+      "difficulty": "easy",
+      "possible_cause": "Door not properly closed or laundry caught in the door.",
+      "generated_by": "convert_with_classifier.py",
+      "review_status": "pending_manual_review",
+      "conversion_notes": [
+        "โมเดลจำแนกขั้นตอน 1 รายการ ว่าไม่ใช่ instruction ผู้พัฒนาควรตรวจสอบความเหมาะสม"
+      ],
+      "classification_log": [
+        {
+          "text": "Make sure the door is properly closed.",
+          "predicted_type": "checkpoint",
+          "confidence": 0.671,
+          "accepted": true,
+          "final_type": "checkpoint",
+          "graph_symptom": "Information code dC - Operating the washing machine with the door open"
+        },
+        {
+          "text": "Make sure laundry is not caught in the door.",
+          "predicted_type": "instruction",
+          "confidence": 0.8638,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Information code dC - Operating the washing machine with the door open"
+        }
+      ],
+      "entry_node": "n1",
+      "nodes": [
+        {
+          "node_id": "n1",
+          "type": "checkpoint",
+          "question": "อาการที่พบตรงกับ \"Information code dC - Operating the washing machine with the door open\" ใช่หรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดยืนยันอาการ สร้างโดยสคริปต์แปลง ไม่ได้มาจากคู่มือโดยตรง",
+          "on_yes": "s1",
+          "on_no": "n_escalate_mismatch"
+        },
+        {
+          "node_id": "s1",
+          "type": "instruction",
+          "content": "Make sure the door is properly closed.",
+          "safety_critical": false,
+          "next": "c1"
+        },
+        {
+          "node_id": "c1",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s2"
+        },
+        {
+          "node_id": "s2",
+          "type": "instruction",
+          "content": "Make sure laundry is not caught in the door.",
+          "safety_critical": false,
+          "next": "c2"
+        },
+        {
+          "node_id": "c2",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "n_escalate"
+        },
+        {
+          "node_id": "n_resolved",
+          "type": "resolution",
+          "content": "ปัญหา \"Information code dC - Operating the washing machine with the door open\" ได้รับการแก้ไขเรียบร้อยแล้ว",
+          "outcome_kind": "user_fixed"
+        },
+        {
+          "node_id": "n_escalate",
+          "type": "escalation",
+          "content": "ดำเนินการตามขั้นตอนในคู่มือครบทุกข้อแล้วแต่ยังไม่สามารถแก้ปัญหาได้ แนะนำให้ติดต่อศูนย์บริการ Samsung พร้อมแจ้งรุ่นเครื่อง อาการที่พบ และขั้นตอนที่ได้ลองทำไปแล้ว",
+          "outcome_kind": "handoff_unknown"
+        },
+        {
+          "node_id": "n_escalate_mismatch",
+          "type": "escalation",
+          "content": "อาการที่พบไม่ตรงกับหัวข้อนี้ในคู่มือ แนะนำให้ตรวจสอบอาการอีกครั้ง หรือติดต่อศูนย์บริการ Samsung พร้อมอธิบายอาการที่พบโดยละเอียด",
+          "outcome_kind": "handoff_unknown"
+        }
+      ]
+    },
+    {
+      "schema_version": 2,
+      "graph_id": "oid84209_information_code_dc1_door_cannot_locked",
+      "device_category": "Washing Machine",
+      "brand": "Samsung",
+      "model_pattern": "OID84209",
+      "entry_symptom": "Information code dC1 - Door cannot be locked",
+      "entry_symptom_th": "",
+      "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+      "page_range": [
+        48,
+        48
+      ],
+      "source_chunk_id": "manual_Samsung_WashingMachine_OID84209_p48_c21",
+      "severity": "medium",
+      "difficulty": "easy",
+      "possible_cause": "Door not properly closed or door lock failure.",
+      "generated_by": "convert_with_classifier.py",
+      "review_status": "pending_manual_review",
+      "conversion_notes": [
+        "โมเดลจำแนกขั้นตอน 1 รายการ ว่าไม่ใช่ instruction ผู้พัฒนาควรตรวจสอบความเหมาะสม"
+      ],
+      "classification_log": [
+        {
+          "text": "Make sure the door is properly closed.",
+          "predicted_type": "checkpoint",
+          "confidence": 0.671,
+          "accepted": true,
+          "final_type": "checkpoint",
+          "graph_symptom": "Information code dC1 - Door cannot be locked"
+        },
+        {
+          "text": "Turn off the washing machine, and then turn it on again.",
+          "predicted_type": "instruction",
+          "confidence": 0.9678,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Information code dC1 - Door cannot be locked"
+        },
+        {
+          "text": "If the information code remains, contact a customer service centre.",
+          "predicted_type": "instruction",
+          "confidence": 0.3068,
+          "accepted": false,
+          "final_type": "instruction",
+          "graph_symptom": "Information code dC1 - Door cannot be locked"
+        }
+      ],
+      "entry_node": "n1",
+      "nodes": [
+        {
+          "node_id": "n1",
+          "type": "checkpoint",
+          "question": "อาการที่พบตรงกับ \"Information code dC1 - Door cannot be locked\" ใช่หรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดยืนยันอาการ สร้างโดยสคริปต์แปลง ไม่ได้มาจากคู่มือโดยตรง",
+          "on_yes": "s1",
+          "on_no": "n_escalate_mismatch"
+        },
+        {
+          "node_id": "s1",
+          "type": "instruction",
+          "content": "Make sure the door is properly closed.",
+          "safety_critical": false,
+          "next": "c1"
+        },
+        {
+          "node_id": "c1",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s2"
+        },
+        {
+          "node_id": "s2",
+          "type": "instruction",
+          "content": "Turn off the washing machine, and then turn it on again.",
+          "safety_critical": false,
+          "next": "c2"
+        },
+        {
+          "node_id": "c2",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s3"
+        },
+        {
+          "node_id": "s3",
+          "type": "instruction",
+          "content": "If the information code remains, contact a customer service centre.",
+          "safety_critical": false,
+          "next": "c3"
+        },
+        {
+          "node_id": "c3",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "n_escalate"
+        },
+        {
+          "node_id": "n_resolved",
+          "type": "resolution",
+          "content": "ปัญหา \"Information code dC1 - Door cannot be locked\" ได้รับการแก้ไขเรียบร้อยแล้ว",
+          "outcome_kind": "user_fixed"
+        },
+        {
+          "node_id": "n_escalate",
+          "type": "escalation",
+          "content": "ดำเนินการตามขั้นตอนในคู่มือครบทุกข้อแล้วแต่ยังไม่สามารถแก้ปัญหาได้ แนะนำให้ติดต่อศูนย์บริการ Samsung พร้อมแจ้งรุ่นเครื่อง อาการที่พบ และขั้นตอนที่ได้ลองทำไปแล้ว",
+          "outcome_kind": "handoff_unknown"
+        },
+        {
+          "node_id": "n_escalate_mismatch",
+          "type": "escalation",
+          "content": "อาการที่พบไม่ตรงกับหัวข้อนี้ในคู่มือ แนะนำให้ตรวจสอบอาการอีกครั้ง หรือติดต่อศูนย์บริการ Samsung พร้อมอธิบายอาการที่พบโดยละเอียด",
+          "outcome_kind": "handoff_unknown"
+        }
+      ]
+    },
+    {
+      "schema_version": 2,
+      "graph_id": "oid84209_information_code_oc_water_overflowed",
+      "device_category": "Washing Machine",
+      "brand": "Samsung",
+      "model_pattern": "OID84209",
+      "entry_symptom": "Information code OC - Water is overflowed",
+      "entry_symptom_th": "",
+      "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+      "page_range": [
+        48,
+        48
+      ],
+      "source_chunk_id": "manual_Samsung_WashingMachine_OID84209_p48_c22",
+      "severity": "high",
+      "difficulty": "medium",
+      "possible_cause": "Water overflow.",
+      "generated_by": "convert_with_classifier.py",
+      "review_status": "pending_manual_review",
+      "conversion_notes": [
+        "โมเดลจำแนกขั้นตอน 1 รายการ ว่าไม่ใช่ instruction ผู้พัฒนาควรตรวจสอบความเหมาะสม"
+      ],
+      "classification_log": [
+        {
+          "text": "Restart after spinning.",
+          "predicted_type": "resolution",
+          "confidence": 0.431,
+          "accepted": false,
+          "final_type": "instruction",
+          "graph_symptom": "Information code OC - Water is overflowed"
+        },
+        {
+          "text": "If the information code remains on the display, contact a local Samsung service centre.",
+          "predicted_type": "escalation",
+          "confidence": 0.9847,
+          "accepted": true,
+          "final_type": "escalation",
+          "graph_symptom": "Information code OC - Water is overflowed"
+        }
+      ],
+      "entry_node": "n1",
+      "nodes": [
+        {
+          "node_id": "n1",
+          "type": "checkpoint",
+          "question": "อาการที่พบตรงกับ \"Information code OC - Water is overflowed\" ใช่หรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดยืนยันอาการ สร้างโดยสคริปต์แปลง ไม่ได้มาจากคู่มือโดยตรง",
+          "on_yes": "s1",
+          "on_no": "n_escalate_mismatch"
+        },
+        {
+          "node_id": "s1",
+          "type": "instruction",
+          "content": "Restart after spinning.",
+          "safety_critical": false,
+          "next": "c1"
+        },
+        {
+          "node_id": "c1",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "n_escalate"
+        },
+        {
+          "node_id": "n_resolved",
+          "type": "resolution",
+          "content": "ปัญหา \"Information code OC - Water is overflowed\" ได้รับการแก้ไขเรียบร้อยแล้ว",
+          "outcome_kind": "user_fixed"
+        },
+        {
+          "node_id": "n_escalate",
+          "type": "escalation",
+          "content": "If the information code remains on the display, contact a local Samsung service centre.",
+          "outcome_kind": "handoff_informed",
+          "author_note": "ข้อความมาจากคู่มือโดยตรง โมเดลจำแนกว่าเป็นการส่งต่อช่าง"
+        },
+        {
+          "node_id": "n_escalate_mismatch",
+          "type": "escalation",
+          "content": "อาการที่พบไม่ตรงกับหัวข้อนี้ในคู่มือ แนะนำให้ตรวจสอบอาการอีกครั้ง หรือติดต่อศูนย์บริการ Samsung พร้อมอธิบายอาการที่พบโดยละเอียด",
+          "outcome_kind": "handoff_unknown"
+        }
+      ]
+    },
+    {
+      "schema_version": 2,
+      "graph_id": "oid84209_information_code_lc_check_drain_hose",
+      "device_category": "Washing Machine",
+      "brand": "Samsung",
+      "model_pattern": "OID84209",
+      "entry_symptom": "Information code LC - Check the drain hose",
+      "entry_symptom_th": "",
+      "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+      "page_range": [
+        48,
+        48
+      ],
+      "source_chunk_id": "manual_Samsung_WashingMachine_OID84209_p48_c23",
+      "severity": "medium",
+      "difficulty": "easy",
+      "possible_cause": "Drain hose end placed on the floor or drain hose clogged.",
+      "generated_by": "convert_with_classifier.py",
+      "review_status": "pending_manual_review",
+      "conversion_notes": [],
+      "classification_log": [
+        {
+          "text": "Make sure the end of the drain hose is not placed on the floor.",
+          "predicted_type": "instruction",
+          "confidence": 0.7384,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Information code LC - Check the drain hose"
+        },
+        {
+          "text": "Make sure the drain hose is not clogged.",
+          "predicted_type": "instruction",
+          "confidence": 0.7185,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Information code LC - Check the drain hose"
+        },
+        {
+          "text": "If the information code remains, contact a customer service centre.",
+          "predicted_type": "instruction",
+          "confidence": 0.3068,
+          "accepted": false,
+          "final_type": "instruction",
+          "graph_symptom": "Information code LC - Check the drain hose"
+        }
+      ],
+      "entry_node": "n1",
+      "nodes": [
+        {
+          "node_id": "n1",
+          "type": "checkpoint",
+          "question": "อาการที่พบตรงกับ \"Information code LC - Check the drain hose\" ใช่หรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดยืนยันอาการ สร้างโดยสคริปต์แปลง ไม่ได้มาจากคู่มือโดยตรง",
+          "on_yes": "s1",
+          "on_no": "n_escalate_mismatch"
+        },
+        {
+          "node_id": "s1",
+          "type": "instruction",
+          "content": "Make sure the end of the drain hose is not placed on the floor.",
+          "safety_critical": false,
+          "next": "c1"
+        },
+        {
+          "node_id": "c1",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s2"
+        },
+        {
+          "node_id": "s2",
+          "type": "instruction",
+          "content": "Make sure the drain hose is not clogged.",
+          "safety_critical": false,
+          "next": "c2"
+        },
+        {
+          "node_id": "c2",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s3"
+        },
+        {
+          "node_id": "s3",
+          "type": "instruction",
+          "content": "If the information code remains, contact a customer service centre.",
+          "safety_critical": false,
+          "next": "c3"
+        },
+        {
+          "node_id": "c3",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "n_escalate"
+        },
+        {
+          "node_id": "n_resolved",
+          "type": "resolution",
+          "content": "ปัญหา \"Information code LC - Check the drain hose\" ได้รับการแก้ไขเรียบร้อยแล้ว",
+          "outcome_kind": "user_fixed"
+        },
+        {
+          "node_id": "n_escalate",
+          "type": "escalation",
+          "content": "ดำเนินการตามขั้นตอนในคู่มือครบทุกข้อแล้วแต่ยังไม่สามารถแก้ปัญหาได้ แนะนำให้ติดต่อศูนย์บริการ Samsung พร้อมแจ้งรุ่นเครื่อง อาการที่พบ และขั้นตอนที่ได้ลองทำไปแล้ว",
+          "outcome_kind": "handoff_unknown"
+        },
+        {
+          "node_id": "n_escalate_mismatch",
+          "type": "escalation",
+          "content": "อาการที่พบไม่ตรงกับหัวข้อนี้ในคู่มือ แนะนำให้ตรวจสอบอาการอีกครั้ง หรือติดต่อศูนย์บริการ Samsung พร้อมอธิบายอาการที่พบโดยละเอียด",
+          "outcome_kind": "handoff_unknown"
+        }
+      ]
+    },
+    {
+      "schema_version": 2,
+      "graph_id": "oid84209_information_code_3c_check_motor_operation",
+      "device_category": "Washing Machine",
+      "brand": "Samsung",
+      "model_pattern": "OID84209",
+      "entry_symptom": "Information code 3C - Check the motor for operation",
+      "entry_symptom_th": "",
+      "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+      "page_range": [
+        48,
+        48
+      ],
+      "source_chunk_id": "manual_Samsung_WashingMachine_OID84209_p48_c24",
+      "severity": "high",
+      "difficulty": "medium",
+      "possible_cause": "Motor operation failure.",
+      "generated_by": "convert_with_classifier.py",
+      "review_status": "pending_manual_review",
+      "conversion_notes": [],
+      "classification_log": [
+        {
+          "text": "Try restarting the cycle.",
+          "predicted_type": "instruction",
+          "confidence": 0.417,
+          "accepted": false,
+          "final_type": "instruction",
+          "graph_symptom": "Information code 3C - Check the motor for operation"
+        },
+        {
+          "text": "If the information code remains, contact a customer service centre.",
+          "predicted_type": "instruction",
+          "confidence": 0.3068,
+          "accepted": false,
+          "final_type": "instruction",
+          "graph_symptom": "Information code 3C - Check the motor for operation"
+        }
+      ],
+      "entry_node": "n1",
+      "nodes": [
+        {
+          "node_id": "n1",
+          "type": "checkpoint",
+          "question": "อาการที่พบตรงกับ \"Information code 3C - Check the motor for operation\" ใช่หรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดยืนยันอาการ สร้างโดยสคริปต์แปลง ไม่ได้มาจากคู่มือโดยตรง",
+          "on_yes": "s1",
+          "on_no": "n_escalate_mismatch"
+        },
+        {
+          "node_id": "s1",
+          "type": "instruction",
+          "content": "Try restarting the cycle.",
+          "safety_critical": false,
+          "next": "c1"
+        },
+        {
+          "node_id": "c1",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s2"
+        },
+        {
+          "node_id": "s2",
+          "type": "instruction",
+          "content": "If the information code remains, contact a customer service centre.",
+          "safety_critical": false,
+          "next": "c2"
+        },
+        {
+          "node_id": "c2",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "n_escalate"
+        },
+        {
+          "node_id": "n_resolved",
+          "type": "resolution",
+          "content": "ปัญหา \"Information code 3C - Check the motor for operation\" ได้รับการแก้ไขเรียบร้อยแล้ว",
+          "outcome_kind": "user_fixed"
+        },
+        {
+          "node_id": "n_escalate",
+          "type": "escalation",
+          "content": "ดำเนินการตามขั้นตอนในคู่มือครบทุกข้อแล้วแต่ยังไม่สามารถแก้ปัญหาได้ แนะนำให้ติดต่อศูนย์บริการ Samsung พร้อมแจ้งรุ่นเครื่อง อาการที่พบ และขั้นตอนที่ได้ลองทำไปแล้ว",
+          "outcome_kind": "handoff_unknown"
+        },
+        {
+          "node_id": "n_escalate_mismatch",
+          "type": "escalation",
+          "content": "อาการที่พบไม่ตรงกับหัวข้อนี้ในคู่มือ แนะนำให้ตรวจสอบอาการอีกครั้ง หรือติดต่อศูนย์บริการ Samsung พร้อมอธิบายอาการที่พบโดยละเอียด",
+          "outcome_kind": "handoff_unknown"
+        }
+      ]
+    },
+    {
+      "schema_version": 2,
+      "graph_id": "oid84209_information_code_tc1_water_heating_temperature",
+      "device_category": "Washing Machine",
+      "brand": "Samsung",
+      "model_pattern": "OID84209",
+      "entry_symptom": "Information code TC1 - Water heating temperature sensor needs to be checked",
+      "entry_symptom_th": "",
+      "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+      "page_range": [
+        48,
+        48
+      ],
+      "source_chunk_id": "manual_Samsung_WashingMachine_OID84209_p48_c25",
+      "severity": "high",
+      "difficulty": "hard",
+      "possible_cause": "Water heating temperature sensor issue.",
+      "generated_by": "convert_with_classifier.py",
+      "review_status": "pending_manual_review",
+      "conversion_notes": [],
+      "classification_log": [
+        {
+          "text": "If the information code remains, contact a customer service centre.",
+          "predicted_type": "instruction",
+          "confidence": 0.3068,
+          "accepted": false,
+          "final_type": "instruction",
+          "graph_symptom": "Information code TC1 - Water heating temperature sensor needs to be checked"
+        }
+      ],
+      "entry_node": "n1",
+      "nodes": [
+        {
+          "node_id": "n1",
+          "type": "checkpoint",
+          "question": "อาการที่พบตรงกับ \"Information code TC1 - Water heating temperature sensor needs to be checked\" ใช่หรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดยืนยันอาการ สร้างโดยสคริปต์แปลง ไม่ได้มาจากคู่มือโดยตรง",
+          "on_yes": "s1",
+          "on_no": "n_escalate_mismatch"
+        },
+        {
+          "node_id": "s1",
+          "type": "instruction",
+          "content": "If the information code remains, contact a customer service centre.",
+          "safety_critical": false,
+          "next": "c1"
+        },
+        {
+          "node_id": "c1",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "n_escalate"
+        },
+        {
+          "node_id": "n_resolved",
+          "type": "resolution",
+          "content": "ปัญหา \"Information code TC1 - Water heating temperature sensor needs to be checked\" ได้รับการแก้ไขเรียบร้อยแล้ว",
+          "outcome_kind": "user_fixed"
+        },
+        {
+          "node_id": "n_escalate",
+          "type": "escalation",
+          "content": "ดำเนินการตามขั้นตอนในคู่มือครบทุกข้อแล้วแต่ยังไม่สามารถแก้ปัญหาได้ แนะนำให้ติดต่อศูนย์บริการ Samsung พร้อมแจ้งรุ่นเครื่อง อาการที่พบ และขั้นตอนที่ได้ลองทำไปแล้ว",
+          "outcome_kind": "handoff_unknown"
+        },
+        {
+          "node_id": "n_escalate_mismatch",
+          "type": "escalation",
+          "content": "อาการที่พบไม่ตรงกับหัวข้อนี้ในคู่มือ แนะนำให้ตรวจสอบอาการอีกครั้ง หรือติดต่อศูนย์บริการ Samsung พร้อมอธิบายอาการที่พบโดยละเอียด",
+          "outcome_kind": "handoff_unknown"
+        }
+      ]
+    },
+    {
+      "schema_version": 2,
+      "graph_id": "oid84209_information_code_hc_high_temperature_heating",
+      "device_category": "Washing Machine",
+      "brand": "Samsung",
+      "model_pattern": "OID84209",
+      "entry_symptom": "Information code HC - High temperature heating check",
+      "entry_symptom_th": "",
+      "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+      "page_range": [
+        50,
+        50
+      ],
+      "source_chunk_id": "manual_Samsung_WashingMachine_OID84209_p50_c26",
+      "severity": "high",
+      "difficulty": "hard",
+      "possible_cause": "High temperature heating issue.",
+      "generated_by": "convert_with_classifier.py",
+      "review_status": "pending_manual_review",
+      "conversion_notes": [],
+      "classification_log": [
+        {
+          "text": "If the information code remains, contact a customer service centre.",
+          "predicted_type": "instruction",
+          "confidence": 0.3068,
+          "accepted": false,
+          "final_type": "instruction",
+          "graph_symptom": "Information code HC - High temperature heating check"
+        }
+      ],
+      "entry_node": "n1",
+      "nodes": [
+        {
+          "node_id": "n1",
+          "type": "checkpoint",
+          "question": "อาการที่พบตรงกับ \"Information code HC - High temperature heating check\" ใช่หรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดยืนยันอาการ สร้างโดยสคริปต์แปลง ไม่ได้มาจากคู่มือโดยตรง",
+          "on_yes": "s1",
+          "on_no": "n_escalate_mismatch"
+        },
+        {
+          "node_id": "s1",
+          "type": "instruction",
+          "content": "If the information code remains, contact a customer service centre.",
+          "safety_critical": false,
+          "next": "c1"
+        },
+        {
+          "node_id": "c1",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "n_escalate"
+        },
+        {
+          "node_id": "n_resolved",
+          "type": "resolution",
+          "content": "ปัญหา \"Information code HC - High temperature heating check\" ได้รับการแก้ไขเรียบร้อยแล้ว",
+          "outcome_kind": "user_fixed"
+        },
+        {
+          "node_id": "n_escalate",
+          "type": "escalation",
+          "content": "ดำเนินการตามขั้นตอนในคู่มือครบทุกข้อแล้วแต่ยังไม่สามารถแก้ปัญหาได้ แนะนำให้ติดต่อศูนย์บริการ Samsung พร้อมแจ้งรุ่นเครื่อง อาการที่พบ และขั้นตอนที่ได้ลองทำไปแล้ว",
+          "outcome_kind": "handoff_unknown"
+        },
+        {
+          "node_id": "n_escalate_mismatch",
+          "type": "escalation",
+          "content": "อาการที่พบไม่ตรงกับหัวข้อนี้ในคู่มือ แนะนำให้ตรวจสอบอาการอีกครั้ง หรือติดต่อศูนย์บริการ Samsung พร้อมอธิบายอาการที่พบโดยละเอียด",
+          "outcome_kind": "handoff_unknown"
+        }
+      ]
+    },
+    {
+      "schema_version": 2,
+      "graph_id": "oid84209_information_code_1c_water_level_sensor",
+      "device_category": "Washing Machine",
+      "brand": "Samsung",
+      "model_pattern": "OID84209",
+      "entry_symptom": "Information code 1C - The Water Level sensor is not working properly",
+      "entry_symptom_th": "",
+      "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+      "page_range": [
+        50,
+        50
+      ],
+      "source_chunk_id": "manual_Samsung_WashingMachine_OID84209_p50_c27",
+      "severity": "high",
+      "difficulty": "medium",
+      "possible_cause": "Water Level sensor malfunction.",
+      "generated_by": "convert_with_classifier.py",
+      "review_status": "pending_manual_review",
+      "conversion_notes": [],
+      "classification_log": [
+        {
+          "text": "Try power off and restarting the cycle.",
+          "predicted_type": "instruction",
+          "confidence": 0.9107,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Information code 1C - The Water Level sensor is not working properly"
+        },
+        {
+          "text": "If the information code remains, contact a customer service centre.",
+          "predicted_type": "instruction",
+          "confidence": 0.3068,
+          "accepted": false,
+          "final_type": "instruction",
+          "graph_symptom": "Information code 1C - The Water Level sensor is not working properly"
+        }
+      ],
+      "entry_node": "n1",
+      "nodes": [
+        {
+          "node_id": "n1",
+          "type": "checkpoint",
+          "question": "อาการที่พบตรงกับ \"Information code 1C - The Water Level sensor is not working properly\" ใช่หรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดยืนยันอาการ สร้างโดยสคริปต์แปลง ไม่ได้มาจากคู่มือโดยตรง",
+          "on_yes": "s1",
+          "on_no": "n_escalate_mismatch"
+        },
+        {
+          "node_id": "s1",
+          "type": "instruction",
+          "content": "Try power off and restarting the cycle.",
+          "safety_critical": false,
+          "next": "c1"
+        },
+        {
+          "node_id": "c1",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s2"
+        },
+        {
+          "node_id": "s2",
+          "type": "instruction",
+          "content": "If the information code remains, contact a customer service centre.",
+          "safety_critical": false,
+          "next": "c2"
+        },
+        {
+          "node_id": "c2",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "n_escalate"
+        },
+        {
+          "node_id": "n_resolved",
+          "type": "resolution",
+          "content": "ปัญหา \"Information code 1C - The Water Level sensor is not working properly\" ได้รับการแก้ไขเรียบร้อยแล้ว",
+          "outcome_kind": "user_fixed"
+        },
+        {
+          "node_id": "n_escalate",
+          "type": "escalation",
+          "content": "ดำเนินการตามขั้นตอนในคู่มือครบทุกข้อแล้วแต่ยังไม่สามารถแก้ปัญหาได้ แนะนำให้ติดต่อศูนย์บริการ Samsung พร้อมแจ้งรุ่นเครื่อง อาการที่พบ และขั้นตอนที่ได้ลองทำไปแล้ว",
+          "outcome_kind": "handoff_unknown"
+        },
+        {
+          "node_id": "n_escalate_mismatch",
+          "type": "escalation",
+          "content": "อาการที่พบไม่ตรงกับหัวข้อนี้ในคู่มือ แนะนำให้ตรวจสอบอาการอีกครั้ง หรือติดต่อศูนย์บริการ Samsung พร้อมอธิบายอาการที่พบโดยละเอียด",
+          "outcome_kind": "handoff_unknown"
+        }
+      ]
+    },
+    {
+      "schema_version": 2,
+      "graph_id": "oid84209_information_code_ac_check_communications_between",
+      "device_category": "Washing Machine",
+      "brand": "Samsung",
+      "model_pattern": "OID84209",
+      "entry_symptom": "Information code AC - Check communications between main and sub PBAs",
+      "entry_symptom_th": "",
+      "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+      "page_range": [
+        50,
+        50
+      ],
+      "source_chunk_id": "manual_Samsung_WashingMachine_OID84209_p50_c28",
+      "severity": "high",
+      "difficulty": "medium",
+      "possible_cause": "Communication failure between main and sub PBAs.",
+      "generated_by": "convert_with_classifier.py",
+      "review_status": "pending_manual_review",
+      "conversion_notes": [],
+      "classification_log": [
+        {
+          "text": "Try power off and restarting the cycle.",
+          "predicted_type": "instruction",
+          "confidence": 0.9107,
+          "accepted": true,
+          "final_type": "instruction",
+          "graph_symptom": "Information code AC - Check communications between main and sub PBAs"
+        },
+        {
+          "text": "If the information code remains, contact a customer service centre.",
+          "predicted_type": "instruction",
+          "confidence": 0.3068,
+          "accepted": false,
+          "final_type": "instruction",
+          "graph_symptom": "Information code AC - Check communications between main and sub PBAs"
+        }
+      ],
+      "entry_node": "n1",
+      "nodes": [
+        {
+          "node_id": "n1",
+          "type": "checkpoint",
+          "question": "อาการที่พบตรงกับ \"Information code AC - Check communications between main and sub PBAs\" ใช่หรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดยืนยันอาการ สร้างโดยสคริปต์แปลง ไม่ได้มาจากคู่มือโดยตรง",
+          "on_yes": "s1",
+          "on_no": "n_escalate_mismatch"
+        },
+        {
+          "node_id": "s1",
+          "type": "instruction",
+          "content": "Try power off and restarting the cycle.",
+          "safety_critical": false,
+          "next": "c1"
+        },
+        {
+          "node_id": "c1",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "s2"
+        },
+        {
+          "node_id": "s2",
+          "type": "instruction",
+          "content": "If the information code remains, contact a customer service centre.",
+          "safety_critical": false,
+          "next": "c2"
+        },
+        {
+          "node_id": "c2",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "n_escalate"
+        },
+        {
+          "node_id": "n_resolved",
+          "type": "resolution",
+          "content": "ปัญหา \"Information code AC - Check communications between main and sub PBAs\" ได้รับการแก้ไขเรียบร้อยแล้ว",
+          "outcome_kind": "user_fixed"
+        },
+        {
+          "node_id": "n_escalate",
+          "type": "escalation",
+          "content": "ดำเนินการตามขั้นตอนในคู่มือครบทุกข้อแล้วแต่ยังไม่สามารถแก้ปัญหาได้ แนะนำให้ติดต่อศูนย์บริการ Samsung พร้อมแจ้งรุ่นเครื่อง อาการที่พบ และขั้นตอนที่ได้ลองทำไปแล้ว",
+          "outcome_kind": "handoff_unknown"
+        },
+        {
+          "node_id": "n_escalate_mismatch",
+          "type": "escalation",
+          "content": "อาการที่พบไม่ตรงกับหัวข้อนี้ในคู่มือ แนะนำให้ตรวจสอบอาการอีกครั้ง หรือติดต่อศูนย์บริการ Samsung พร้อมอธิบายอาการที่พบโดยละเอียด",
+          "outcome_kind": "handoff_unknown"
+        }
+      ]
+    },
+    {
+      "schema_version": 2,
+      "graph_id": "oid84209_information_code_ac6_inverter_communication_check",
+      "device_category": "Washing Machine",
+      "brand": "Samsung",
+      "model_pattern": "OID84209",
+      "entry_symptom": "Information code AC6 - Inverter communication check",
+      "entry_symptom_th": "",
+      "source": "OID84209_IB_WW3000FM-MD_EN_TH_250612.pdf",
+      "page_range": [
+        50,
+        50
+      ],
+      "source_chunk_id": "manual_Samsung_WashingMachine_OID84209_p50_c29",
+      "severity": "high",
+      "difficulty": "hard",
+      "possible_cause": "Inverter communication issue.",
+      "generated_by": "convert_with_classifier.py",
+      "review_status": "pending_manual_review",
+      "conversion_notes": [],
+      "classification_log": [
+        {
+          "text": "If the information code remains, contact a customer service centre.",
+          "predicted_type": "instruction",
+          "confidence": 0.3068,
+          "accepted": false,
+          "final_type": "instruction",
+          "graph_symptom": "Information code AC6 - Inverter communication check"
+        }
+      ],
+      "entry_node": "n1",
+      "nodes": [
+        {
+          "node_id": "n1",
+          "type": "checkpoint",
+          "question": "อาการที่พบตรงกับ \"Information code AC6 - Inverter communication check\" ใช่หรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดยืนยันอาการ สร้างโดยสคริปต์แปลง ไม่ได้มาจากคู่มือโดยตรง",
+          "on_yes": "s1",
+          "on_no": "n_escalate_mismatch"
+        },
+        {
+          "node_id": "s1",
+          "type": "instruction",
+          "content": "If the information code remains, contact a customer service centre.",
+          "safety_critical": false,
+          "next": "c1"
+        },
+        {
+          "node_id": "c1",
+          "type": "checkpoint",
+          "question": "หลังดำเนินการขั้นตอนนี้แล้ว ปัญหาได้รับการแก้ไขหรือไม่?",
+          "safety_critical": false,
+          "author_note": "โหนดตรวจผลลัพธ์ สร้างโดยสคริปต์แปลง",
+          "on_yes": "n_resolved",
+          "on_no": "n_escalate"
+        },
+        {
+          "node_id": "n_resolved",
+          "type": "resolution",
+          "content": "ปัญหา \"Information code AC6 - Inverter communication check\" ได้รับการแก้ไขเรียบร้อยแล้ว",
+          "outcome_kind": "user_fixed"
+        },
+        {
+          "node_id": "n_escalate",
+          "type": "escalation",
+          "content": "ดำเนินการตามขั้นตอนในคู่มือครบทุกข้อแล้วแต่ยังไม่สามารถแก้ปัญหาได้ แนะนำให้ติดต่อศูนย์บริการ Samsung พร้อมแจ้งรุ่นเครื่อง อาการที่พบ และขั้นตอนที่ได้ลองทำไปแล้ว",
+          "outcome_kind": "handoff_unknown"
+        },
+        {
+          "node_id": "n_escalate_mismatch",
+          "type": "escalation",
+          "content": "อาการที่พบไม่ตรงกับหัวข้อนี้ในคู่มือ แนะนำให้ตรวจสอบอาการอีกครั้ง หรือติดต่อศูนย์บริการ Samsung พร้อมอธิบายอาการที่พบโดยละเอียด",
+          "outcome_kind": "handoff_unknown"
+        }
+      ]
+    }
+  ]
+}
