@@ -10,7 +10,8 @@
     "start:prod": "node dist/main.js",
     "test": "jest",
     "migrate": "node scripts/run-migrations.js",
-    "seed": "node scripts/seed-graphs.js"
+    "seed": "node scripts/seed-graphs.js",
+    "seed:equipment": "node scripts/seed-equipment.js"
   },
   "dependencies": {
     "@nestjs/cli": "^10.4.0",
