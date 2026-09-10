@@ -26,9 +26,7 @@ CREATE TABLE IF NOT EXISTS manuals (
   INDEX idx_manuals_category (device_category)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ============================================================
--- graphs — 1 แถวต่ออาการ 1 อาการ
--- ============================================================
+--graphs — 1 แถวต่ออาการ 1 อาการ
 
 CREATE TABLE IF NOT EXISTS graphs (
   graph_id           VARCHAR(120) NOT NULL,

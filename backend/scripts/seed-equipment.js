@@ -105,10 +105,6 @@ function validate(data) {
   return problems;
 }
 
-// ------------------------------------------------------------
-// เขียนลงฐานข้อมูล
-// ------------------------------------------------------------
-
 async function seed(conn, data) {
   // 1) แคตตาล็อกอุปกรณ์ — upsert
   //    ใช้ upsert เพราะ equipment_usage อ้างถึงแบบ FOREIGN KEY
@@ -158,10 +154,6 @@ async function seed(conn, data) {
   return { equipment: data.equipment.length, usage: usageCount };
 }
 
-// ------------------------------------------------------------
-// ตรวจผลหลังเขียน
-// ------------------------------------------------------------
-
 async function report(conn) {
   const [[counts]] = await conn.query(`
     SELECT
@@ -198,9 +190,6 @@ async function report(conn) {
     console.log(`\n⬜ ยังไม่มีข้อมูล ${missing.length} ประเภท: ${missing.join(', ')}`);
   }
 }
-
-// ------------------------------------------------------------
-
 async function main() {
   const args = process.argv.slice(2).filter((a) => !a.startsWith('--'));
   const verifyOnly = process.argv.includes('--verify');
