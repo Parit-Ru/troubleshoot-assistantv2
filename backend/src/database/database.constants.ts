@@ -1,5 +1,3 @@
-// backend/src/database/database.constants.ts
-
 /**
  * ชื่อเรียก (token) ของ connection pool ในระบบ Dependency Injection ของ NestJS
  *

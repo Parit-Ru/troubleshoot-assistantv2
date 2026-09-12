@@ -1,16 +1,14 @@
 -- backend/migrations/001_create_graph_tables.sql
---
+
 -- ตารางกลุ่ม "ข้อมูลกราฟ" — เขียนครั้งเดียวตอน seed แล้วอ่านอย่างเดียว
---
+
 --   manuals  →  graphs  →  nodes
 --   (คู่มือ)    (อาการ)    (ขั้นตอน)
---
+
 -- ทุกตารางใช้ utf8mb4 เพราะข้อความในกราฟเป็นภาษาไทย
 -- ถ้าใช้ utf8 (ซึ่งใน MySQL คือ utf8mb3) ตัวอักษรบางตัวจะเก็บไม่ได้
 
--- ============================================================
 -- manuals — 1 แถวต่อคู่มือ 1 เล่ม
--- ============================================================
 
 CREATE TABLE IF NOT EXISTS manuals (
   manual_id        VARCHAR(80)  NOT NULL,
@@ -46,14 +44,12 @@ CREATE TABLE IF NOT EXISTS graphs (
   difficulty         ENUM('easy','medium','hard') NULL,
 
   -- ค่าคงที่จากคู่มือ (เช่น "ระยะท่อขั้นต่ำ 3 เมตร") เป็น provenance เฉยๆ
-  -- engine ไม่ได้อ่านค่านี้ไปตัดสินใจ ตัวเลขถูกฝังในข้อความโหนดอยู่แล้ว
   config             JSON NULL,
 
   -- โหนดแรกที่จะเริ่มเดิน
   -- ตั้งใจไม่ใส่ FOREIGN KEY ไปที่ nodes เพราะจะเป็นวงกลม:
   --   graphs ต้องมีก่อน nodes (nodes อ้าง graph_id)
   --   แต่ graphs.entry_node ก็อ้าง nodes อีกที
-  -- ความถูกต้องข้อนี้ถูกตรวจโดย seed script และ validate_graph.py แทน
   entry_node         VARCHAR(60) NOT NULL,
 
   schema_version     TINYINT UNSIGNED NOT NULL DEFAULT 2,
@@ -70,13 +66,11 @@ CREATE TABLE IF NOT EXISTS graphs (
   INDEX idx_graphs_manual (manual_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ============================================================
 -- nodes — 1 แถวต่อโหนด
--- ============================================================
---
+
 -- โหนด 5 ประเภทมี field ไม่เหมือนกัน แต่เก็บในตารางเดียว
 -- คอลัมน์ที่ประเภทนั้นไม่ใช้จะเป็น NULL
---
+
 --   ประเภท        คอลัมน์ที่ใช้
 --   checkpoint    text_content, on_yes, on_no
 --   instruction   text_content, next_node, safety_critical, safety_warning
@@ -84,7 +78,7 @@ CREATE TABLE IF NOT EXISTS graphs (
 --                 input_pattern, store_as
 --   resolution    text_content, outcome_kind
 --   escalation    text_content, outcome_kind
---
+
 -- ทำไมรวม question / content / prompt เป็น text_content ช่องเดียว:
 -- ทั้งสาม field เป็น "ข้อความที่แสดงให้ผู้ใช้เห็น" เหมือนกัน ต่างแค่ชื่อ
 -- ตัว engine เองก็มีฟังก์ชัน getRawText() ที่รวมสามอันนี้อยู่แล้ว

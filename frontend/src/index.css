@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  /* ตั้งที่ body ไม่ใช่ที่ #root เพื่อให้สีพื้นเต็มจอแม้เนื้อหาสั้น */
+  body {
+    @apply bg-canvas text-ink;
+  }
+}

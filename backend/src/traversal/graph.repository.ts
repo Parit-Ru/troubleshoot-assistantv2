@@ -1,5 +1,3 @@
-// backend/src/traversal/graph.repository.ts
-
 /**
  * graph.repository.ts — โหลดกราฟทั้งหมดจาก MySQL เข้าหน่วยความจำตอนบูต
  *
@@ -10,10 +8,6 @@
  *   - กราฟเป็นข้อมูลอ่านอย่างเดียว เปลี่ยนเฉพาะตอนรัน seed script
  *   - ระดับร้อยกราฟ กินหน่วยความจำไม่กี่ร้อย KB
  *   - ทุก request จึงเดินกราฟได้โดยไม่แตะฐานข้อมูลเลย
- *
- * หลัก fail-fast: ถ้าข้อมูลในฐานข้อมูลไม่ครบตามที่ engine ต้องการ
- * ให้ล้มตอนบูตพร้อมบอก graph_id/node_id ที่ผิด
- * ห้ามปล่อยผ่านเป็น undefined แล้วไปพังตอนผู้ใช้เดินถึงโหนดนั้น
  */
 
 import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
@@ -36,10 +30,6 @@ import {
   TroubleshootingNode,
   UnsupportedSchemaVersionError,
 } from '../traversal-engine/types';
-
-// ============================================================
-// รูปร่างแถวดิบที่ได้จาก MySQL
-// ============================================================
 
 /** 1 แถว = 1 กราฟ (JOIN manuals มาแล้วเพื่อเอา device_category/brand/model_pattern) */
 interface GraphRow extends RowDataPacket {
