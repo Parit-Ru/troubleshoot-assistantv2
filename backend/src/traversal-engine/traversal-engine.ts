@@ -9,10 +9,10 @@
  *   - submitAction   ส่งคำตอบ/คำสั่งเข้ามา แล้วได้โหนดถัดไปกลับมา
  *
  * ไฟล์นี้ไม่ import NestJS หรืออะไรที่ต้องมี server รันอยู่เลย
+ * และไม่ใช้โมดูลเฉพาะของ Node ด้วย จึงรันได้ทั้งบนเซิร์ฟเวอร์และในเบราว์เซอร์
  */
 
-import { randomUUID } from 'node:crypto';
-import {
+import type {
   TroubleshootingGraph,
   TroubleshootingNode,
   ResolutionNode,
@@ -22,6 +22,8 @@ import {
   TraversalAction,
   RenderedNode,
   NodeReference,
+} from './types';
+import {
   NodeNotFoundError,
   InvalidActionError,
   SafetyConfirmationRequiredError,
@@ -43,7 +45,9 @@ export function startSession(graph: TroubleshootingGraph): { session: SessionSta
   }
 
   const session: SessionState = {
-    sessionId: randomUUID(),
+    // ใช้ globalThis.crypto แทน node:crypto — เป็นมาตรฐานเว็บที่ Node 20+ มีให้เหมือนกัน
+    // ทำให้ไฟล์นี้รันในเบราว์เซอร์ได้ด้วย โดยผลลัพธ์เหมือนเดิมทุกประการ
+    sessionId: globalThis.crypto.randomUUID(),
     graphId: graph.graph_id,
     currentNodeId: graph.entry_node,
     status: 'in_progress',
