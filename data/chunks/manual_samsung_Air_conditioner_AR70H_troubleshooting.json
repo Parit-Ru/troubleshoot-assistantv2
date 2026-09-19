@@ -1,0 +1,223 @@
+[
+  {
+    "chunk_id": "manual_Samsung_AirConditioner_AR70HD1_p43_stops_working",
+    "device_category": "Air Conditioner",
+    "brand": "Samsung",
+    "model": "AR70H**D1***",
+    "source": "RAC255-00_IB_26Y_AR80H_WindFree_GEO_CB_EN-WEB_251229-D04",
+    "page": 43,
+    "content": "The air conditioner stops working. Unit not receiving power; circuit breaker tripped; Timed off function turned off the unit. 1. Make sure the unit is receiving power. 2. Check the circuit breaker; if flipped off, flip it on again and restart the unit. If the problem persists, contact your service provider. 3. If the Timed off function turned off the unit, turn on the unit again.",
+    "metadata": {
+      "symptom": "The air conditioner stops working.",
+      "possible_cause": "Unit not receiving power; circuit breaker tripped; Timed off function turned off the unit.",
+      "solution": "1. Make sure the unit is receiving power.\n2. Check the circuit breaker; if flipped off, flip it on again and restart the unit. If the problem persists, contact your service provider.\n3. If the Timed off function turned off the unit, turn on the unit again.",
+      "severity": "low",
+      "difficulty": "easy",
+      "safety_warning": null
+    }
+  },
+  {
+    "chunk_id": "manual_Samsung_AirConditioner_AR70HD1_p43_cannot_change_temperature",
+    "device_category": "Air Conditioner",
+    "brand": "Samsung",
+    "model": "AR70H**D1***",
+    "source": "RAC255-00_IB_26Y_AR80H_WindFree_GEO_CB_EN-WEB_251229-D04",
+    "page": 43,
+    "content": "Cannot change the temperature. Unit is in Fan mode, which does not allow temperature control (automatically controlled). Check if the unit is in Fan mode. If so, the set temperature cannot be changed; the unit automatically controls it.",
+    "metadata": {
+      "symptom": "Cannot change the temperature.",
+      "possible_cause": "Unit is in Fan mode, which does not allow temperature control (automatically controlled).",
+      "solution": "Check if the unit is in Fan mode. If so, the set temperature cannot be changed; the unit automatically controls it.",
+      "severity": "low",
+      "difficulty": "easy",
+      "safety_warning": null
+    }
+  },
+  {
+    "chunk_id": "manual_Samsung_AirConditioner_AR70HD1_p43_improper_airflow_temperature",
+    "device_category": "Air Conditioner",
+    "brand": "Samsung",
+    "model": "AR70H**D1***",
+    "source": "RAC255-00_IB_26Y_AR80H_WindFree_GEO_CB_EN-WEB_251229-D04",
+    "page": 43,
+    "content": "Improper airflow temperature. Set temperature not lower than current temperature in Cool mode; air filter blocked with dirt or debris; outdoor unit covered or installed near obstacles; doors or windows open; pipe length between units exceeds the maximum allowed length. 1. Check the set temperature - in Cool mode, cooling occurs only when the set temperature is lower than the current temperature; use the remote control to change it. 2. Check if the air filter is blocked with dirt or debris; clean it regularly if so. 3. Check if the outdoor unit is covered or installed near obstacles; remove coverings and obstacles. 4. Check if doors or windows are open; close them. 5. Check if the pipe length between the units exceeds the maximum pipe length; if so, cooling performance may decrease.",
+    "metadata": {
+      "symptom": "Improper airflow temperature.",
+      "possible_cause": "Set temperature not lower than current temperature in Cool mode; air filter blocked with dirt or debris; outdoor unit covered or installed near obstacles; doors or windows open; pipe length between units exceeds the maximum allowed length.",
+      "solution": "1. Check the set temperature - in Cool mode, cooling occurs only when the set temperature is lower than the current temperature; use the remote control to change it.\n2. Check if the air filter is blocked with dirt or debris; clean it regularly if so.\n3. Check if the outdoor unit is covered or installed near obstacles; remove coverings and obstacles.\n4. Check if doors or windows are open; close them.\n5. Check if the pipe length between the units exceeds the maximum pipe length; if so, cooling performance may decrease.",
+      "severity": "medium",
+      "difficulty": "easy",
+      "safety_warning": null
+    }
+  },
+  {
+    "chunk_id": "manual_Samsung_AirConditioner_AR70HD1_p43_cannot_change_airflow_direction",
+    "device_category": "Air Conditioner",
+    "brand": "Samsung",
+    "model": "AR70H**D1***",
+    "source": "RAC255-00_IB_26Y_AR80H_WindFree_GEO_CB_EN-WEB_251229-D04",
+    "page": 43,
+    "content": "Cannot change the airflow direction. Good Sleep function is on in Cool mode, which locks airflow direction control. Check if the Good Sleep function is on in Cool mode. If so, you cannot control the airflow direction.",
+    "metadata": {
+      "symptom": "Cannot change the airflow direction.",
+      "possible_cause": "Good Sleep function is on in Cool mode, which locks airflow direction control.",
+      "solution": "Check if the Good Sleep function is on in Cool mode. If so, you cannot control the airflow direction.",
+      "severity": "low",
+      "difficulty": "easy",
+      "safety_warning": null
+    }
+  },
+  {
+    "chunk_id": "manual_Samsung_AirConditioner_AR70HD1_p43_cannot_change_fan_speed",
+    "device_category": "Air Conditioner",
+    "brand": "Samsung",
+    "model": "AR70H**D1***",
+    "source": "RAC255-00_IB_26Y_AR80H_WindFree_GEO_CB_EN-WEB_251229-D04",
+    "page": 43,
+    "content": "Cannot change the fan speed. Unit is in AI Auto or Dry mode, or the Good Sleep function is on in Cool mode - fan speed is automatically controlled in these conditions. Check if the unit is in AI Auto or Dry mode, or if the Good Sleep function is on in Cool mode. In these conditions, you cannot control the fan speed; the unit automatically controls it.",
+    "metadata": {
+      "symptom": "Cannot change the fan speed.",
+      "possible_cause": "Unit is in AI Auto or Dry mode, or the Good Sleep function is on in Cool mode - fan speed is automatically controlled in these conditions.",
+      "solution": "Check if the unit is in AI Auto or Dry mode, or if the Good Sleep function is on in Cool mode. In these conditions, you cannot control the fan speed; the unit automatically controls it.",
+      "severity": "low",
+      "difficulty": "easy",
+      "safety_warning": null
+    }
+  },
+  {
+    "chunk_id": "manual_Samsung_AirConditioner_AR70HD1_p43_remote_not_working",
+    "device_category": "Air Conditioner",
+    "brand": "Samsung",
+    "model": "AR70H**D1***",
+    "source": "RAC255-00_IB_26Y_AR80H_WindFree_GEO_CB_EN-WEB_251229-D04",
+    "page": 43,
+    "content": "The remote control does not work. Remote control battery depleted; signal to the unit obstructed; bright lights such as fluorescent bulbs or neon signs interfering with the signal. 1. Charge the remote control using the USB port (type C) on the bottom of the remote control. 2. Make sure the remote control can send an unobstructed signal to the unit. 3. Keep bright lights away from the unit; light from fluorescent bulbs or neon signs may interrupt the signal from the remote control.",
+    "metadata": {
+      "symptom": "The remote control does not work.",
+      "possible_cause": "Remote control battery depleted; signal to the unit obstructed; bright lights such as fluorescent bulbs or neon signs interfering with the signal.",
+      "solution": "1. Charge the remote control using the USB port (type C) on the bottom of the remote control.\n2. Make sure the remote control can send an unobstructed signal to the unit.\n3. Keep bright lights away from the unit; light from fluorescent bulbs or neon signs may interrupt the signal from the remote control.",
+      "severity": "low",
+      "difficulty": "easy",
+      "safety_warning": null
+    }
+  },
+  {
+    "chunk_id": "manual_Samsung_AirConditioner_AR70HD1_p43_timer_not_working",
+    "device_category": "Air Conditioner",
+    "brand": "Samsung",
+    "model": "AR70H**D1***",
+    "source": "RAC255-00_IB_26Y_AR80H_WindFree_GEO_CB_EN-WEB_251229-D04",
+    "page": 43,
+    "content": "The Timed on/off function does not work. The confirm/set button on the remote control was not pressed when setting the timer. Make sure to press the confirm button on the remote control when setting the timer.",
+    "metadata": {
+      "symptom": "The Timed on/off function does not work.",
+      "possible_cause": "The confirm/set button on the remote control was not pressed when setting the timer.",
+      "solution": "Make sure to press the confirm button on the remote control when setting the timer.",
+      "severity": "low",
+      "difficulty": "easy",
+      "safety_warning": null
+    }
+  },
+  {
+    "chunk_id": "manual_Samsung_AirConditioner_AR70HD1_p43_indicator_blinking",
+    "device_category": "Air Conditioner",
+    "brand": "Samsung",
+    "model": "AR70H**D1***",
+    "source": "RAC255-00_IB_26Y_AR80H_WindFree_GEO_CB_EN-WEB_251229-D04",
+    "page": 43,
+    "content": "The indicator on the indoor unit display blinks continuously. Unit malfunction indicated by a continuously blinking indicator light. 1. Press the Power button to turn off the unit, or disconnect the power plug. 2. If the indicator light on the indoor unit display continues blinking, contact your service provider.",
+    "metadata": {
+      "symptom": "The indicator on the indoor unit display blinks continuously.",
+      "possible_cause": "Unit malfunction indicated by a continuously blinking indicator light.",
+      "solution": "1. Press the Power button to turn off the unit, or disconnect the power plug.\n2. If the indicator light on the indoor unit display continues blinking, contact your service provider.",
+      "severity": "medium",
+      "difficulty": "easy",
+      "safety_warning": null
+    }
+  },
+  {
+    "chunk_id": "manual_Samsung_AirConditioner_AR70HD1_p44_odors_from_unit",
+    "device_category": "Air Conditioner",
+    "brand": "Samsung",
+    "model": "AR70H**D1***",
+    "source": "RAC255-00_IB_26Y_AR80H_WindFree_GEO_CB_EN-WEB_251229-D04",
+    "page": 44,
+    "content": "Odors are coming from the unit during regular operation. Unit operating in a smoky area; drain pipes not clean. No components in the unit produce a strong odor on their own. If the unit is operating in a smoky area, ventilate the room or operate the unit in Fan mode for 3 to 4 hours. Check if the drain pipes are clean and clean them regularly.",
+    "metadata": {
+      "symptom": "Odors are coming from the unit during regular operation.",
+      "possible_cause": "Unit operating in a smoky area; drain pipes not clean. No components in the unit produce a strong odor on their own.",
+      "solution": "If the unit is operating in a smoky area, ventilate the room or operate the unit in Fan mode for 3 to 4 hours. Check if the drain pipes are clean and clean them regularly.",
+      "severity": "low",
+      "difficulty": "easy",
+      "safety_warning": null
+    }
+  },
+  {
+    "chunk_id": "manual_Samsung_AirConditioner_AR70HD1_p44_error_message",
+    "device_category": "Air Conditioner",
+    "brand": "Samsung",
+    "model": "AR70H**D1***",
+    "source": "RAC255-00_IB_26Y_AR80H_WindFree_GEO_CB_EN-WEB_251229-D04",
+    "page": 44,
+    "content": "The indoor unit display shows an error message. Indoor unit indicator blinking, indicating an error code. Write down the error code shown and contact your service provider, providing them with the error code.",
+    "metadata": {
+      "symptom": "The indoor unit display shows an error message.",
+      "possible_cause": "Indoor unit indicator blinking, indicating an error code.",
+      "solution": "Write down the error code shown and contact your service provider, providing them with the error code.",
+      "severity": "medium",
+      "difficulty": "hard",
+      "safety_warning": null
+    }
+  },
+  {
+    "chunk_id": "manual_Samsung_AirConditioner_AR70HD1_p44_unit_generating_noise",
+    "device_category": "Air Conditioner",
+    "brand": "Samsung",
+    "model": "AR70H**D1***",
+    "source": "RAC255-00_IB_26Y_AR80H_WindFree_GEO_CB_EN-WEB_251229-D04",
+    "page": 44,
+    "content": "The unit is generating noise. Normal operating noise; if pipe length between units is less than 3 m and no coil was used, additional noise may be transmitted from the outdoor unit to the indoor unit via the piping. It is normal for the unit to generate some noise while operating. If the pipe length between the units is less than 3 m and no coil was used, refer to the 'Typical installation' section in the Installation manual, as additional noise may be transmitted from the outdoor unit to the indoor unit via the piping.",
+    "metadata": {
+      "symptom": "The unit is generating noise.",
+      "possible_cause": "Normal operating noise; if pipe length between units is less than 3 m and no coil was used, additional noise may be transmitted from the outdoor unit to the indoor unit via the piping.",
+      "solution": "It is normal for the unit to generate some noise while operating. If the pipe length between the units is less than 3 m and no coil was used, refer to the 'Typical installation' section in the Installation manual, as additional noise may be transmitted from the outdoor unit to the indoor unit via the piping.",
+      "severity": "low",
+      "difficulty": "easy",
+      "safety_warning": null
+    }
+  },
+  {
+    "chunk_id": "manual_Samsung_AirConditioner_AR70HD1_p44_water_drips_outdoor",
+    "device_category": "Air Conditioner",
+    "brand": "Samsung",
+    "model": "AR70H**D1***",
+    "source": "RAC255-00_IB_26Y_AR80H_WindFree_GEO_CB_EN-WEB_251229-D04",
+    "page": 44,
+    "content": "Water drips from the pipe connections on the outdoor unit. Condensation developing due to significant changes in ambient temperature or humidity. This is normal.",
+    "metadata": {
+      "symptom": "Water drips from the pipe connections on the outdoor unit.",
+      "possible_cause": "Condensation developing due to significant changes in ambient temperature or humidity.",
+      "solution": "This is normal.",
+      "severity": "low",
+      "difficulty": "easy",
+      "safety_warning": null
+    }
+  },
+  {
+    "chunk_id": "manual_Samsung_AirConditioner_AR70HD1_p44_condensation_indoor",
+    "device_category": "Air Conditioner",
+    "brand": "Samsung",
+    "model": "AR70H**D1***",
+    "source": "RAC255-00_IB_26Y_AR80H_WindFree_GEO_CB_EN-WEB_251229-D04",
+    "page": 44,
+    "content": "Condensation forms on the surface of the indoor unit. Higher humidity in the room during Cool mode operation, or a large difference between the desired temperature and indoor temperature. This is a normal occurrence under these conditions.",
+    "metadata": {
+      "symptom": "Condensation forms on the surface of the indoor unit.",
+      "possible_cause": "Higher humidity in the room during Cool mode operation, or a large difference between the desired temperature and indoor temperature.",
+      "solution": "This is a normal occurrence under these conditions.",
+      "severity": "low",
+      "difficulty": "easy",
+      "safety_warning": null
+    }
+  }
+]
