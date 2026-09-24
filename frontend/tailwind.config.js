@@ -15,7 +15,7 @@ export default {
         ink: {
           DEFAULT: "#F1F5F9",
           soft: "#94A3B8",
-          faint: "#64748B",
+          faint: "#78879D",
         },
 
         success: "#4ADE80",
@@ -24,10 +24,7 @@ export default {
       },
 
       fontFamily: {
-        // ใช้ฟอนต์ที่ติดมากับเครื่องเท่านั้น ไล่ตามระบบปฏิบัติการ
-        // Windows → Leelawadee UI, Android → Noto Sans Thai, iOS และ macOS → Thonburi
         sans: ['"Leelawadee UI"', '"Noto Sans Thai"', "Thonburi", "Tahoma", "sans-serif"],
-        // ใช้กับรหัสซึ่งเป็นตัวละตินล้วน จึงไม่ต้องมีฟอนต์ไทยในลำดับ
         mono: ["Consolas", '"Courier New"', "monospace"],
       },
     },

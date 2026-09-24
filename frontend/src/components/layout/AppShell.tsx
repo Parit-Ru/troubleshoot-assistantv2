@@ -18,6 +18,9 @@ import { ServerStatus } from './ServerStatus'
  */
 const APP_NAME = 'FixBot'
 
+/** อ่านครั้งเดียวที่นี่ ใช้ทั้งแถบโหมดจำลองและการซ่อนป้ายสถานะบนมือถือ */
+const IS_MOCK = import.meta.env.VITE_USE_MOCK === 'true'
+
 /** เมนู 2 รายการ หน้าตรวจอาการและหน้า gallery ไม่อยู่ในเมนู เพราะเข้าจากลิงก์ในหน้าอื่น */
 const NAV_ITEMS = [
   { to: '/', label: 'หน้าแรก' },
@@ -56,8 +59,15 @@ export function AppShell({ children }: AppShellProps) {
           ))}
         </nav>
 
-        {/* md:mt-auto ดันป้ายสถานะไปอยู่ล่างสุดของ sidebar / มือถือ: w-full ทำให้ขึ้นบรรทัดใหม่เต็มแถว */}
-        <div className="w-full md:mt-auto">
+        {/*
+          md:mt-auto ดันป้ายสถานะไปอยู่ล่างสุดของ sidebar / มือถือ: w-full ทำให้ขึ้นบรรทัดใหม่เต็มแถว
+
+          ในโหมดจำลอง มือถือซ่อนป้ายนี้ทั้งกล่อง เพราะแถบสีฟ้าด้านล่างบอกเรื่องเดียวกันอยู่แล้ว
+          ต้องซ่อนที่กล่องนี้ ไม่ใช่ที่ ServerStatus เพราะกล่องว่างที่เหลือยังกินระยะ gap-y ของแถบนำทางอยู่
+          ซ่อนเฉพาะโหมดจำลอง ไม่ซ่อนตลอด เพราะโหมดปกติมือถือยังต้องเห็นว่าเซิร์ฟเวอร์ล่ม
+          ชื่อคลาสเขียนเต็มทั้งสองแบบ ด้วยเหตุผลเดียวกับ Button.tsx
+        */}
+        <div className={IS_MOCK ? 'hidden md:mt-auto md:block' : 'w-full md:mt-auto'}>
           <ServerStatus />
         </div>
       </aside>
@@ -67,7 +77,7 @@ export function AppShell({ children }: AppShellProps) {
           แถบโหมดจำลองอยู่บนสุดของคอลัมน์เนื้อหา ไม่ได้อยู่เหนือทั้งหน้า
           เพราะถ้าอยู่เหนือ sidebar ที่สูงเต็มจอ ป้ายสถานะท้าย sidebar จะล้นจอลงไปเท่าความสูงของแถบ
         */}
-        {import.meta.env.VITE_USE_MOCK === 'true' && (
+        {IS_MOCK && (
           <div className="flex items-center gap-2 bg-info/15 px-4 py-2 text-xs text-info md:px-10">
             <Icon name="info" className="h-4 w-4 shrink-0" />
             <span>โหมดจำลอง — ขั้นตอนทำงานในเบราว์เซอร์นี้ ยังไม่ได้เชื่อมกับเซิร์ฟเวอร์จริง</span>
