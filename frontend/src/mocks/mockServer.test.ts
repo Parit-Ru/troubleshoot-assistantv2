@@ -7,7 +7,7 @@ const STOPS_WORKING = 'samsung_ac_ar70h_stops_working'
 const ERROR_MESSAGE = 'samsung_ac_ar70h_error_message'
 const WATER_DRIPS = 'samsung_ac_ar70h_water_drips_outdoor'
 
-/** เดินตาม action ที่ให้มาทีละขั้น แล้วคืน session ที่หยุดอยู่ */
+/** ดำเนินการตาม action ที่ให้มาทีละขั้น แล้วคืน session ที่หยุดอยู่ */
 async function walk(graphId: string, actions: TraversalAction[]) {
   let session = await startSession(graphId)
   for (const action of actions) {
@@ -26,7 +26,7 @@ describe('mockServer', () => {
     expect(graphs.every((g) => g.entrySymptomTh)).toBe(true)
   })
 
-  it('เริ่ม session แล้วได้โหนดแรกของกราฟ พร้อมรายการอุปกรณ์', async () => {
+  it('เริ่ม session แล้วได้สถานะเริ่มต้นของผังขั้นตอน พร้อมรายการอุปกรณ์', async () => {
     const session = await startSession(STOPS_WORKING)
 
     expect(session.node.nodeId).toBe('n1')
@@ -47,7 +47,7 @@ describe('mockServer', () => {
     expect((error as ApiError).status).toBe(400)
     expect((error as ApiError).code).toBe('SAFETY_CONFIRMATION_REQUIRED')
 
-    // อ่านสถานะซ้ำ ต้องยังอยู่โหนดเดิม
+    // อ่านสถานะซ้ำ ต้องยังอยู่สถานะเดิม
     // ระบบที่ตอบ error แล้วแอบเดินต่อ จะแย่กว่าระบบที่ไม่มีด่านเลย
     const after = await getSession(session.sessionId)
     expect(after.node.nodeId).toBe('n_fix_breaker')
@@ -60,8 +60,8 @@ describe('mockServer', () => {
     expect(session.node.nodeId).toBe('n_recheck_breaker')
   })
 
-  it('กรอกรหัสผิดรูปแบบ พาไปโหนดอธิบายรูปแบบ ไม่ใช่ error', async () => {
-    // สำคัญ: การกรอกผิดไม่ใช่ข้อผิดพลาดของระบบ แต่เป็นเส้นทางหนึ่งในกราฟ
+  it('กรอกรหัสผิดรูปแบบ พาไปสถานะอธิบายรูปแบบ ไม่ใช่ error', async () => {
+    // สำคัญ: การกรอกผิดไม่ใช่ข้อผิดพลาดของระบบ แต่เป็นเส้นทางหนึ่งในผังขั้นตอน
     // หน้าจอจึงห้ามตรวจรูปแบบเอง ต้องปล่อยให้เซิร์ฟเวอร์ตัดสิน
     const session = await walk(ERROR_MESSAGE, [YES, { type: 'input', value: '12' }])
 
