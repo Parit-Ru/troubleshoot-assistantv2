@@ -1,30 +1,109 @@
-# FixGraph
+# troubleshoot-assistantv2
 
-ระบบผู้ช่วยแก้ปัญหาเครื่องใช้ไฟฟ้า ด้วยการเดิน troubleshooting graph
-ที่ควบคุมด้วยอัลกอริทึม ไม่ใช่ให้ LLM ตัดสินใจขั้นตอนเอง
+ระบบช่วยเหลือและแนะนำการซ่อมเครื่องใช้ไฟฟ้าภายในบ้าน
+(Home Appliance Repair Assistance and Recommendation System)
 
-## โครงสร้าง
+โครงงานวิชา 01418499 — วิทยาการคอมพิวเตอร์ มหาวิทยาลัยเกษตรศาสตร์ วิทยาเขตกำแพงแสน
 
-- `backend/` — NestJS + PostgreSQL
-- `frontend/` — React + Vite + TypeScript + Tailwind
-- `data/` — troubleshooting graph และ schema
-- `scripts/` — เครื่องมือ Python สำหรับตรวจสอบ graph
+ระบบพาผู้ใช้แก้ปัญหาเครื่องใช้ไฟฟ้า Samsung **ทีละขั้น** ตามขั้นตอนในหัวข้อ Troubleshooting ของคู่มือผู้ใช้
+โดยใช้ **เครื่องสถานะเชิงกำหนด (Deterministic Finite Machine)** เป็นผู้ตัดสินว่าขั้นถัดไปคืออะไร
+ไม่ใช่ให้ LLM ตัดสินใจ และบังคับการยืนยันคำเตือนความปลอดภัยที่ฝั่งเซิร์ฟเวอร์
+
+## สถานะปัจจุบัน
+
+| ส่วน | สถานะ |
+|---|---|
+| กลไกควบคุมเครื่องสถานะ (`backend/src/traversal-engine/`) | ✅ เสร็จ — เทส 82 ข้อผ่าน |
+| REST API (NestJS, `backend/src/traversal/`) | ✅ เสร็จ — 5 endpoint + เทส service 10 ข้อผ่าน (รวมเทส backend ทั้งหมด **92 ข้อ**) |
+| ผังขั้นตอนของเครื่องปรับอากาศ AR70H | ✅ 13 ชุด 95 สถานะ (คู่มือหน้า 43–44) ร่างโดยใช้ LLM ช่วย แล้วตรวจแก้ทุกสถานะด้วยมือ |
+| การเดินครบทุกเส้นทางของผังขั้นตอนแอร์ | ✅ 106 เส้นทาง ไม่มีทางตัน (นิยามของ "เส้นทาง" อยู่ใน `path-coverage.spec.ts`) |
+| ฐานข้อมูล MySQL: migration, seed, `GraphRepository` | ✅ เสร็จ |
+| หน้าเว็บ (`frontend/`) | ✅ เสร็จ เทส 43 ข้อผ่าน ต่อกับ REST API จริงแล้ว (เลิกใช้ตัวจำลองเป็นค่าเริ่มต้น) |
+| การสาธิตด่านความปลอดภัยกับเซิร์ฟเวอร์จริง | ⬜ ยังไม่ได้เดินทดสอบจริง — มีสคริปต์ `backend/scripts/demo-safety-gate.ps1` ยิง HTTP ตรงเข้าเซิร์ฟเวอร์เตรียมไว้แล้ว (ไม่ทำ e2e ด้วย supertest) |
+| ค้นหาอาการด้วยภาษาธรรมชาติ, คะแนนความมั่นใจ | ⬜ ยังไม่ได้ทำ |
+| LLM เรียบเรียงถ้อยคำ | ⬜ ยังไม่ได้ทำ (เป็นชั้นเสริม ถอดออกได้) |
+| ผังขั้นตอนของตู้เย็น เครื่องซักผ้า โทรทัศน์ | ⬜ ยังไม่เสร็จ — เครื่องซักผ้ามีฉบับร่างจากสคริปต์ 29 ชุด ยังไม่ผ่านการตรวจ และยังไม่ผ่าน validator |
+
+### REST API — 5 endpoint
+
+- `GET /traversal/graphs`
+- `POST /traversal/sessions`
+- `GET /traversal/sessions/:id`
+- `POST /traversal/sessions/:id/actions`
+- `DELETE /traversal/sessions/:id` (คืนสถานะ 204)
+
+รหัสข้อผิดพลาดที่ใช้ร่วมกันทั้ง backend และ frontend: `SAFETY_CONFIRMATION_REQUIRED`, `INVALID_ACTION`, `SESSION_COMPLETED`, `SESSION_NOT_FOUND`, `GRAPH_NOT_FOUND`, `GRAPH_NODE_MISSING`, `GRAPH_SCHEMA_UNSUPPORTED`, `INTERNAL_ERROR`
+
+## ขอบเขต
+
+- เครื่องใช้ไฟฟ้า Samsung 4 ประเภท: เครื่องปรับอากาศ, ตู้เย็น, เครื่องซักผ้า, โทรทัศน์ (ตัดไมโครเวฟออกตามข้อเสนอแนะของอาจารย์)
+- **ระดับผู้ใช้เท่านั้น** — สิ่งที่คู่มือบอกให้เจ้าของเครื่องทำเองได้ เช่น ตรวจไฟ/เบรกเกอร์ ตั้งค่า ทำความสะอาดฟิลเตอร์ อ่านรหัสข้อผิดพลาด
+- อาการที่เกินขอบเขตต้องจบที่สถานะส่งต่อ "ติดต่อศูนย์บริการ Samsung" เสมอ ระบบไม่แต่งวิธีซ่อมขึ้นเอง
+
+## โครงสร้าง repo
+
+| โฟลเดอร์ | หน้าที่ |
+|---|---|
+| `backend/` | NestJS + MySQL (SQL เขียนเอง ไม่ใช้ ORM) — กลไกควบคุมเครื่องสถานะ, REST API, ชั้นข้อมูล, migration, seed |
+| `frontend/` | React + Vite + TypeScript + Tailwind — เอกสารอธิบายโค้ดอยู่ที่ `frontend/docs/explained/` |
+| `data/` | ผังขั้นตอนการวินิจฉัย (`manuals/`), schema, รายการอุปกรณ์ที่ต้องเตรียม (`equipment/`) |
+| `scripts/` | เครื่องมือ Python ออฟไลน์: ตรวจผังขั้นตอน, แปลงข้อมูลจากคู่มือ, ตัวจำแนกประเภทสถานะ |
+| `models/`, `reports/` | ตัวจำแนกประเภทสถานะที่เทรนแล้ว และรายงานผลการจำแนก |
+
+### ชื่อในโค้ดเทียบกับศัพท์ในเอกสาร
+
+ชื่อในโค้ดยังคงเดิมไว้ก่อน
+
+| ในโค้ด | ความหมาย |
+|---|---|
+| ตาราง `graphs` | ผังขั้นตอนการวินิจฉัย (เครื่องสถานะ 1 ชุดต่ออาการ) |
+| ตาราง `nodes` | สถานะ (การเปลี่ยนสถานะเก็บเป็นคอลัมน์ `on_yes`, `on_no`, `next_node`, `on_invalid` ในตารางนี้) |
+| `traversal-engine.ts` | กลไกควบคุมเครื่องสถานะ |
+| `resolveNextNode()` | ฟังก์ชันเปลี่ยนสถานะ — จุดตัดสินใจเพียงจุดเดียว และเป็นที่บังคับด่านความปลอดภัย |
 
 ## เริ่มใช้งาน
 
-Backend:
+ต้องใช้ Node.js 20 ขึ้นไป
+
+### Backend
 
     cd backend
     npm install
-    npm run start:dev
+    copy .env.example .env      # แล้วกรอกค่า DB_* ให้ครบ
+    npm run migrate
+    npm run seed
+    npm run seed:equipment
+    npm run start:dev           # ตรวจว่าทำงาน: http://localhost:3000/health
+    npm test
 
-Frontend:
+`npm run seed` นำเข้าเฉพาะผังขั้นตอนของแอร์ (13 ชุด)
+
+### Frontend
 
     cd frontend
     npm install
     npm run dev
+    npm test
 
-## ตรวจสอบ graph
+ค่าเริ่มต้นใน `frontend/.env.development` คือ `VITE_USE_MOCK=false` หน้าเว็บจึงเรียก backend จริงเสมอ — **ต้องเปิด backend ไว้ก่อน** (`npm run start:dev`) จึงจะใช้งานหน้าเว็บได้
+ถ้าต้องการกลับไปใช้ตัวจำลองที่รันอยู่ในเบราว์เซอร์ (เช่น ตอนทำงานโดยไม่ต่อฐานข้อมูล) ให้ตั้งค่าเป็น `true` แล้วรัน `npm run dev` ใหม่
 
-    python scripts/validate_graph.py --all data/graphs/
-    python scripts/simulate_paths.py --all data/graphs/
+## สาธิตด่านความปลอดภัยฝั่งเซิร์ฟเวอร์
+
+ด่านความปลอดภัยถูกบังคับอยู่ในฟังก์ชันเปลี่ยนสถานะ (`resolveNextNode()`) ฝั่งเซิร์ฟเวอร์ ไม่ใช่ที่หน้าเว็บ วิธีพิสูจน์:
+
+    cd backend
+    ./scripts/demo-safety-gate.ps1
+
+สคริปต์นี้ยิง HTTP request ตรงเข้า REST API โดยไม่ผ่านหน้าเว็บ เพื่อยืนยันว่าต่อให้ผู้ใช้แก้โค้ดฝั่งเบราว์เซอร์ ก็ข้ามด่านนี้ไม่ได้
+(โครงงานนี้ตัดสินใจไม่เขียน e2e test ด้วย supertest — ใช้สคริปต์นี้เป็นหลักฐานแทน)
+
+## ตรวจไฟล์ผังขั้นตอน
+
+    pip install jsonschema
+    python scripts/validate_graph.py data/manuals/samsung_ac_ar70h.json
+
+ผังขั้นตอนของแอร์ผ่านครบ 13 ชุด (มีคำเตือน 1 ข้อเรื่องการอ้างอิงคู่มือติดตั้งที่ยังไม่อยู่ในฐานความรู้)
+
+ไม่ควรใช้ `--all` ในตอนนี้ เพราะ `data/manuals/` มีฉบับร่างของเครื่องซักผ้าที่ยังไม่ผ่านการตรวจ
+ซึ่งไม่ผ่าน validator ทุกชุดตามที่คาดไว้ ทำให้คำสั่ง `--all` จบด้วยสถานะล้มเหลว
