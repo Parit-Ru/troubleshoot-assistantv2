@@ -3,6 +3,13 @@ import * as mysql from 'mysql2/promise';
 
 import { MYSQL_POOL } from './database.constants';
 
+// แปลงตัวอักษร \n (สองตัว: ทับ + n) ให้เป็นการขึ้นบรรทัดใหม่จริง
+// เพราะบางแพลตฟอร์มเก็บค่า env หลายบรรทัดเป็นบรรทัดเดียว
+// ถ้าค่ามีการขึ้นบรรทัดใหม่จริงอยู่แล้ว ฟังก์ชันนี้จะไม่เปลี่ยนอะไร
+function normalizePem(value: string): string {
+  return value.replace(/\\n/g, '\n').trim();
+}
+
 function buildPoolOptions(): mysql.PoolOptions {
   const required = ['DB_HOST', 'DB_PORT', 'DB_USER', 'DB_NAME'];
   const missing = required.filter((key) => !process.env[key]);
@@ -26,7 +33,9 @@ function buildPoolOptions(): mysql.PoolOptions {
     // 5 พอสำหรับงานขนาดนี้ และปลอดภัยกับ MySQL cloud แบบฟรี
     connectionLimit: 5,
     queueLimit: 0,
-    ssl: process.env.DB_SSL_CA ? { ca: process.env.DB_SSL_CA } : undefined,
+    ssl: process.env.DB_SSL_CA
+      ? { ca: normalizePem(process.env.DB_SSL_CA) }
+      : undefined,
   };
 }
 @Global()
