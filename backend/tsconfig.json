@@ -14,9 +14,8 @@
     "outDir": "./dist",
 
     "baseUrl": "./",
-    "ignoreDeprecations": "5.0",
+    "ignoreDeprecations": "6.0",
 
-    // ปิด incremental เพราะชนกับ deleteOutDir: true ใน nest-cli.json
     "incremental": false,
     "skipLibCheck": true,
     "strictNullChecks": true,

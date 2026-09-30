@@ -35,7 +35,14 @@ import {
 // ฟังก์ชันหลักที่ใช้จากภายนอก
 // ============================================================
 
-export function startSession(graph: TroubleshootingGraph): { session: SessionState; node: RenderedNode } {
+/**
+ * confidence: คะแนนความคล้ายที่ผู้เรียกคำนวณมาแล้ว (หรือ null ถ้าไม่มี)
+ * engine แค่เก็บลงใน session ไม่อ่านไปตัดสินใจอะไรเลย
+ */
+export function startSession(
+  graph: TroubleshootingGraph,
+  confidence: number | null = null,
+): { session: SessionState; node: RenderedNode } {
   assertSupportedSchema(graph);
 
   const index = buildNodeIndex(graph);
@@ -52,6 +59,7 @@ export function startSession(graph: TroubleshootingGraph): { session: SessionSta
     currentNodeId: graph.entry_node,
     status: 'in_progress',
     variables: {},
+    confidence,
     history: [],
   };
 
