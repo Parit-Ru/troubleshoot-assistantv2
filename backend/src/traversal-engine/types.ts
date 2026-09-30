@@ -170,6 +170,14 @@ export interface SessionState {
   status: SessionStatus;
   /** ค่าที่เก็บจากโหนด input เช่น { error_code: "E1" } */
   variables: Record<string, string>;
+  /**
+   * คะแนนความมั่นใจของ session = คะแนนความคล้าย (cosine) ระหว่างคำค้นกับผังที่เลือก
+   * เป็นของ session ไม่ใช่ของสถานะ · null (หรือไม่มี) = ไม่มีการจับคู่ให้วัด
+   *
+   * แสดงผลอย่างเดียว: engine ไม่เคยอ่านค่านี้เพื่อตัดสินขั้นถัดไปหรือข้ามด่านความปลอดภัย
+   * ประกาศเป็น optional เพื่อให้ SessionState ที่สร้างไว้เดิมยังคอมไพล์ผ่าน
+   */
+  confidence?: number | null;
   history: SessionHistoryEntry[];
 }
 

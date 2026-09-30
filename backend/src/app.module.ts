@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { DatabaseModule } from './database/database.module';
 import { HealthModule } from './health/health.module';
 import { TraversalModule } from './traversal/traversal.module';
+import { SymptomSearchModule } from './symptom-search/symptom-search.module';
 
 @Module({
   imports: [
@@ -9,6 +10,7 @@ import { TraversalModule } from './traversal/traversal.module';
     DatabaseModule,
     HealthModule,
     TraversalModule,
+    SymptomSearchModule,
   ],
   controllers: [],
   providers: [],

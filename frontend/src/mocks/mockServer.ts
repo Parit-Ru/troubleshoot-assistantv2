@@ -192,6 +192,8 @@ export async function startSession(graphId: string): Promise<SessionResponse> {
       status: session.status,
       node,
       equipment: equipmentFor(graph),
+      // ตัวจำลองไม่มีระบบค้นหา จึงไม่มีการจับคู่ให้วัดเสมอ (เซิร์ฟเวอร์จริงคำนวณเองเมื่อได้รับ query)
+      confidence: null,
     }
   } catch (error) {
     throw toApiError(error)
@@ -211,6 +213,8 @@ export async function getSession(sessionId: string): Promise<SessionResponse> {
       status: session.status,
       node: getCurrentNode(session, graph),
       equipment: equipmentFor(graph),
+      // ตัวจำลองไม่มีระบบค้นหา จึงไม่มีการจับคู่ให้วัดเสมอ (เซิร์ฟเวอร์จริงคำนวณเองเมื่อได้รับ query)
+      confidence: null,
     }
   } catch (error) {
     throw toApiError(error)
@@ -239,6 +243,8 @@ export async function submitAction(
       status: result.session.status,
       node: result.node,
       equipment: equipmentFor(graph),
+      // ตัวจำลองไม่มีระบบค้นหา จึงไม่มีการจับคู่ให้วัดเสมอ (เซิร์ฟเวอร์จริงคำนวณเองเมื่อได้รับ query)
+      confidence: null,
     }
   } catch (error) {
     throw toApiError(error)

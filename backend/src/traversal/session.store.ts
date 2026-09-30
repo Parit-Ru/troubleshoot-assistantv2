@@ -44,6 +44,8 @@ interface SessionRow extends RowDataPacket {
   current_node_id: string;
   status: SessionStatus;
   variables: unknown;
+  /** DECIMAL(4,3) — mysql2 ส่งมาเป็นข้อความ หรือ null */
+  confidence: string | number | null;
 }
 
 /** 1 แถวจากตาราง session_history */
@@ -65,14 +67,15 @@ export class SessionStore {
   async create(session: SessionState): Promise<void> {
     await this.pool.query(
       `INSERT INTO sessions
-         (session_id, graph_id, current_node_id, status, variables, expires_at)
-       VALUES (?, ?, ?, ?, ?, NOW() + INTERVAL ? HOUR)`,
+         (session_id, graph_id, current_node_id, status, variables, confidence, expires_at)
+       VALUES (?, ?, ?, ?, ?, ?, NOW() + INTERVAL ? HOUR)`,
       [
         session.sessionId,
         session.graphId,
         session.currentNodeId,
         session.status,
         JSON.stringify(session.variables),
+        session.confidence ?? null,
         SESSION_TTL_HOURS,
       ],
     );
@@ -89,7 +92,7 @@ export class SessionStore {
    */
   async find(sessionId: string): Promise<SessionState | undefined> {
     const [sessionRows] = await this.pool.query<SessionRow[]>(
-      `SELECT session_id, graph_id, current_node_id, status, variables
+      `SELECT session_id, graph_id, current_node_id, status, variables, confidence
          FROM sessions
         WHERE session_id = ? AND expires_at > NOW()`,
       [sessionId],
@@ -112,6 +115,8 @@ export class SessionStore {
       currentNodeId: row.current_node_id,
       status: row.status,
       variables: parseVariables(row.variables),
+      // DECIMAL ถูก mysql2 ส่งกลับเป็นข้อความ ('0.707') จึงต้องแปลงเป็นตัวเลข · NULL คงเป็น null
+      confidence: row.confidence === null ? null : Number(row.confidence),
       history: historyRows.map(rowToHistoryEntry),
     };
   }

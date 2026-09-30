@@ -26,6 +26,7 @@ import * as path from 'node:path';
 import type { GraphRepository, GraphSummary } from './graph.repository';
 import type { EquipmentRepository } from './equipment.repository';
 import type { SessionStore } from './session.store';
+import type { SymptomSearchService } from '../symptom-search/symptom-search.service';
 import type { EquipmentItemDto } from './traversal.dto';
 import {
   GraphNotFoundError,
@@ -151,11 +152,27 @@ class FakeSessionStore {
   }
 }
 
-function makeService(): TraversalService {
+/**
+ * ระบบค้นหาอาการปลอม: มีเมธอดเดียวที่ TraversalService ใช้ (scoreGraph)
+ * เก็บประวัติการเรียกไว้ให้เทสตรวจว่าถูกเรียกหรือไม่ และเรียกด้วยอะไร
+ */
+class FakeSymptomSearch {
+  calls: Array<{ query: string; graphId: string }> = [];
+
+  constructor(private readonly behavior: (query: string, graphId: string) => Promise<number | null>) {}
+
+  async scoreGraph(query: string, graphId: string): Promise<number | null> {
+    this.calls.push({ query, graphId });
+    return this.behavior(query, graphId);
+  }
+}
+
+function makeService(search: FakeSymptomSearch = new FakeSymptomSearch(async () => null)): TraversalService {
   return new TraversalService(
     new FakeGraphRepository() as unknown as GraphRepository,
     new FakeEquipmentRepository() as unknown as EquipmentRepository,
     new FakeSessionStore() as unknown as SessionStore,
+    search as unknown as SymptomSearchService,
   );
 }
 
@@ -282,5 +299,91 @@ describe('TraversalService', () => {
     const service = makeService();
 
     await expect(service.startSession('ไม่มีกราฟนี้')).rejects.toBeInstanceOf(GraphNotFoundError);
+  });
+});
+
+// ============================================================
+// คะแนนความมั่นใจของ session (ขั้น 1.8)
+//
+// เซิร์ฟเวอร์คำนวณเอง · null = ไม่มีการจับคู่ให้วัด · แสดงผลอย่างเดียว
+// ใช้ระบบค้นหาปลอม จึงไม่ได้พิสูจน์คุณภาพของคะแนนจากโมเดลจริง
+// ============================================================
+
+describe('TraversalService — คะแนนความมั่นใจของ session', () => {
+  it('ไม่ส่ง query (เลือกจากรายการเอง) → confidence เป็น null และไม่เรียกระบบค้นหา', async () => {
+    const search = new FakeSymptomSearch(async () => 0.9);
+    const service = makeService(search);
+
+    const session = await service.startSession(STOPS_WORKING);
+
+    expect(session.confidence).toBeNull();
+    expect(search.calls).toHaveLength(0);
+  });
+
+  it('ส่ง query → confidence คือคะแนนที่ระบบค้นหาคิดให้ผังที่เลือก', async () => {
+    const search = new FakeSymptomSearch(async () => 0.812);
+    const service = makeService(search);
+
+    const session = await service.startSession(STOPS_WORKING, 'แอร์ดับ');
+
+    expect(session.confidence).toBe(0.812);
+    expect(search.calls).toEqual([{ query: 'แอร์ดับ', graphId: STOPS_WORKING }]);
+  });
+
+  it('getSession ภายหลังได้ confidence เดิมที่บันทึกไว้', async () => {
+    const service = makeService(new FakeSymptomSearch(async () => 0.812));
+    const started = await service.startSession(STOPS_WORKING, 'แอร์ดับ');
+
+    const again = await service.getSession(started.sessionId);
+
+    expect(again.confidence).toBe(0.812);
+  });
+
+  it('ระบบค้นหาไม่พร้อม (คืน null) → confidence เป็น null ไม่แต่งตัวเลข', async () => {
+    const service = makeService(new FakeSymptomSearch(async () => null));
+
+    const session = await service.startSession(STOPS_WORKING, 'แอร์ดับ');
+
+    expect(session.confidence).toBeNull();
+  });
+
+  it('คำนวณคะแนนล้มเหลว → ยังเริ่ม session ได้ และ confidence เป็น null', async () => {
+    const service = makeService(
+      new FakeSymptomSearch(async () => {
+        throw new Error('embed ล้มเหลว');
+      }),
+    );
+
+    const session = await service.startSession(STOPS_WORKING, 'แอร์ดับ');
+
+    expect(session.confidence).toBeNull();
+    expect(session.node).toBeDefined();
+  });
+
+  it('graphId ไม่มีอยู่ → GraphNotFoundError และไม่เสียเวลาคำนวณคะแนน', async () => {
+    const search = new FakeSymptomSearch(async () => 0.9);
+    const service = makeService(search);
+
+    await expect(service.startSession('ไม่มีกราฟนี้', 'แอร์ดับ')).rejects.toBeInstanceOf(
+      GraphNotFoundError,
+    );
+    expect(search.calls).toHaveLength(0);
+  });
+
+  it('คะแนนสูงสุด (1) ก็ไม่ช่วยข้ามด่านความปลอดภัย: confidence ไม่มีผลต่อการเปลี่ยนสถานะ', async () => {
+    const service = makeService(new FakeSymptomSearch(async () => 1));
+
+    // เดินเส้นทางเดียวกับเทสด่านความปลอดภัยด้านบน แต่เริ่มด้วย query จึงได้ confidence = 1
+    let session = await service.startSession(STOPS_WORKING, 'แอร์ดับ');
+    expect(session.confidence).toBe(1);
+    for (const action of [YES, YES]) {
+      session = await service.submitAction(session.sessionId, action);
+    }
+    expect(session.node.nodeId).toBe('n_fix_breaker');
+    expect(session.node.requiresSafetyConfirmation).toBe(true);
+
+    await expect(
+      service.submitAction(session.sessionId, { type: 'continue' }),
+    ).rejects.toBeInstanceOf(SafetyConfirmationRequiredError);
   });
 });

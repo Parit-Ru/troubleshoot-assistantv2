@@ -18,6 +18,7 @@ import { GraphRepository } from './graph.repository';
 import type { GraphSummary } from './graph.repository';
 import { EquipmentRepository } from './equipment.repository';
 import { SessionStore } from './session.store';
+import { SymptomSearchService } from '../symptom-search/symptom-search.service';
 import type { SessionResponseDto } from './traversal.dto';
 import {
   getCurrentNode,
@@ -65,6 +66,7 @@ export class TraversalService {
     private readonly graphRepository: GraphRepository,
     private readonly equipmentRepository: EquipmentRepository,
     private readonly sessionStore: SessionStore,
+    private readonly symptomSearch: SymptomSearchService,
   ) {}
 
   // ============================================================
@@ -82,12 +84,13 @@ export class TraversalService {
   }
 
   /** POST /traversal/sessions */
-  async startSession(graphId: string): Promise<SessionResponseDto> {
+  async startSession(graphId: string, query?: string): Promise<SessionResponseDto> {
     const graph = this.requireGraph(graphId);
+    const confidence = await this.computeConfidence(graphId, query);
 
     // engine เป็น pure function ถ้าโยน error (เช่น entry_node หาไม่เจอ)
     // sessionStore.create() แถวถัดไปจะไม่ถูกเรียกเลย จึงไม่มี session ค้างอยู่ครึ่งๆ กลางๆ
-    const { session, node } = engineStartSession(graph);
+    const { session, node } = engineStartSession(graph, confidence);
     await this.sessionStore.create(session);
 
     return this.toResponse(session, node, graph);
@@ -176,6 +179,25 @@ export class TraversalService {
       status: session.status,
       node,
       equipment: this.equipmentRepository.findByCategory(graph.device_category),
+      confidence: session.confidence ?? null,
     };
+  }
+
+  /**
+   * คะแนนความมั่นใจของ session (ขั้น 1.8)
+   *
+   * - ไม่มี query (ผู้ใช้เลือกอาการจากรายการเอง) → null
+   * - มี query → ให้ระบบค้นหาคำนวณเอง (ไม่รับตัวเลขจากหน้าจอ)
+   * - ระบบค้นหาไม่พร้อม หรือคำนวณล้มเหลว → null ไม่แต่งตัวเลข และไม่ทำให้การเริ่ม session ล้ม
+   *
+   * ค่านี้แสดงผลอย่างเดียว ไม่มีโค้ดส่วนไหนอ่านมันไปตัดสินขั้นถัดไปหรือด่านความปลอดภัย
+   */
+  private async computeConfidence(graphId: string, query?: string): Promise<number | null> {
+    if (query === undefined) return null;
+    try {
+      return await this.symptomSearch.scoreGraph(query, graphId);
+    } catch {
+      return null;
+    }
   }
 }

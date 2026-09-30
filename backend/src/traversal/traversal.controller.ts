@@ -37,13 +37,13 @@ export class TraversalController {
     return this.traversalService.listGraphs();
   }
 
-  /** POST /traversal/sessions — body: { graphId } */
+  /** POST /traversal/sessions — body: { graphId, query? } (query ไม่บังคับ ไว้คิดคะแนนความมั่นใจ) */
   @Post('sessions')
   async startSession(@Body() body: unknown): Promise<SessionResponseDto> {
     // parseStartSessionBody โยน InvalidRequestBodyError ทันทีถ้า body ผิดรูปแบบ
     // โค้ดจะไม่เดินไปถึง service เลยในกรณีนั้น (filter จับ error แล้วแปลงเป็น 400 แทน)
-    const { graphId } = parseStartSessionBody(body);
-    return this.traversalService.startSession(graphId);
+    const { graphId, query } = parseStartSessionBody(body);
+    return this.traversalService.startSession(graphId, query);
   }
 
   /** GET /traversal/sessions/:id */

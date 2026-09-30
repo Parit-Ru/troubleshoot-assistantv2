@@ -19,6 +19,7 @@ import type {
   SessionStatus,
   TraversalAction,
 } from '../traversal-engine/types';
+import { MAX_QUERY_LENGTH } from '../symptom-search/symptom-search.dto';
 
 // ============================================================
 // ค่าคงที่
@@ -59,6 +60,11 @@ export class InvalidRequestBodyError extends Error {
 /** body ของ POST /traversal/sessions */
 export interface StartSessionBody {
   graphId: string;
+  /**
+   * คำที่ผู้ใช้พิมพ์ค้นหา (ไม่บังคับ) ไว้ให้เซิร์ฟเวอร์คำนวณคะแนนความมั่นใจของ session
+   * ไม่ส่ง = ผู้ใช้เลือกอาการจากรายการเอง → confidence เป็น null
+   */
+  query?: string;
 }
 
 /**
@@ -88,8 +94,23 @@ export function parseStartSessionBody(body: unknown): StartSessionBody {
     throw new InvalidRequestBodyError('graphId ต้องเป็นข้อความที่ไม่ว่าง');
   }
 
-  // สร้าง object ใหม่จาก field ที่รู้จักเท่านั้น field แปลกปลอมจึงไม่ผ่านไปต่อ
-  return { graphId };
+  // query ไม่บังคับ: ถ้าส่งมาต้องเป็นข้อความที่ไม่ว่าง และยาวไม่เกินเพดานเดียวกับการค้นหา
+  // (ส่งข้อความว่างมาถือว่าผิดรูปแบบ ไม่ตีเป็น "ไม่ส่ง" เพื่อให้หน้าจอที่ผิดพลาดเห็นได้ชัด)
+  if (obj.query === undefined) {
+    // สร้าง object ใหม่จาก field ที่รู้จักเท่านั้น field แปลกปลอมจึงไม่ผ่านไปต่อ
+    return { graphId };
+  }
+  if (typeof obj.query !== 'string') {
+    throw new InvalidRequestBodyError('query ต้องเป็นข้อความ');
+  }
+  const query = obj.query.trim();
+  if (query === '') {
+    throw new InvalidRequestBodyError('query ต้องไม่ว่าง');
+  }
+  if (query.length > MAX_QUERY_LENGTH) {
+    throw new InvalidRequestBodyError(`query ยาวเกิน ${MAX_QUERY_LENGTH} ตัวอักษร`);
+  }
+  return { graphId, query };
 }
 
 /**
@@ -181,4 +202,10 @@ export interface SessionResponseDto {
   status: SessionStatus;
   node: RenderedNode;
   equipment: EquipmentItemDto[];
+  /**
+   * คะแนนความมั่นใจของ session = คะแนนความคล้าย (cosine) ปัด 3 ตำแหน่ง
+   * เซิร์ฟเวอร์คำนวณเอง · null = ผู้ใช้เลือกอาการจากรายการเอง หรือระบบค้นหาไม่พร้อม
+   * ไม่ใช่ความน่าจะเป็น หน้าจอต้องเรียกว่า "คะแนนความคล้าย"
+   */
+  confidence: number | null;
 }
