@@ -130,30 +130,3 @@ export interface ApiErrorBody {
   code?: string
   message?: string
 }
-
-/**
- * ยืนยันแล้วในขั้น 10.1
- *
- * รหัสข้อผิดพลาดที่หน้าจอรู้จักและมีข้อความไทยรองรับ
- * รหัสอื่นที่ไม่อยู่ในรายการนี้จะตกไปที่ข้อความกลางๆ
- *
- * NETWORK_ERROR ไม่ได้มาจากเซิร์ฟเวอร์ แต่หน้าจอสร้างขึ้นเองเมื่อเรียกไม่ติด
- */
-export type ApiErrorCode =
-  | 'SAFETY_CONFIRMATION_REQUIRED'
-  | 'INVALID_ACTION'
-  | 'SESSION_COMPLETED'
-  | 'SESSION_NOT_FOUND'
-  | 'GRAPH_NOT_FOUND'
-  | 'GRAPH_NODE_MISSING'
-  | 'GRAPH_SCHEMA_UNSUPPORTED'
-  | 'NETWORK_ERROR'
-
-  export interface HealthResponse {
-  status: 'ok' | 'degraded'
-  service: string
-  database: 'ok' | 'error'
-  databaseError?: string
-  timestamp: string
-  environment: string
-}

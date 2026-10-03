@@ -22,9 +22,6 @@ export const EMBEDDING_MODEL_ID = 'Xenova/paraphrase-multilingual-MiniLM-L12-v2'
 /** q8 = โมเดลบีบอัด 8 บิต (ไฟล์ onnx/model_quantized.onnx) */
 export const EMBEDDING_DTYPE = 'q8';
 
-/** ขนาดเวกเตอร์ที่โมเดลนี้ให้ */
-export const EMBEDDING_DIMENSIONS = 384;
-
 /**
  * โฟลเดอร์โมเดลที่ตัดคำศัพท์แล้ว (อยู่ใน git)
  * นับจากไฟล์นี้ขึ้นไป 2 ระดับคือ backend/ ทั้งตอนรันจาก src/ (เทส)
