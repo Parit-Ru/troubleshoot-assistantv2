@@ -1,12 +1,13 @@
 // backend/scripts/eval-symptom-search.js
 //
-// ขั้น 1.9.2 — วัดคุณภาพการค้นหาอาการด้วยชุดคำค้นที่ผู้พัฒนาเขียนเอง (data/eval/)
+// ขั้น 1.9.2 — วัดคุณภาพการค้นหาอาการด้วยชุดคำค้นใน data/eval/
+// (ผู้เขียนแต่ละชุดดูที่ฟิลด์ "author" ในไฟล์ — ชุดตั้งเกณฑ์ร่างโดย AI ดู docs/explained/10)
 //
 // วิธีรัน (ยืนที่โฟลเดอร์ backend/ และต้อง build ก่อน 1 ครั้ง: npm run build):
 //
 //   node scripts/eval-symptom-search.js                     ชุดตั้งเกณฑ์: กวาดเกณฑ์หลายค่า ดูรายข้อที่พลาด
 //   node scripts/eval-symptom-search.js --from 0.4 --to 0.8 --step 0.02
-//   node scripts/eval-symptom-search.js --show 0.6          เลือกรายข้อที่พลาดที่เกณฑ์ 0.6 (ค่าเริ่มต้น 0.5)
+//   node scripts/eval-symptom-search.js --show 0.6          เลือกรายข้อที่พลาดที่เกณฑ์ 0.6 (ค่าเริ่มต้น 0.55)
 //   node scripts/eval-symptom-search.js --set report --threshold 0.62
 //                                                           ชุดรายงานผล: วัดที่เกณฑ์เดียวที่เลือกไว้แล้ว
 //
@@ -43,7 +44,7 @@ const TO = Number(opt('to', 0.9));
 const STEP = Number(opt('step', 0.05));
 const JSON_OUT = opt('json', null);
 const THRESHOLD = opt('threshold', null);
-const SHOW = opt('show', '0.5'); // เกณฑ์ที่ใช้เลือก "รายข้อที่ต้องดู" ในชุดตั้งเกณฑ์
+const SHOW = opt('show', '0.55'); // เกณฑ์ที่ใช้เลือก "รายข้อที่ต้องดู" ในชุดตั้งเกณฑ์ (ตรง MATCH_THRESHOLD)
 
 const EVAL_DIR = path.resolve(__dirname, '../../data/eval');
 const MANUAL_FILE = path.resolve(__dirname, '../../data/manuals/samsung_ac_ar70h.json');
