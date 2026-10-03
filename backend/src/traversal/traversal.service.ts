@@ -2,7 +2,7 @@
  * traversal.service.ts — ต่อสาย GraphRepository + EquipmentRepository + SessionStore
  *                        เข้ากับกลไกควบคุมเครื่องสถานะ (traversal-engine)
  *
- * กฎที่ห้ามละเมิด (ล็อกไว้ตั้งแต่ PROJECT_CONTEXT.md): ไฟล์นี้ห้ามมีตรรกะการเปลี่ยน
+ * กฎที่ห้ามละเมิด (หลักการของโครงงาน): ไฟล์นี้ห้ามมีตรรกะการเปลี่ยน
  * สถานะของตัวเองแม้แต่บรรทัดเดียว ทุกการตัดสินใจว่า "ขั้นถัดไปคืออะไร" และ "action นี้
  * ใช้กับสถานะปัจจุบันได้ไหม" ต้องมาจาก startSession/getCurrentNode/submitAction ของ
  * engine เท่านั้น หน้าที่ของไฟล์นี้มีแค่: หาข้อมูลป้อนให้ engine, ส่งต่อผลลัพธ์, บันทึกผล
@@ -39,11 +39,11 @@ import type {
 // "session" หรือ "graph ที่ไม่มีอยู่" เลย มันรับ SessionState + TroubleshootingGraph
 // ที่มีอยู่แล้วมาทำงานเท่านั้น การหาไม่เจอเป็นเรื่องของชั้นข้อมูล (repository/store
 // คืน undefined) จึงเป็น service ที่ต้องแปลงเป็น error เอง
-// เหมือน InvalidRequestBodyError ใน traversal.dto.ts (A.1) ที่ไม่ extends TraversalError
+// เหมือน InvalidRequestBodyError ใน traversal.dto.ts ที่ไม่ extends TraversalError
 // เช่นกัน ด้วยเหตุผลเดียวกัน
 //
-// filter ใน A.6 จะจับทั้งคู่ด้วย instanceof แล้วแปลงเป็น 404 GRAPH_NOT_FOUND /
-// 404 SESSION_NOT_FOUND ตามตารางข้อ 4
+// TraversalExceptionFilter จะจับทั้งคู่ด้วย instanceof แล้วแปลงเป็น 404 GRAPH_NOT_FOUND /
+// 404 SESSION_NOT_FOUND
 // ============================================================
 
 export class GraphNotFoundError extends Error {
@@ -70,7 +70,7 @@ export class TraversalService {
   ) {}
 
   // ============================================================
-  // 5 เมธอด ตรงกับ 5 endpoint ของ API (ตารางข้อ 4)
+  // 5 เมธอด ตรงกับ 5 endpoint ของ TraversalController
   // ============================================================
 
   /**

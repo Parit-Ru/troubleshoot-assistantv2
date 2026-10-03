@@ -16,14 +16,6 @@ import type { StepProps } from './stepProps'
  * หน้าจอทำแค่ตัดช่องว่างหัวท้าย และไม่ให้ส่งค่าว่าง
  */
 
-/** รหัสอ่านง่ายกว่าเมื่อทุกตัวอักษรกว้างเท่ากัน (แยก 0 กับ O, 1 กับ l ได้) */
-const INPUT_FONT_CLASSES: Record<InputType, string> = {
-  error_code: 'font-mono',
-  model_number: 'font-mono',
-  number: '',
-  text: '',
-}
-
 const BASE_INPUT_CLASSES =
   'w-full rounded-lg border border-line bg-canvas px-4 py-3 text-ink placeholder:text-ink-faint focus:border-accent focus:outline-none disabled:opacity-40'
 
@@ -47,7 +39,9 @@ export function InputStep({ node, onAction, isPending, manualLabel }: StepProps)
     onAction({ type: 'input', value: trimmed })
   }
 
-  const inputClasses = [BASE_INPUT_CLASSES, INPUT_FONT_CLASSES[inputType]].filter(Boolean).join(' ')
+  // รหัสอ่านง่ายกว่าเมื่อทุกตัวอักษรกว้างเท่ากัน (แยก 0 กับ O, 1 กับ l ได้)
+  const isCode = inputType === 'error_code' || inputType === 'model_number'
+  const inputClasses = isCode ? `${BASE_INPUT_CLASSES} font-mono` : BASE_INPUT_CLASSES
 
   return (
     <StepCard

@@ -19,33 +19,30 @@ interface SymptomRowProps {
 
 /**
  * แถวมี 3 สภาพ
- * - idle      กดได้ตามปกติ
- * - starting  แถวที่ถูกกด กดซ้ำไม่ได้ แต่ไม่จาง เพื่อให้เห็นชัดว่าแถวไหนกำลังทำงาน
+ * - ปกติ      กดได้
+ * - isStarting  แถวที่ถูกกด กดซ้ำไม่ได้ แต่ไม่จาง เพื่อให้เห็นชัดว่าแถวไหนกำลังทำงาน
  * - disabled  แถวอื่นระหว่างรอ จางลงและกดไม่ได้
  */
-type RowState = 'idle' | 'starting' | 'disabled'
-
-/** เขียนชื่อคลาสเต็มทุกคำ เพราะ Tailwind หาชื่อคลาสจากข้อความในไฟล์ ต่อชื่อด้วยตัวแปรไม่ได้ */
-const STATE_CLASSES: Record<RowState, string> = {
-  idle: 'hover:bg-panel',
-  starting: 'cursor-wait',
-  disabled: 'cursor-not-allowed opacity-40',
-}
 
 const BASE_CLASSES =
   'flex min-h-12 w-full items-center gap-3 px-1 py-3 text-left transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent'
 
 export function SymptomRow({ summary, isStarting, disabled, onSelect }: SymptomRowProps) {
   // isStarting มาก่อน เผื่อผู้เรียกส่ง true มาทั้งคู่ แถวที่กดจะยังแสดงตัวหมุน
-  const state: RowState = isStarting ? 'starting' : disabled ? 'disabled' : 'idle'
-  const classes = [BASE_CLASSES, STATE_CLASSES[state]].join(' ')
+  // เขียนชื่อคลาสเต็มทุกคำ เพราะ Tailwind หาชื่อคลาสจากข้อความในไฟล์ ต่อชื่อด้วยตัวแปรไม่ได้
+  const stateClasses = isStarting
+    ? 'cursor-wait'
+    : disabled
+      ? 'cursor-not-allowed opacity-40'
+      : 'hover:bg-panel'
+  const classes = `${BASE_CLASSES} ${stateClasses}`
 
   return (
     <li className="border-b border-line">
       <button
         type="button"
         // ปิดปุ่มทั้งแถวที่กำลังเริ่มและแถวอื่น กันกดซ้ำจนได้ session สองอัน
-        disabled={state !== 'idle'}
+        disabled={isStarting || disabled}
         aria-busy={isStarting || undefined}
         className={classes}
         onClick={() => onSelect(summary.graphId)}
