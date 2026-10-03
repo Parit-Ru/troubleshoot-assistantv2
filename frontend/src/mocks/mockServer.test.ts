@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest'
 import { ApiError } from '../api/http'
-import { abandonSession, getSession, listGraphs, startSession, submitAction } from './mockServer'
+import {
+  abandonSession,
+  getSession,
+  listGraphs,
+  searchSymptoms,
+  startSession,
+  submitAction,
+} from './mockServer'
 import type { TraversalAction } from '../api/types'
 
 const STOPS_WORKING = 'samsung_ac_ar70h_stops_working'
@@ -112,5 +119,19 @@ describe('mockServer', () => {
 
     expect((error as ApiError).status).toBe(404)
     expect((error as ApiError).code).toBe('GRAPH_NOT_FOUND')
+  })
+
+  it('ค้นหาอาการ ตอบ 503 SEARCH_UNAVAILABLE เสมอ ไม่แต่งผลค้นหาขึ้นมาเอง', async () => {
+    const error = await searchSymptoms().catch((e: unknown) => e)
+
+    expect(error).toBeInstanceOf(ApiError)
+    expect((error as ApiError).status).toBe(503)
+    expect((error as ApiError).code).toBe('SEARCH_UNAVAILABLE')
+  })
+
+  it('session ที่เริ่มในโหมดจำลอง ไม่มีคะแนนความคล้าย (confidence เป็น null)', async () => {
+    const session = await startSession(STOPS_WORKING)
+
+    expect(session.confidence).toBeNull()
   })
 })

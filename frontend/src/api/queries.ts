@@ -4,10 +4,11 @@ import {
   getHealth,
   getSession,
   listGraphs,
+  searchSymptoms,
   startSession,
   submitAction,
 } from './traversal'
-import type { SessionResponse, TraversalAction } from './types'
+import type { SessionResponse, SymptomSearchResponse, TraversalAction } from './types'
 
 /**
  * hook ของ React Query ที่หน้าจอเรียกใช้
@@ -75,13 +76,32 @@ export function useSession(sessionId: string) {
 // ============================================================
 
 /**
+ * ค้นหาอาการด้วยข้อความที่ผู้ใช้พิมพ์
+ *
+ * ใช้ useMutation ไม่ใช่ useQuery เพราะค้นเฉพาะตอนผู้ใช้กดค้นหา ไม่ใช่ตอนหน้าจอแสดง
+ * และไม่ใส่แคช: คำค้นเดียวกันค้นซ้ำได้ผลเดิมอยู่แล้ว แต่ผลขึ้นกับสถานะระบบค้นหาบนเซิร์ฟเวอร์
+ * (เช่น ตอนแรกยังโหลดโมเดลอยู่ ตอบ SEARCH_NOT_READY) จึงไม่ควรจำผลเก่า
+ */
+export function useSymptomSearch() {
+  return useMutation<SymptomSearchResponse, Error, string>({
+    mutationFn: (query: string) => searchSymptoms(query),
+  })
+}
+
+/** ตัวแปรของการเริ่ม session query ใส่เฉพาะเมื่อเลือกมาจากผลค้นหา */
+export interface StartSessionVariables {
+  graphId: string
+  query?: string
+}
+
+/**
  * เริ่มการตรวจ
  * เอาผลใส่แคชทันที หน้าตรวจอาการจะเปิดขึ้นมาพร้อมข้อมูล ไม่ต้องรอโหลดซ้ำ
  */
 export function useStartSession() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (graphId: string) => startSession(graphId),
+    mutationFn: ({ graphId, query }: StartSessionVariables) => startSession(graphId, query),
     onSuccess: (session: SessionResponse) => {
       queryClient.setQueryData(queryKeys.session(session.sessionId), session)
     },

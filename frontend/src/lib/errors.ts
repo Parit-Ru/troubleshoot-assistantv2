@@ -44,6 +44,17 @@ export function describeError(error: unknown): ErrorDescription {
     return UNKNOWN_ERROR
   }
 
+  // 400 ที่ไม่มี code: Express ตอบเองเมื่อ JSON ผิดไวยากรณ์ ก่อนถึงตัวแปลง error ของเรา
+  // http.ts จึงให้รหัส UNKNOWN_ERROR มา แยกจาก 500 ที่ไม่รู้สาเหตุด้วย status
+  // หน้าจอเราส่ง JSON ที่ถูกต้องเสมอ กรณีนี้จึงแทบไม่เกิด แต่ถ้าเกินต้องไม่ขึ้นว่า "ระบบไม่รู้จัก"
+  if (error.code === 'UNKNOWN_ERROR' && error.status === 400) {
+    return {
+      title: 'เซิร์ฟเวอร์อ่านคำขอไม่ได้',
+      detail: 'ลองอีกครั้ง ถ้ายังเกิดซ้ำ ให้รีเฟรชหน้าแล้วทำใหม่',
+      recovery: 'retry',
+    }
+  }
+
   switch (error.code) {
     case 'NETWORK_ERROR':
       return {
@@ -86,6 +97,31 @@ export function describeError(error: unknown): ErrorDescription {
         title: 'ไม่พบอาการนี้',
         detail: 'อาการนี้ไม่มีในระบบแล้ว เลือกอาการอื่นจากรายการ',
         recovery: 'back-to-symptoms',
+      }
+
+    // ---------- ค้นหาอาการ (POST /symptom-search) ----------
+
+    case 'INVALID_QUERY':
+      return {
+        title: 'ข้อความที่พิมพ์ใช้ค้นหาไม่ได้',
+        detail: 'พิมพ์อาการที่พบให้ไม่ว่างและไม่ยาวเกิน 200 ตัวอักษร แล้วลองอีกครั้ง',
+        recovery: 'stay',
+      }
+
+    // กำลังโหลดโมเดล (เซิร์ฟเวอร์เพิ่งตื่น) รอสักครู่แล้วลองใหม่ได้
+    case 'SEARCH_NOT_READY':
+      return {
+        title: 'ระบบค้นหากำลังเริ่มทำงาน',
+        detail: 'รอสักครู่แล้วกดค้นหาอีกครั้ง หรือเลือกอาการจากรายการด้านล่างได้เลย',
+        recovery: 'retry',
+      }
+
+    // ปิดสวิตช์อยู่หรือโหลดไม่สำเร็จ รอแล้วก็ไม่หาย ทางที่ใช้ได้คือรายการอาการเดิม
+    case 'SEARCH_UNAVAILABLE':
+      return {
+        title: 'ระบบค้นหาไม่พร้อมใช้งานตอนนี้',
+        detail: 'เลือกอาการจากรายการด้านล่างแทน ระบบจะถามทีละข้อตามคู่มือเหมือนกัน',
+        recovery: 'stay',
       }
 
     // สองรหัสนี้หมายถึงข้อมูลในฐานข้อมูลผิด ผู้ใช้แก้เองไม่ได้

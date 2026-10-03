@@ -70,6 +70,39 @@ export interface GraphSummary {
   difficulty?: Difficulty
 }
 
+/**
+ * ผังขั้นตอน 1 รายการที่ POST /symptom-search ส่งกลับมาในฟิลด์ matches
+ *
+ * ลอกมาจาก backend/src/symptom-search/symptom-search.dto.ts (SymptomMatchDto)
+ * ไม่ import ตรง เพราะไฟล์นั้นมีโค้ดที่ทำงานจริงปนอยู่ด้วย (ตัวตรวจ body และ class error)
+ * ถ้าฝั่ง backend แก้ DTO ต้องมาแก้ที่นี่ด้วย
+ */
+export interface SymptomMatch {
+  graphId: string
+  entrySymptom: string
+  entrySymptomTh?: string
+  deviceCategory: DeviceCategory
+  /**
+   * คะแนนความคล้าย (cosine) ปัด 3 ตำแหน่ง
+   * ไม่ใช่ความน่าจะเป็น ห้ามแสดงเป็น "มั่นใจ x%"
+   */
+  score: number
+  /** ข้อความอาการในข้อมูลที่ทำให้ได้คะแนนนี้ */
+  matchedText: string
+}
+
+/** สิ่งที่ POST /symptom-search ส่งกลับมา (ลอกจาก SymptomSearchResponseDto) */
+export interface SymptomSearchResponse {
+  /** คำค้นหลังเซิร์ฟเวอร์ตัดช่องว่างหน้าหลังแล้ว */
+  query: string
+  /** เกณฑ์ที่เซิร์ฟเวอร์ใช้ตัดสินรอบนี้ */
+  threshold: number
+  /** คะแนนสูงสุดที่พบ ส่งมาเสมอแม้ไม่มีผังผ่านเกณฑ์ (null = ไม่มีผังให้เทียบเลย) */
+  bestScore: number | null
+  /** ผังที่ผ่านเกณฑ์ เรียงมากไปน้อย ว่าง = ต้องแสดงการส่งต่อศูนย์บริการ ห้ามเดา */
+  matches: SymptomMatch[]
+}
+
 // ============================================================
 // 3. type ที่เสนอเอง — รูปร่างเทียบกับ response ของ backend แล้ว ตรงกันทุกฟิลด์
 // ============================================================
@@ -90,7 +123,8 @@ export interface SessionResponse {
   /**
    * คะแนนความคล้ายระหว่างคำค้นกับผังที่เลือก เซิร์ฟเวอร์คำนวณเอง (ปัด 3 ตำแหน่ง)
    * null หรือไม่มี = ผู้ใช้เลือกอาการจากรายการเอง หรือระบบค้นหาไม่พร้อม
-   * ไม่ใช่ความน่าจะเป็น ห้ามแสดงเป็น "มั่นใจ x%" (หน้าจอแสดงในขั้น 1.10)
+   * ไม่ใช่ความน่าจะเป็น ห้ามแสดงเป็น "มั่นใจ x%" หน้าจอแสดงเป็น "คะแนนความคล้าย" อย่างเดียว
+   * และไม่ใช้ตัดสินอะไรทั้งสิ้น (ขั้นถัดไปเป็นของเครื่องสถานะที่เซิร์ฟเวอร์)
    */
   confidence?: number | null
 }
