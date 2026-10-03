@@ -12,7 +12,7 @@ import type { ReactNode } from 'react'
  * - spinner ไม่หมุนเอง ผู้เรียกต้องใส่คลาส animate-spin
  */
 
-/** ชื่อไอคอนทั้ง 14 ตัว ถ้าพิมพ์ชื่อผิด TypeScript จะแจ้งตั้งแต่ตอนเขียน */
+/** ชื่อไอคอนทั้ง 12 ตัว ถ้าพิมพ์ชื่อผิด TypeScript จะแจ้งตั้งแต่ตอนเขียน */
 export type IconName =
   | 'warning' // เตือน
   | 'success' // ถูก
@@ -23,8 +23,6 @@ export type IconName =
   | 'pencil' // ผู้พัฒนาเพิ่มเอง
   | 'box' // อุปกรณ์
   | 'spinner' // หมุนรอ
-  | 'copy' // คัดลอก
-  | 'check' // ติ๊ก
   | 'logo' // สถานะหนึ่งเปลี่ยนไปได้สองทาง
   | 'switch-on' // สวิตช์เปิด
   | 'switch-off' // สวิตช์ปิด
@@ -109,19 +107,6 @@ const ICONS: Record<IconName, IconShape> = {
     viewBox: '0 0 24 24',
     // วงกลมสามในสี่วง พอหมุนด้วย animate-spin จะเห็นเป็นตัวหมุนรอ
     body: <path d="M21 12a9 9 0 1 1-9-9" />,
-  },
-  copy: {
-    viewBox: '0 0 24 24',
-    body: (
-      <>
-        <rect x="8" y="8" width="12.5" height="12.5" rx="2" />
-        <path d="M16 8V5.5a2 2 0 0 0-2-2H5.5a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2H8" />
-      </>
-    ),
-  },
-  check: {
-    viewBox: '0 0 24 24',
-    body: <path d="m5 12.5 4.5 4.5L19 7" />,
   },
   logo: {
     viewBox: '0 0 24 24',
