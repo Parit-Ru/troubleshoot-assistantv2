@@ -12,7 +12,5 @@ import { SymptomSearchModule } from './symptom-search/symptom-search.module';
     TraversalModule,
     SymptomSearchModule,
   ],
-  controllers: [],
-  providers: [],
 })
 export class AppModule {}

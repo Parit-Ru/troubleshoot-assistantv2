@@ -1,18 +1,18 @@
 /**
- * traversal.controller.ts — 5 endpoint ตามตารางข้อ 4 ของ HANDOFF
+ * traversal.controller.ts — 5 endpoint ของ API เดินขั้นตอนการตรวจอาการ
  *
  * ไฟล์นี้ตั้งใจให้ "โง่" ที่สุดเท่าที่เป็นไปได้ ไม่มีการตัดสินใจอะไรเองเลย:
  *   - รับ request
- *   - ตรวจรูปร่าง body ด้วยฟังก์ชันจาก traversal.dto.ts (A.1)
- *   - ส่งต่อให้ TraversalService (A.5) ทำงานจริง
+ *   - ตรวจรูปร่าง body ด้วยฟังก์ชันจาก traversal.dto.ts
+ *   - ส่งต่อให้ TraversalService ทำงานจริง
  *   - คืนสิ่งที่ service ให้กลับมาตรงๆ
  *
  * error ทุกชนิดที่เกิดขึ้น (ไม่ว่าจาก parse* หรือจาก service) ไม่ได้ถูกจับที่นี่เลย
- * ปล่อยให้หลุดขึ้นไปให้ TraversalExceptionFilter (A.6) ที่ติดไว้ระดับ controller
+ * ปล่อยให้หลุดขึ้นไปให้ TraversalExceptionFilter ที่ติดไว้ระดับ controller
  * ด้านล่างเป็นคนแปลงเป็น HTTP response แทน
  *
  * @Body() รับเป็น unknown เสมอ ไม่ประกาศเป็น DTO class ของ NestJS/class-validator
- * เพราะตัดสินใจแล้วในขั้น A.1 ว่าจะไม่ใช้ class-validator — รูปร่างของ body ที่แท้จริง
+ * เพราะตัดสินใจไม่ใช้ class-validator — รูปร่างของ body ที่แท้จริง
  * ถูกพิสูจน์ (และแปลง type ให้ TypeScript เชื่อ) ผ่าน parseStartSessionBody /
  * parseTraversalAction เท่านั้น
  */
@@ -65,7 +65,7 @@ export class TraversalController {
   /**
    * DELETE /traversal/sessions/:id
    *
-   * ต้องตอบ 204 ไม่มี body ตามตารางข้อ 4 — @HttpCode(204) บังคับ status code เอง
+   * ต้องตอบ 204 ไม่มี body — @HttpCode(204) บังคับ status code เอง
    * ฟังก์ชันคืน Promise<void> พอ ไม่ต้อง return อะไร NestJS จะไม่แนบ body ให้
    */
   @Delete('sessions/:id')
