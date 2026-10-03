@@ -18,8 +18,14 @@ import type { DeviceCategory, GraphSummary } from '../api/types'
  */
 const thaiCollator = new Intl.Collator('th')
 
+/**
+ * ส่วนของข้อมูลอาการที่ใช้แสดงชื่อ
+ * แคบกว่า GraphSummary เพื่อให้ทั้งรายการอาการ (GraphSummary) และผลค้นหา (SymptomMatch) ส่งเข้ามาได้
+ */
+export type SymptomLabel = Pick<GraphSummary, 'entrySymptom' | 'entrySymptomTh'>
+
 /** ชื่ออาการที่แสดงบนหน้าจอ ใช้ชื่อไทยถ้ามี ไม่มีก็ใช้ชื่ออังกฤษ */
-export function symptomName(summary: GraphSummary): string {
+export function symptomName(summary: SymptomLabel): string {
   return summary.entrySymptomTh ?? summary.entrySymptom
 }
 

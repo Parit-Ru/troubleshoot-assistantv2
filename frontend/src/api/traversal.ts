@@ -1,5 +1,5 @@
 import { request } from './http'
-import type { GraphSummary, SessionResponse, TraversalAction } from './types'
+import type { GraphSummary, SessionResponse, SymptomSearchResponse, TraversalAction } from './types'
 
 /**
  * หนึ่งฟังก์ชันต่อหนึ่ง endpoint
@@ -44,15 +44,34 @@ export async function listGraphs(): Promise<GraphSummary[]> {
   return request<GraphSummary[]>('/traversal/graphs')
 }
 
-/** POST /traversal/sessions */
-export async function startSession(graphId: string): Promise<SessionResponse> {
+/**
+ * POST /traversal/sessions
+ *
+ * query ส่งเฉพาะตอนผู้ใช้เลือกผังจากผลค้นหา (ส่งข้อความเดียวกับที่ค้น)
+ * เซิร์ฟเวอร์คำนวณคะแนนความคล้ายเอง หน้าจอไม่ส่งคะแนนไป
+ * ถ้าเลือกจากรายการเอง ไม่ส่ง query → confidence ใน response เป็น null
+ * (query เป็น undefined จะถูก JSON.stringify ตัดทิ้งเอง ไม่ต้องเขียนเงื่อนไข)
+ */
+export async function startSession(graphId: string, query?: string): Promise<SessionResponse> {
   if (import.meta.env.VITE_USE_MOCK === 'true') {
     const mock = await import('../mocks/mockServer')
     return mock.startSession(graphId)
   }
   return request<SessionResponse>('/traversal/sessions', {
     method: 'POST',
-    body: { graphId },
+    body: { graphId, query },
+  })
+}
+
+/** POST /symptom-search */
+export async function searchSymptoms(query: string): Promise<SymptomSearchResponse> {
+  if (import.meta.env.VITE_USE_MOCK === 'true') {
+    const mock = await import('../mocks/mockServer')
+    return mock.searchSymptoms()
+  }
+  return request<SymptomSearchResponse>('/symptom-search', {
+    method: 'POST',
+    body: { query },
   })
 }
 

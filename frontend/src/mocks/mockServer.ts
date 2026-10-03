@@ -43,6 +43,7 @@ import type {
   EquipmentItem,
   GraphSummary,
   SessionResponse,
+  SymptomSearchResponse,
   TraversalAction,
 } from '../api/types'
 
@@ -175,6 +176,20 @@ export async function listGraphs(): Promise<GraphSummary[]> {
     severity: graph.severity,
     difficulty: graph.difficulty,
   }))
+}
+
+/**
+ * POST /symptom-search
+ *
+ * ตัวจำลองไม่มีโมเดลค้นหา และไม่แต่งผลลัพธ์ขึ้นมาเอง (ผลปลอมจะทำให้หน้าจอดูเหมือนค้นหาได้จริง)
+ * จึงตอบเหมือนเซิร์ฟเวอร์จริงตอนปิดสวิตช์ระบบค้นหา: 503 SEARCH_UNAVAILABLE
+ * ผู้ใช้เห็นข้อความบอกให้เลือกจากรายการแทน ซึ่งเป็นทางเดียวที่ใช้ได้ในโหมดจำลอง
+ *
+ * ไม่รับ query เพราะไม่ได้ใช้ (ผลเหมือนกันทุกคำค้น)
+ */
+export async function searchSymptoms(): Promise<SymptomSearchResponse> {
+  await delay()
+  throw new ApiError(503, 'SEARCH_UNAVAILABLE', 'ระบบค้นหาไม่พร้อมใช้งาน (โหมดจำลอง)')
 }
 
 /** POST /traversal/sessions */

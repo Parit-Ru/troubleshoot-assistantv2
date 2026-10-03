@@ -10,6 +10,7 @@ import { Button } from '../components/ui/Button'
 import { Icon } from '../components/ui/Icon'
 import { Notice } from '../components/ui/Notice'
 import { describeError } from '../lib/errors'
+import { formatScore } from '../lib/search'
 import { symptomName } from '../lib/symptoms'
 import { toTrailEntry } from '../lib/trail'
 import type { TrailEntry } from '../lib/trail'
@@ -90,7 +91,8 @@ function SessionView({ sessionId }: { sessionId: string }) {
 
   function handleRestart(graphId: string) {
     // replace: ไม่ให้ปุ่ม back พากลับมาหน้าจบของ session เก่า
-    restart.mutate(graphId, {
+    // ไม่ส่ง query: เริ่มซ้ำคือเริ่มใหม่จากผังเดิม ไม่ใช่การค้นหา session ใหม่จึงไม่มีคะแนนความคล้าย
+    restart.mutate({ graphId }, {
       onSuccess: (next) => navigate(`/session/${next.sessionId}`, { replace: true }),
     })
   }
@@ -153,7 +155,7 @@ function SessionView({ sessionId }: { sessionId: string }) {
   }
 
   // ---------- มีข้อมูลแล้ว ----------
-  const { node, graphId, equipment } = session.data
+  const { node, graphId, equipment, confidence } = session.data
   // รายการอาการอาจยังโหลดไม่เสร็จ หัวข้อชั่วคราวไปก่อน ไม่ค้างทั้งหน้า
   const summary = graphs.data?.find((graph) => graph.graphId === graphId)
   const manualLabel = summary && `${summary.brand} ${summary.modelPattern}`
@@ -178,6 +180,14 @@ function SessionView({ sessionId }: { sessionId: string }) {
             </Button>
           )}
         </div>
+        {/* มีเฉพาะ session ที่เริ่มจากผลค้นหา (null/ไม่มี = เลือกจากรายการเอง ไม่แต่งตัวเลขขึ้นมา)
+            เป็นข้อมูลประกอบอย่างเดียว ไม่ได้ใช้ตัดสินขั้นตอน และไม่ใช่ความน่าจะเป็น */}
+        {confidence != null && (
+          <p className="text-sm text-ink-faint">
+            คะแนนความคล้ายกับที่พิมพ์ค้นหา <span className="font-mono">{formatScore(confidence)}</span>
+            {' '}(แสดงเป็นข้อมูลประกอบเท่านั้น ขั้นตอนถัดไปตัดสินตามคู่มือ)
+          </p>
+        )}
       </div>
 
       <EquipmentPanel items={equipment} deviceCategory={summary?.deviceCategory} />

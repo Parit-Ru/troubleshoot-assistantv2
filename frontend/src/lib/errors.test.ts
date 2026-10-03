@@ -48,6 +48,34 @@ describe('describeError — ข้อผิดพลาดที่ระบบ�
   })
 })
 
+describe('describeError — ค้นหาอาการ', () => {
+  it('คำค้นใช้ไม่ได้ (400 INVALID_QUERY) ให้แก้ข้อความแล้วค้นใหม่ ไม่ต้องทำอะไรเพิ่ม', () => {
+    const result = describeError(apiError(400, 'INVALID_QUERY'))
+    expect(result.title).toBe('ข้อความที่พิมพ์ใช้ค้นหาไม่ได้')
+    expect(result.recovery).toBe('stay')
+  })
+
+  it('ระบบค้นหากำลังโหลด (503 SEARCH_NOT_READY) ให้รอแล้วลองใหม่', () => {
+    const result = describeError(apiError(503, 'SEARCH_NOT_READY'))
+    expect(result.title).toBe('ระบบค้นหากำลังเริ่มทำงาน')
+    expect(result.recovery).toBe('retry')
+  })
+
+  it('ระบบค้นหาปิดอยู่ (503 SEARCH_UNAVAILABLE) ให้ใช้รายการอาการแทน ไม่ใช่ลองใหม่', () => {
+    // รอแล้วก็ไม่หาย ถ้าบอกให้ลองใหม่ ผู้ใช้จะกดซ้ำโดยไม่มีวันสำเร็จ
+    const result = describeError(apiError(503, 'SEARCH_UNAVAILABLE'))
+    expect(result.title).toBe('ระบบค้นหาไม่พร้อมใช้งานตอนนี้')
+    expect(result.detail).toContain('รายการ')
+    expect(result.recovery).toBe('stay')
+  })
+
+  it('400 ที่ไม่มี code (JSON ผิดไวยากรณ์ Express ตอบเอง) ไม่ขึ้นว่า "ระบบไม่รู้จัก"', () => {
+    const result = describeError(apiError(400, 'UNKNOWN_ERROR'))
+    expect(result.title).toBe('เซิร์ฟเวอร์อ่านคำขอไม่ได้')
+    expect(result.recovery).toBe('retry')
+  })
+})
+
 describe('describeError — ข้อมูลขั้นตอนไม่สมบูรณ์ (500)', () => {
   // สองรหัสนี้หมายถึงข้อมูลในฐานข้อมูลผิด ผู้ใช้แก้เองไม่ได้
   // จึงแสดงรหัสไว้ให้แจ้งผู้ดูแลระบบ
@@ -92,6 +120,10 @@ describe('describeError — กติการ่วม', () => {
     apiError(409, 'SESSION_COMPLETED'),
     apiError(404, 'SESSION_NOT_FOUND'),
     apiError(404, 'GRAPH_NOT_FOUND'),
+    apiError(400, 'INVALID_QUERY'),
+    apiError(503, 'SEARCH_NOT_READY'),
+    apiError(503, 'SEARCH_UNAVAILABLE'),
+    apiError(400, 'UNKNOWN_ERROR'),
     apiError(500, 'GRAPH_NODE_MISSING'),
     apiError(500, 'GRAPH_SCHEMA_UNSUPPORTED'),
     apiError(500, 'UNKNOWN_ERROR'),
