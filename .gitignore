@@ -19,3 +19,5 @@ env/
 # Python cache
 __pycache__/
 *.py[cod]
+
+repository-backup.git/

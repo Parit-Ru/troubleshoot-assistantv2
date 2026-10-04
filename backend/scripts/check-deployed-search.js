@@ -6,9 +6,12 @@
 //   node scripts/check-deployed-search.js https://troubleshoot-assistantv2.onrender.com
 //   node scripts/check-deployed-search.js http://localhost:3000 --queries 30
 //   node scripts/check-deployed-search.js <url> --wait 300     รอโมเดลโหลดนานสุด 300 วินาที (ค่าเริ่มต้น 240)
+//   node scripts/check-deployed-search.js <url> --origin https://parit-ru.github.io
+//                                                              origin ของหน้าเว็บที่ใช้ตรวจ CORS (ค่าเริ่มต้นตามนี้)
 //
-// ทำอะไร (ใช้เฉพาะ GET /health, GET /symptom-search/status และ POST /symptom-search):
+// ทำอะไร (ใช้เฉพาะ GET /health, OPTIONS /symptom-search, GET /symptom-search/status และ POST /symptom-search):
 //   1. GET /health         เซิร์ฟเวอร์ Render ฟรีหลับอยู่ได้ จึงรอได้นานสุด 120 วินาที แล้วบอกว่ารอนานแค่ไหน
+//      + ตรวจ CORS         ส่ง preflight จำลองหน้าเว็บ ต้องได้ access-control-allow-origin เท่ากับ --origin
 //   2. GET /symptom-search/status
 //        disabled  ปิดสวิตช์อยู่ (ปกติหลัง deploy จังหวะ ก) → จด memoryRssMb แล้วจบ
 //        loading   รอจนเป็น ready หรือ failed
@@ -22,11 +25,20 @@
 // รหัสออก: 0 = ปกติ (รวมกรณีปิดสวิตช์) · 1 = พบปัญหา
 
 const argv = process.argv.slice(2);
-const BASE = (argv.find((a) => /^https?:\/\//.test(a)) ?? '').replace(/\/+$/, '');
-const opt = (name, fallback) => {
+const optStr = (name, fallback) => {
   const i = argv.indexOf(`--${name}`);
-  return i >= 0 && i + 1 < argv.length ? Number(argv[i + 1]) : fallback;
+  return i >= 0 && i + 1 < argv.length ? argv[i + 1] : fallback;
 };
+const opt = (name, fallback) => {
+  const v = optStr(name, null);
+  return v === null ? fallback : Number(v);
+};
+/** origin ของหน้าเว็บที่จะเรียก backend (ค่าของ CORS_ORIGIN บน Render ต้องเท่ากับค่านี้เป๊ะๆ) */
+const WEB_ORIGIN = optStr('origin', 'https://parit-ru.github.io').replace(/\/+$/, '');
+// หา URL เซิร์ฟเวอร์: อาร์กิวเมนต์ http(s) ตัวแรกที่ไม่ใช่ค่าของ --origin
+const BASE = (
+  argv.find((a, i) => /^https?:\/\//.test(a) && argv[i - 1] !== '--origin') ?? ''
+).replace(/\/+$/, '');
 const N_QUERIES = opt('queries', 10);
 const WAIT_S = opt('wait', 240);
 
@@ -96,6 +108,32 @@ async function main() {
   console.log(`  status ${h.status} · ${fmtS(took)}${took > 8000 ? ' (ช้า: เซิร์ฟเวอร์น่าจะเพิ่งตื่นจากหลับหรือเพิ่งบูต)' : ''}`);
   console.log(`  ${JSON.stringify(h.body)}`);
   if (h.body?.status !== 'ok') fail('/health ไม่ใช่ ok (ฐานข้อมูลอาจต่อไม่ได้)');
+
+  // 1b) CORS: จำลองที่เบราว์เซอร์ทำก่อนเรียกจากหน้าเว็บ (preflight) ถ้า origin ไม่ตรง
+  // เบราว์เซอร์บล็อกทุกคำขอของหน้าเว็บ ทั้งที่ curl/สคริปต์นี้เรียกได้ปกติ
+  // (เคยเกิดจริง: CORS_ORIGIN บน Render ถูกตั้งเป็น URL ของ repo แทน origin ของ GitHub Pages)
+  console.log(`\n1b) CORS (จำลองเรียกจากหน้าเว็บ origin = ${WEB_ORIGIN})`);
+  try {
+    const pf = await fetch(`${BASE}/symptom-search`, {
+      method: 'OPTIONS',
+      headers: {
+        Origin: WEB_ORIGIN,
+        'Access-Control-Request-Method': 'POST',
+        'Access-Control-Request-Headers': 'content-type',
+      },
+      signal: AbortSignal.timeout(30_000),
+    });
+    const allowed = pf.headers.get('access-control-allow-origin');
+    console.log(`  preflight ${pf.status} · access-control-allow-origin: ${allowed ?? '(ไม่มี)'}`);
+    if (allowed !== WEB_ORIGIN) {
+      fail(
+        `CORS_ORIGIN บนเซิร์ฟเวอร์ไม่ตรงกับ origin ของหน้าเว็บ: ได้ "${allowed}" ต้องเป็น "${WEB_ORIGIN}" ` +
+          '(เฉพาะ scheme + โดเมน ไม่มี path ไม่มี / ท้าย) หน้าเว็บจะเรียก backend ไม่ได้เลย',
+      );
+    }
+  } catch (e) {
+    fail(`ตรวจ CORS ไม่ได้ (${e.name}: ${e.message})`);
+  }
 
   // 2) /symptom-search/status
   console.log('\n2) GET /symptom-search/status');
