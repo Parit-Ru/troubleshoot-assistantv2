@@ -1,0 +1,108 @@
+หลักฐานการพิสูจน์ด่านความปลอดภัยกับเซิร์ฟเวอร์จริง (T2)
+วันที่ทดสอบ: 4 ตุลาคม 2569 (2026-10-04) ราว 15:00–15:10 น. เวลาประเทศไทย
+ผู้รัน: Claude Code (ตามคำสั่งผู้ใช้) · Windows PowerShell 5.1 (ไม่มี PowerShell 7 ในเครื่อง จึงไม่ได้ทดสอบ pwsh)
+โค้ดที่ทดสอบ: สาขา main commit b1545cd (backend build ใหม่ด้วย npm run build)
+สคริปต์: backend/scripts/demo-safety-gate.ps1 และ backend/scripts/show-session-history.js
+
+ฐานข้อมูล: backend/.env ชี้ MySQL 8.4 บน Aiven ตัวเดียวกับที่ Render ใช้ ดังนั้นทั้งการรันในเครื่อง
+และการรันผ่าน Render เขียนลงฐานข้อมูลตัวเดียวกัน (ไม่ได้บันทึกค่าเชื่อมต่อไว้ในไฟล์นี้)
+
+======================================================================
+สรุปผล
+======================================================================
+ทั้งการรันกับ backend ในเครื่อง (http://localhost:3000) และกับ Render
+(https://troubleshoot-assistantv2.onrender.com) ผ่านครบ 6 ข้อ รหัสออก 0
+และอ่านตาราง session_history ตรงๆ แล้วพบ 3 แถวพอดี (answer yes, answer yes, confirm_safety)
+ไม่มีแถวของ action_type = continue แปลว่า action ที่ถูกปฏิเสธไม่เปลี่ยนสถานะและไม่ถูกบันทึก
+
+ข้อสังเกตที่ต้องบอกตรงๆ (ดูหัวข้อ "ความผิดพลาดของสคริปต์ที่แก้ระหว่างทดสอบ"):
+การรันครั้งแรกกับ Render ข้อ 4 ไม่ผ่านเพราะบั๊กของสคริปต์เอง (อ่าน body ของคำตอบ error ไม่ได้)
+ไม่ใช่ความผิดของเซิร์ฟเวอร์ แก้สคริปต์แล้วรันซ้ำจึงผ่าน
+
+======================================================================
+1) รอบสุดท้ายกับ backend ในเครื่อง (http://localhost:3000)
+======================================================================
+[PASS] step 1: GET /health is ok -- HTTP 200, status=ok
+[PASS] step 2: POST /traversal/sessions returns 2xx and a sessionId -- HTTP 201, node=n1
+SESSION_ID=8d05db3f-a35f-415f-ad63-e10d38b00cb1
+[PASS] step 3: two "answer yes" reach n_fix_breaker with requiresSafetyConfirmation=true -- HTTP 201/201, node=n_fix_breaker, requiresSafetyConfirmation=True
+[PASS] step 4: "continue" without confirming is rejected with 400 SAFETY_CONFIRMATION_REQUIRED -- HTTP 400, code=SAFETY_CONFIRMATION_REQUIRED
+[PASS] step 5: state is still n_fix_breaker after the rejected action -- HTTP 200, node=n_fix_breaker
+[PASS] step 6: "confirm_safety" is accepted and the state moves on -- HTTP 201, node=n_recheck_breaker
+RESULT: all 6 steps passed          (รหัสออก 0)
+
+node scripts/show-session-history.js 8d05db3f-a35f-415f-ad63-e10d38b00cb1
+  ผัง: samsung_ac_ar70h_stops_working  ·  สถานะปัจจุบัน: n_recheck_breaker  ·  status: in_progress
+  session_history: 3 แถว
+    step_order | node_id (สถานะที่อยู่ตอนส่ง) | action_type    | action_value
+             0 | n1                           | answer         | yes
+             1 | n2                           | answer         | yes
+             2 | n_fix_breaker                | confirm_safety |
+  มีแถวของ action_type = continue หรือไม่: ไม่มี
+
+(รอบแรกที่ยังไม่ได้แก้สคริปต์ session d130b45b-b9ab-4d93-89e1-d8204fb71477 ก็ผ่าน 6/6 และได้ประวัติ 3 แถวแบบเดียวกัน)
+
+======================================================================
+2) รอบสุดท้ายกับ Render (https://troubleshoot-assistantv2.onrender.com)
+======================================================================
+[PASS] step 1: GET /health is ok -- HTTP 200, status=ok
+[PASS] step 2: POST /traversal/sessions returns 2xx and a sessionId -- HTTP 201, node=n1
+SESSION_ID=8c35f2aa-5742-4498-b66c-ad2ae696518c
+[PASS] step 3: two "answer yes" reach n_fix_breaker with requiresSafetyConfirmation=true -- HTTP 201/201, node=n_fix_breaker, requiresSafetyConfirmation=True
+[PASS] step 4: "continue" without confirming is rejected with 400 SAFETY_CONFIRMATION_REQUIRED -- HTTP 400, code=SAFETY_CONFIRMATION_REQUIRED
+[PASS] step 5: state is still n_fix_breaker after the rejected action -- HTTP 200, node=n_fix_breaker
+[PASS] step 6: "confirm_safety" is accepted and the state moves on -- HTTP 201, node=n_recheck_breaker
+RESULT: all 6 steps passed          (รหัสออก 0)
+
+node scripts/show-session-history.js 8c35f2aa-5742-4498-b66c-ad2ae696518c
+  ผัง: samsung_ac_ar70h_stops_working  ·  สถานะปัจจุบัน: n_recheck_breaker  ·  status: in_progress
+  session_history: 3 แถว
+    step_order | node_id (สถานะที่อยู่ตอนส่ง) | action_type    | action_value
+             0 | n1                           | answer         | yes
+             1 | n2                           | answer         | yes
+             2 | n_fix_breaker                | confirm_safety |
+  มีแถวของ action_type = continue หรือไม่: ไม่มี
+
+======================================================================
+3) ความผิดพลาดของสคริปต์ที่แก้ระหว่างทดสอบ (บันทึกตามจริง)
+======================================================================
+การรันกับ Render ครั้งที่ 1 และ 2 (session 07392f6c-95fc-47cd-8b52-c3a3b220d6c0 และ
+939ac569-0446-41b6-8a8b-107fbf05449b) ข้อ 4 ไม่ผ่าน: ได้ HTTP 400 แต่ code ว่าง
+ฐานข้อมูลของทั้งสอง session ยังมี 3 แถวและไม่มีแถว continue (ด่านทำงานถูก)
+
+สาเหตุที่ตรวจพบ: ไม่ใช่เซิร์ฟเวอร์ ตรวจด้วยไคลเอนต์อีกตัว (node fetch) ซ้ำสถานการณ์เดียวกันกับ Render
+ได้ body ครบ:
+  {"statusCode":400,"code":"SAFETY_CONFIRMATION_REQUIRED","message":"โหนด 'n_fix_breaker' เป็น safety_critical ต้องส่ง action 'confirm_safety' เท่านั้น จะใช้ 'continue' เฉยๆ ไม่ได้"}
+(ข้อความ error เหมือนกับในเครื่องทุกตัวอักษร ผ่าน Cloudflare) ส่วน Windows PowerShell 5.1 อ่าน
+$_.ErrorDetails.Message ของคำตอบ error จาก Render ได้ค่าว่าง
+การแก้: ให้สคริปต์อ่าน body จากสตรีมของคำตอบ (GetResponseStream) ก่อน แล้วค่อยถอยไปใช้ ErrorDetails.Message
+หลังแก้ ผ่านทั้งในเครื่องและกับ Render
+(ข้อจำกัด: ไม่ได้พิสูจน์ว่าทำไม ErrorDetails.Message ว่างเฉพาะกับ Render รู้แค่ว่าอ่านจากสตรีมแล้วได้)
+
+======================================================================
+4) การล้าง session ทดสอบ
+======================================================================
+ก่อนผู้ทดสอบเริ่มวันนี้: sessions=8, session_history=23
+หลังรันทั้งหมด: sessions=13, session_history=38 (เพิ่ม 5 session × 3 แถวประวัติ)
+ลบเฉพาะ 5 session ที่สคริปต์สร้าง (ตรวจจากไอดีและเวลาสร้าง) ด้วย DELETE /traversal/sessions/:id:
+  d130b45b-b9ab-4d93-89e1-d8204fb71477  DELETE=204  GET หลังลบ=404
+  07392f6c-95fc-47cd-8b52-c3a3b220d6c0  DELETE=204  GET หลังลบ=404
+  939ac569-0446-41b6-8a8b-107fbf05449b  DELETE=204  GET หลังลบ=404
+  8d05db3f-a35f-415f-ad63-e10d38b00cb1  DELETE=204  GET หลังลบ=404
+  8c35f2aa-5742-4498-b66c-ad2ae696518c  DELETE=204  GET หลังลบ=404
+หลังลบ: sessions=8, session_history=23 (กลับเท่าเดิม ประวัติถูกลบตามด้วย ON DELETE CASCADE)
+นอกจากนี้ session ที่ใช้ตรวจ CORS/ไคลเอนต์ดิบ (835369a2-..., 78094e55-...) ถูกลบโดยสคริปต์ตรวจเองแล้ว (DELETE 204)
+
+======================================================================
+5) สิ่งที่หลักฐานนี้พิสูจน์ และสิ่งที่ไม่ได้พิสูจน์
+======================================================================
+พิสูจน์: ด่านความปลอดภัยที่สถานะ n_fix_breaker (safety_critical) ถูกบังคับที่เซิร์ฟเวอร์
+ - ส่ง continue โดยตรงไปที่ REST API (ไม่ผ่านหน้าเว็บ) ถูกปฏิเสธ 400 SAFETY_CONFIRMATION_REQUIRED
+ - สถานะไม่ขยับ และฐานข้อมูลไม่มีแถวของ action ที่ถูกปฏิเสธ
+ - ยืนยันคำเตือน (confirm_safety) ผ่านได้ ด่านจึงไม่ใช่การบล็อกทุกอย่าง
+ - ผลเหมือนกันทั้ง backend ในเครื่องและ Render
+ไม่ได้พิสูจน์:
+ - ด่านของสถานะ safety_critical ตัวอื่น (n_power_off, n_power_back_on ฯลฯ) ทดสอบเฉพาะ n_fix_breaker ของผัง stops_working
+ - ข้อ 3 ของ T2 (เปิดหน้าเว็บ ใส่ ?demo=1 กดปุ่มสาธิต และอัดวิดีโอ) เป็นงานของผู้ใช้ ยังไม่ได้ทำ
+ - PowerShell 7 (pwsh) ไม่มีในเครื่อง จึงทดสอบเฉพาะ Windows PowerShell 5.1
+ - ไม่ได้ทดสอบการส่ง action ในขณะที่ระบบค้นหากำลังโหลด

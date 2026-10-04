@@ -14,9 +14,11 @@ import { ServerStatus } from './ServerStatus'
 
 /**
  * ชื่อแอปที่แสดงบนหน้าจอ เก็บไว้ที่เดียว
- * ชื่อ FixBot ซ้ำกับผลิตภัณฑ์ของ iFixit และรอเปลี่ยน — ตอนเปลี่ยนแก้บรรทัดนี้กับ <title> ใน index.html
+ * เดิมชื่อ FixBot ซึ่งซ้ำกับผลิตภัณฑ์ของ iFixit จึงเปลี่ยนเป็น FixStep (4 ต.ค. 2569)
+ * ค้นเว็บแล้วไม่พบผลิตภัณฑ์ชื่อ FixStep แต่ยังไม่ได้ตรวจเครื่องหมายการค้าหรือชื่อโดเมน
+ * ตอนเปลี่ยนอีกแก้บรรทัดนี้กับ <title> ใน index.html
  */
-const APP_NAME = 'FixBot'
+const APP_NAME = 'FixStep'
 
 /** อ่านครั้งเดียวที่นี่ ใช้ทั้งแถบโหมดจำลองและการซ่อนป้ายสถานะบนมือถือ */
 const IS_MOCK = import.meta.env.VITE_USE_MOCK === 'true'
