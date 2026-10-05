@@ -1,5 +1,5 @@
 /**
- * traversal.controller.ts — 5 endpoint ของ API เดินขั้นตอนการตรวจอาการ
+ * traversal.controller.ts — 6 endpoint ของ API เดินขั้นตอนการตรวจอาการ
  *
  * ไฟล์นี้ตั้งใจให้ "โง่" ที่สุดเท่าที่เป็นไปได้ ไม่มีการตัดสินใจอะไรเองเลย:
  *   - รับ request
@@ -14,12 +14,12 @@
  * @Body() รับเป็น unknown เสมอ ไม่ประกาศเป็น DTO class ของ NestJS/class-validator
  * เพราะตัดสินใจไม่ใช้ class-validator — รูปร่างของ body ที่แท้จริง
  * ถูกพิสูจน์ (และแปลง type ให้ TypeScript เชื่อ) ผ่าน parseStartSessionBody /
- * parseTraversalAction เท่านั้น
+ * parseTraversalAction / parseOutcomeBody เท่านั้น
  */
 
 import { Body, Controller, Delete, Get, HttpCode, Param, Post, UseFilters } from '@nestjs/common';
 
-import { parseStartSessionBody, parseTraversalAction } from './traversal.dto';
+import { parseOutcomeBody, parseStartSessionBody, parseTraversalAction } from './traversal.dto';
 import type { SessionResponseDto } from './traversal.dto';
 import { TraversalExceptionFilter } from './traversal.exception.filter';
 import { TraversalService } from './traversal.service';
@@ -60,6 +60,25 @@ export class TraversalController {
   ): Promise<SessionResponseDto> {
     const action = parseTraversalAction(body);
     return this.traversalService.submitAction(sessionId, action);
+  }
+
+  /**
+   * POST /traversal/sessions/:id/outcome — body: { text }
+   *
+   * บันทึกข้อความผลลัพธ์ที่ผู้ใช้กรอกตอนการตรวจจบ (ได้ครั้งเดียวต่อ session)
+   * เป็น endpoint แยกจาก /actions โดยตั้งใจ: ไม่ผ่าน submitAction/resolveNextNode เลย
+   *
+   * ตอบ 200 ไม่ใช่ 201: ไม่ได้สร้างทรัพยากรใหม่ แค่บันทึกข้อมูลเพิ่มให้ session ที่มีอยู่
+   * (ต่างจาก /sessions และ /actions ที่ตอบ 201 ตามค่าเริ่มต้นของ NestJS สำหรับ POST)
+   */
+  @Post('sessions/:id/outcome')
+  @HttpCode(200)
+  async submitOutcome(
+    @Param('id') sessionId: string,
+    @Body() body: unknown,
+  ): Promise<SessionResponseDto> {
+    const { text } = parseOutcomeBody(body);
+    return this.traversalService.submitOutcome(sessionId, text);
   }
 
   /**

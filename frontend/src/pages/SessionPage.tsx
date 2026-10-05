@@ -1,9 +1,17 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import type { TraversalAction } from '../api/types'
-import { useAbandonSession, useGraphs, useSession, useStartSession, useSubmitAction } from '../api/queries'
+import {
+  useAbandonSession,
+  useGraphs,
+  useSession,
+  useStartSession,
+  useSubmitAction,
+  useSubmitOutcome,
+} from '../api/queries'
 import { DemoPanel } from '../components/DemoPanel'
 import { EquipmentPanel } from '../components/EquipmentPanel'
+import { OutcomeForm } from '../components/OutcomeForm'
 import { PathRail } from '../components/step/PathRail'
 import { StepView } from '../components/step/StepView'
 import { Button } from '../components/ui/Button'
@@ -22,6 +30,8 @@ import type { TrailEntry } from '../lib/trail'
  *   - สถานะปัจจุบัน   มาจากเซิร์ฟเวอร์ (useSession)
  *   - ขั้นถัดไป        เซิร์ฟเวอร์เป็นคนเลือก หน้าจอแค่ส่ง action ไป (useSubmitAction)
  *   - เส้นทางที่ผ่านมา  หน้าจอบันทึกเอง ใช้แสดงผลอย่างเดียว
+ *   - ผลลัพธ์ที่ผู้ใช้กรอกตอนจบ  ส่งไปเก็บที่เซิร์ฟเวอร์ (useSubmitOutcome) เป็นข้อมูลบันทึกอย่างเดียว
+ *     ไม่ผ่าน handleAction และไม่เปลี่ยนขั้นตอน ปุ่มที่หน้าจบไม่ขึ้นกับว่ากรอกหรือไม่
  *
  * สิ่งที่ห้ามทำในหน้านี้
  *   - คำนวณเองว่าขั้นถัดไปคืออะไร
@@ -51,6 +61,7 @@ function SessionView({ sessionId }: { sessionId: string }) {
   const session = useSession(sessionId)
   const graphs = useGraphs()
   const submit = useSubmitAction(sessionId)
+  const saveOutcome = useSubmitOutcome(sessionId)
   const abandon = useAbandonSession()
   const restart = useStartSession()
 
@@ -66,6 +77,9 @@ function SessionView({ sessionId }: { sessionId: string }) {
    */
   const isSendingRef = useRef(false)
 
+  /** กันกดบันทึกผลเบิ้ล ด้วยเหตุผลเดียวกับ isSendingRef (เซิร์ฟเวอร์รับได้ครั้งเดียวอยู่แล้ว แต่ครั้งที่สองจะขึ้นข้อผิดพลาดให้เสียเปล่า) */
+  const isSavingOutcomeRef = useRef(false)
+
   /** กรอบของกล่องขั้นตอนปัจจุบัน ใช้ย้ายโฟกัสหลังเปลี่ยนขั้น */
   const stepRef = useRef<HTMLDivElement>(null)
 
@@ -79,6 +93,17 @@ function SessionView({ sessionId }: { sessionId: string }) {
       onSuccess: () => setTrail((previous) => [...previous, toTrailEntry(nodeBefore, action)]),
       onSettled: () => {
         isSendingRef.current = false
+      },
+    })
+  }
+
+  function handleOutcome(text: string) {
+    if (isSavingOutcomeRef.current) return
+    isSavingOutcomeRef.current = true
+
+    saveOutcome.mutate(text, {
+      onSettled: () => {
+        isSavingOutcomeRef.current = false
       },
     })
   }
@@ -101,6 +126,7 @@ function SessionView({ sessionId }: { sessionId: string }) {
   function handleRefresh() {
     submit.reset()
     restart.reset()
+    saveOutcome.reset()
     void session.refetch()
   }
 
@@ -114,7 +140,7 @@ function SessionView({ sessionId }: { sessionId: string }) {
   }, [trail.length])
 
   // ---------- รอนาน: แบบเดียวกับ SymptomsPage ----------
-  const isWaiting = session.isPending || submit.isPending || restart.isPending
+  const isWaiting = session.isPending || submit.isPending || restart.isPending || saveOutcome.isPending
   const [isSlow, setIsSlow] = useState(false)
 
   useEffect(() => {
@@ -155,11 +181,12 @@ function SessionView({ sessionId }: { sessionId: string }) {
   }
 
   // ---------- มีข้อมูลแล้ว ----------
-  const { node, graphId, equipment, confidence } = session.data
+  const { node, graphId, equipment, confidence, outcome: savedOutcome } = session.data
   // รายการอาการอาจยังโหลดไม่เสร็จ หัวข้อชั่วคราวไปก่อน ไม่ค้างทั้งหน้า
   const summary = graphs.data?.find((graph) => graph.graphId === graphId)
   const manualLabel = summary && `${summary.brand} ${summary.modelPattern}`
   // แสดงข้อผิดพลาดของการกระทำล่าสุดครั้งละหนึ่งอย่าง กล่องขั้นตอนยังอยู่ที่เดิม
+  // (ข้อผิดพลาดของการบันทึกผลลัพธ์ไม่อยู่ตรงนี้ แสดงในช่องกรอกเองข้างปุ่มบันทึก)
   const actionError = submit.error ?? restart.error
 
   return (
@@ -205,6 +232,15 @@ function SessionView({ sessionId }: { sessionId: string }) {
             onAction={handleAction}
             isPending={submit.isPending}
             manualLabel={manualLabel}
+            outcomeForm={
+              <OutcomeForm
+                savedText={savedOutcome}
+                onSubmit={handleOutcome}
+                isSending={saveOutcome.isPending}
+                error={saveOutcome.error}
+                onRefresh={handleRefresh}
+              />
+            }
             outcomeActions={
               <>
                 <Button variant="primary" className="w-full" onClick={() => navigate('/symptoms')}>

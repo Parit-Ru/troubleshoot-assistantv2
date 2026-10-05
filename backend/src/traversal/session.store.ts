@@ -21,10 +21,15 @@
  *
  * ยังไม่มีตัวกวาด session หมดอายุ: แถวที่หมดอายุยังอยู่ในตารางแต่ find() มองไม่เห็น
  * ข้อมูลระดับนี้ไม่เป็นปัญหา และประวัติเหล่านี้ยังเอาไปใช้ทำหน้า Analytics ได้ในอนาคต
+ *
+ * ผลลัพธ์ที่ผู้ใช้กรอกตอนการตรวจจบ (outcome_text / outcome_at, migration 005):
+ *   เก็บและอ่านผ่าน saveOutcome() / findOutcome() ท้ายคลาสเท่านั้น
+ *   find() ไม่อ่านคอลัมน์เหล่านี้ และ SessionState (type ของกลไกควบคุมเครื่องสถานะ) ไม่มีฟิลด์นี้
+ *   จึงไม่มีทางที่ engine จะได้เห็นหรืออ่านค่า outcome เป็นข้อมูลบันทึกอย่างเดียว
  */
 
 import { Inject, Injectable } from '@nestjs/common';
-import type { Pool, RowDataPacket } from 'mysql2/promise';
+import type { Pool, ResultSetHeader, RowDataPacket } from 'mysql2/promise';
 
 import { MYSQL_POOL } from '../database/database.constants';
 import type {
@@ -53,6 +58,11 @@ interface HistoryRow extends RowDataPacket {
   node_id: string;
   action_type: TraversalAction['type'];
   action_value: string | null;
+}
+
+/** ผลลัพธ์ที่ผู้ใช้กรอกของ session หนึ่ง (NULL = ยังไม่ได้กรอก) */
+interface OutcomeRow extends RowDataPacket {
+  outcome_text: string | null;
 }
 
 @Injectable()
@@ -199,6 +209,59 @@ export class SessionStore {
    */
   async delete(sessionId: string): Promise<void> {
     await this.pool.query('DELETE FROM sessions WHERE session_id = ?', [sessionId]);
+  }
+
+  // ============================================================
+  // ผลลัพธ์ที่ผู้ใช้กรอกตอนการตรวจจบ (ข้อมูลบันทึกอย่างเดียว)
+  // ============================================================
+
+  /**
+   * บันทึกข้อความผลลัพธ์ของ session ที่จบแล้ว "ได้ครั้งเดียว"
+   *
+   * คืน true  = บันทึกแล้ว
+   * คืน false = ไม่มีแถวที่ตรงเงื่อนไข ซึ่งเป็นได้ 3 สาเหตุ: ไม่มี session นี้ / session ยังไม่จบ
+   *             / เคยบันทึกไปแล้ว ฟังก์ชันนี้ไม่แยกสาเหตุ ให้ service ตรวจก่อนเรียก (find) แล้วถือว่า
+   *             false คือ "เคยบันทึกแล้ว"
+   *
+   * ทำไมเงื่อนไข outcome_text IS NULL อยู่ใน UPDATE เดียวกัน (ไม่เช็คก่อนแล้วค่อยเขียน):
+   *   ถ้าสองคำขอพร้อมกันเข้ามา ฐานข้อมูลล็อกแถวทีละคำสั่ง คำขอแรกเปลี่ยน NULL เป็นข้อความ
+   *   คำขอที่สองเห็นว่าไม่ใช่ NULL แล้วจึงไม่แก้ได้ 0 แถว ผลคือมีผู้ชนะแค่คนเดียวโดยไม่ต้องมี transaction
+   *   (ถ้าเช็คก่อนแล้วค่อยเขียนเป็นสองคำสั่ง ทั้งสองคำขออาจผ่านการเช็คพร้อมกันแล้วเขียนทับกัน)
+   *
+   * status = 'completed' กันไว้อีกชั้นว่าจะไม่บันทึกให้ session ที่ยังเดินอยู่ แม้ service จะตรวจแล้ว
+   * ไม่เช็คอายุ session ที่นี่ (service เรียก find() ซึ่งมองไม่เห็นแถวหมดอายุไปก่อนแล้ว)
+   * ไม่ต่ออายุ session ตอนบันทึก: การกรอกผลลัพธ์ไม่ใช่ action ของเครื่องสถานะ
+   *
+   * เวลาใช้ NOW() ใน SQL ตามข้อตกลงด้านบน ไม่ใช้เวลาจาก JavaScript
+   * ค่า text ที่ส่งเข้ามาต้องผ่านการตรวจ (ตัดช่องว่าง ไม่ว่าง ไม่ยาวเกิน) จาก DTO มาแล้ว
+   */
+  async saveOutcome(sessionId: string, text: string): Promise<boolean> {
+    const [result] = await this.pool.query<ResultSetHeader>(
+      `UPDATE sessions
+          SET outcome_text = ?,
+              outcome_at = NOW()
+        WHERE session_id = ?
+          AND status = 'completed'
+          AND outcome_text IS NULL`,
+      [text, sessionId],
+    );
+    return result.affectedRows === 1;
+  }
+
+  /**
+   * อ่านข้อความผลลัพธ์ที่เคยบันทึก คืน null ถ้ายังไม่เคยกรอก หรือไม่มี session นี้ หรือหมดอายุแล้ว
+   *
+   * เป็นคำสั่งแยกจาก find() โดยตั้งใจ เพื่อให้ SessionState ที่ส่งเข้า engine ไม่มีค่านี้ปนไปเลย
+   * service เรียกเฉพาะตอน session จบแล้ว (สถานะอื่นไม่มีทางมีค่า) จึงไม่เพิ่มคำสั่งให้การเดินขั้นตอนปกติ
+   */
+  async findOutcome(sessionId: string): Promise<string | null> {
+    const [rows] = await this.pool.query<OutcomeRow[]>(
+      `SELECT outcome_text
+         FROM sessions
+        WHERE session_id = ? AND expires_at > NOW()`,
+      [sessionId],
+    );
+    return rows[0]?.outcome_text ?? null;
   }
 }
 

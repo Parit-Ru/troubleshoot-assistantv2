@@ -30,6 +30,8 @@ import type { SymptomSearchService } from '../symptom-search/symptom-search.serv
 import type { EquipmentItemDto } from './traversal.dto';
 import {
   GraphNotFoundError,
+  OutcomeAlreadySubmittedError,
+  SessionNotCompletedError,
   SessionNotFoundError,
   TraversalService,
 } from './traversal.service';
@@ -135,6 +137,15 @@ class FakeEquipmentRepository {
 class FakeSessionStore {
   private readonly sessions = new Map<string, SessionState>();
 
+  /**
+   * ผลลัพธ์ที่ผู้ใช้กรอก เก็บแยกจาก session โดยตั้งใจ เหมือนของจริง
+   * (SessionStore จริงไม่ใส่ค่านี้ใน SessionState ที่ส่งเข้า engine)
+   */
+  private readonly outcomes = new Map<string, string>();
+
+  /** นับว่า findOutcome ถูกเรียกกี่ครั้ง ไว้ตรวจว่าการเดินขั้นตอนปกติไม่เสียคำสั่งเพิ่ม */
+  findOutcomeCalls = 0;
+
   async create(session: SessionState): Promise<void> {
     this.sessions.set(session.sessionId, session);
   }
@@ -149,6 +160,29 @@ class FakeSessionStore {
 
   async delete(sessionId: string): Promise<void> {
     this.sessions.delete(sessionId);
+    this.outcomes.delete(sessionId);
+  }
+
+  /**
+   * ลอกเงื่อนไขของ UPDATE จริง (session.store.ts): บันทึกได้เฉพาะ session ที่จบแล้วและยังไม่มีผลลัพธ์
+   * คืน true เมื่อบันทึก false เมื่อไม่ตรงเงื่อนไข เนื้อเมธอดไม่มี await ระหว่างเช็คกับเขียน
+   * ความ atomic ของจริงอยู่ที่ฐานข้อมูล (ดูเอกสาร 13) เทสนี้พิสูจน์แค่ตรรกะของ service
+   */
+  async saveOutcome(sessionId: string, text: string): Promise<boolean> {
+    const session = this.sessions.get(sessionId);
+    if (!session || session.status !== 'completed' || this.outcomes.has(sessionId)) return false;
+    this.outcomes.set(sessionId, text);
+    return true;
+  }
+
+  async findOutcome(sessionId: string): Promise<string | null> {
+    this.findOutcomeCalls++;
+    return this.outcomes.get(sessionId) ?? null;
+  }
+
+  /** ให้เทสดูตรงๆ ว่าเก็บอะไรไว้ (ไม่นับเป็นการเรียก findOutcome) */
+  storedOutcome(sessionId: string): string | undefined {
+    return this.outcomes.get(sessionId);
   }
 }
 
@@ -167,11 +201,14 @@ class FakeSymptomSearch {
   }
 }
 
-function makeService(search: FakeSymptomSearch = new FakeSymptomSearch(async () => null)): TraversalService {
+function makeService(
+  search: FakeSymptomSearch = new FakeSymptomSearch(async () => null),
+  store: FakeSessionStore = new FakeSessionStore(),
+): TraversalService {
   return new TraversalService(
     new FakeGraphRepository() as unknown as GraphRepository,
     new FakeEquipmentRepository() as unknown as EquipmentRepository,
-    new FakeSessionStore() as unknown as SessionStore,
+    store as unknown as SessionStore,
     search as unknown as SymptomSearchService,
   );
 }
@@ -385,5 +422,184 @@ describe('TraversalService — คะแนนความมั่นใจข�
     await expect(
       service.submitAction(session.sessionId, { type: 'continue' }),
     ).rejects.toBeInstanceOf(SafetyConfirmationRequiredError);
+  });
+});
+
+// ============================================================
+// ผลลัพธ์ที่ผู้ใช้กรอกตอนการตรวจจบ
+//
+// ข้อมูลบันทึกอย่างเดียว: ไม่ผ่าน engine ไม่เปลี่ยนสถานะ ไม่บังคับ ส่งได้ครั้งเดียว
+// ใช้ store ปลอมที่ลอกเงื่อนไขของ SQL จริง จึงพิสูจน์ตรรกะของ service เท่านั้น
+// ไม่พิสูจน์ความ atomic ของ UPDATE กับ MySQL จริง (ตรวจแยก ดูเอกสาร 13)
+// ============================================================
+
+/** ถึงสถานะสิ้นสุดแบบ resolution: ตอบ "ใช่" ที่คำถามแรกของผังน้ำหยดเครื่องนอก → n_normal */
+const REACH_RESOLUTION = (service: TraversalService) => walk(service, WATER_DRIPS, [YES]);
+
+/** ถึงสถานะสิ้นสุดแบบ escalation: ผังรหัสข้อผิดพลาด ตอบใช่ แล้วกรอก E1 → n_escalate_with_code */
+const REACH_ESCALATION = (service: TraversalService) =>
+  walk(service, ERROR_MESSAGE, [YES, { type: 'input', value: 'E1' }]);
+
+describe('TraversalService — ผลลัพธ์ที่ผู้ใช้กรอก', () => {
+  it('ข้อมูลที่เทสใช้: สองเส้นทางจบที่สถานะคนละชนิดจริง (resolution กับ escalation)', async () => {
+    // กันเทสข้างล่างอ้างว่าครอบคลุมทั้งสองแบบทั้งที่ข้อมูลผังเปลี่ยนไปจนเป็นชนิดเดียวกัน
+    const service = makeService();
+    const typeOf = (graphId: string, nodeId: string) =>
+      manual.graphs.find((g) => g.graph_id === graphId)?.nodes.find((n) => n.node_id === nodeId)?.type;
+
+    const resolution = await REACH_RESOLUTION(service);
+    const escalation = await REACH_ESCALATION(service);
+
+    expect(typeOf(WATER_DRIPS, resolution.node.nodeId)).toBe('resolution');
+    expect(typeOf(ERROR_MESSAGE, escalation.node.nodeId)).toBe('escalation');
+  });
+
+  it.each([
+    ['resolution', REACH_RESOLUTION],
+    ['escalation', REACH_ESCALATION],
+  ])('บันทึกที่สถานะสิ้นสุดแบบ %s ได้ และ response มี outcome เป็นข้อความที่บันทึก', async (_kind, reach) => {
+    const store = new FakeSessionStore();
+    const service = makeService(undefined, store);
+    const done = await reach(service);
+    expect(done.outcome).toBeNull(); // ถึงสถานะสิ้นสุดแล้วแต่ยังไม่ได้กรอก
+
+    const res = await service.submitOutcome(done.sessionId, 'ทำตามแล้วหายแล้ว');
+
+    expect(res.outcome).toBe('ทำตามแล้วหายแล้ว');
+    expect(res.status).toBe('completed');
+    expect(res.node.isTerminal).toBe(true);
+    expect(store.storedOutcome(done.sessionId)).toBe('ทำตามแล้วหายแล้ว');
+  });
+
+  it('รีโหลด (getSession) หลังบันทึก ได้ข้อความเดิม และสถานะ/โหนดไม่เปลี่ยน', async () => {
+    const service = makeService();
+    const done = await REACH_RESOLUTION(service);
+    await service.submitOutcome(done.sessionId, 'ยังไม่หาย แต่เบาลง');
+
+    const again = await service.getSession(done.sessionId);
+
+    expect(again.outcome).toBe('ยังไม่หาย แต่เบาลง');
+    expect(again.node.nodeId).toBe(done.node.nodeId);
+    expect(again.status).toBe('completed');
+  });
+
+  it('ไม่บังคับ: session ที่จบแล้วแต่ไม่กรอก getSession ได้ outcome เป็น null', async () => {
+    const service = makeService();
+    const done = await REACH_ESCALATION(service);
+
+    expect((await service.getSession(done.sessionId)).outcome).toBeNull();
+  });
+
+  it('ไม่มี session → SessionNotFoundError', async () => {
+    const service = makeService();
+
+    await expect(service.submitOutcome('ไม่มี-session-นี้', 'x')).rejects.toBeInstanceOf(
+      SessionNotFoundError,
+    );
+  });
+
+  it('session ยังเดินอยู่ → SessionNotCompletedError และไม่มีอะไรถูกบันทึก', async () => {
+    const store = new FakeSessionStore();
+    const service = makeService(undefined, store);
+    const midway = await service.startSession(STOPS_WORKING);
+    expect(midway.status).toBe('in_progress');
+
+    await expect(service.submitOutcome(midway.sessionId, 'ยังไม่จบ')).rejects.toBeInstanceOf(
+      SessionNotCompletedError,
+    );
+    expect(store.storedOutcome(midway.sessionId)).toBeUndefined();
+  });
+
+  it('ส่งซ้ำ → OutcomeAlreadySubmittedError และข้อความแรกไม่ถูกเขียนทับ', async () => {
+    const store = new FakeSessionStore();
+    const service = makeService(undefined, store);
+    const done = await REACH_RESOLUTION(service);
+    await service.submitOutcome(done.sessionId, 'ข้อความแรก');
+
+    await expect(service.submitOutcome(done.sessionId, 'ข้อความที่สอง')).rejects.toBeInstanceOf(
+      OutcomeAlreadySubmittedError,
+    );
+
+    expect(store.storedOutcome(done.sessionId)).toBe('ข้อความแรก');
+    expect((await service.getSession(done.sessionId)).outcome).toBe('ข้อความแรก');
+  });
+
+  it('สองคำขอพร้อมกัน → สำเร็จหนึ่ง ถูกปฏิเสธหนึ่ง (ตรรกะของ service ความ atomic ของจริงอยู่ที่ UPDATE)', async () => {
+    const service = makeService();
+    const done = await REACH_RESOLUTION(service);
+
+    const results = await Promise.allSettled([
+      service.submitOutcome(done.sessionId, 'คำขอ A'),
+      service.submitOutcome(done.sessionId, 'คำขอ B'),
+    ]);
+
+    const fulfilled = results.filter((r) => r.status === 'fulfilled');
+    const rejected = results.filter((r): r is PromiseRejectedResult => r.status === 'rejected');
+    expect(fulfilled).toHaveLength(1);
+    expect(rejected).toHaveLength(1);
+    expect(rejected[0].reason).toBeInstanceOf(OutcomeAlreadySubmittedError);
+  });
+
+  it('ไม่ผ่าน engine: หลังบันทึก action ใหม่ยังถูกปฏิเสธด้วย SessionAlreadyCompletedError ตามเดิม', async () => {
+    const service = makeService();
+    const done = await REACH_RESOLUTION(service);
+    await service.submitOutcome(done.sessionId, 'บันทึกแล้ว');
+
+    await expect(service.submitAction(done.sessionId, YES)).rejects.toBeInstanceOf(
+      SessionAlreadyCompletedError,
+    );
+    expect((await service.getSession(done.sessionId)).outcome).toBe('บันทึกแล้ว');
+  });
+
+  it('ผลลัพธ์ไม่มีผลต่อเส้นทาง: เดินเส้นเดียวกัน มี/ไม่มี outcome จบที่สถานะเดียวกัน', async () => {
+    const serviceA = makeService();
+    const serviceB = makeService();
+    const a = await REACH_RESOLUTION(serviceA);
+    const b = await REACH_RESOLUTION(serviceB);
+
+    await serviceA.submitOutcome(a.sessionId, 'มีผลลัพธ์');
+
+    const aAfter = await serviceA.getSession(a.sessionId);
+    const bAfter = await serviceB.getSession(b.sessionId);
+    expect(aAfter.node.nodeId).toBe(bAfter.node.nodeId);
+    expect(aAfter.status).toBe(bAfter.status);
+  });
+
+  it('response ทุกชนิดมี outcome: start/action เป็น null · การเดินขั้นตอนปกติไม่เรียก findOutcome เลย', async () => {
+    const store = new FakeSessionStore();
+    const service = makeService(undefined, store);
+
+    const started = await service.startSession(STOPS_WORKING);
+    const stepped = await service.submitAction(started.sessionId, YES);
+    const reloaded = await service.getSession(started.sessionId);
+
+    for (const r of [started, stepped, reloaded]) {
+      expect('outcome' in r).toBe(true);
+      expect(r.outcome).toBeNull();
+    }
+    // session ยังเดินอยู่ไม่มีทางมีผลลัพธ์ จึงไม่เสียคำสั่ง SQL เพิ่ม
+    expect(store.findOutcomeCalls).toBe(0);
+  });
+
+  it('getSession ที่จบแล้วอ่านผลลัพธ์ 1 ครั้ง', async () => {
+    const store = new FakeSessionStore();
+    const service = makeService(undefined, store);
+    const done = await REACH_RESOLUTION(service);
+
+    await service.getSession(done.sessionId);
+
+    expect(store.findOutcomeCalls).toBe(1);
+  });
+
+  it('confidence กับผลลัพธ์เป็นข้อมูลคนละอย่าง: บันทึกผลลัพธ์แล้ว confidence เดิมไม่เปลี่ยน', async () => {
+    const service = makeService(new FakeSymptomSearch(async () => 0.812));
+    let s = await service.startSession(WATER_DRIPS, 'น้ำหยด');
+    s = await service.submitAction(s.sessionId, YES);
+    expect(s.status).toBe('completed');
+
+    const res = await service.submitOutcome(s.sessionId, 'ผลลัพธ์');
+
+    expect(res.confidence).toBe(0.812);
+    expect(res.outcome).toBe('ผลลัพธ์');
   });
 });

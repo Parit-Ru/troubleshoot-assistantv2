@@ -6,12 +6,14 @@
  * ไม่แตะฐานข้อมูล ทำให้เทสได้เร็วโดยไม่ต้องเปิดเซิร์ฟเวอร์
  *
  * ทำไมเขียนตัวตรวจเอง ไม่ใช้ class-validator:
- *   - body ของ API นี้มีแค่ 2 แบบ และเรียบง่ายมาก
+ *   - body ของ API นี้มีแค่ 3 แบบ และเรียบง่ายมาก
  *   - ไม่ต้องลงแพ็กเกจเพิ่ม และไม่ต้องอธิบาย decorator
  *   - เขียนเป็นฟังก์ชันธรรมดาแล้วอธิบายได้ทุกบรรทัด
  *
  * ถ้า body ผิดรูปแบบ ฟังก์ชันในไฟล์นี้โยน InvalidRequestBodyError
  * แล้ว filter (A.6) แปลงเป็น 400 INVALID_ACTION
+ * ยกเว้น body ของผลลัพธ์ที่ผู้ใช้กรอก (parseOutcomeBody) ที่โยน InvalidOutcomeError
+ * แล้ว filter แปลงเป็น 400 INVALID_OUTCOME แยกต่างหาก
  */
 
 import type {
@@ -34,6 +36,16 @@ import { MAX_QUERY_LENGTH } from '../symptom-search/symptom-search.dto';
  */
 export const MAX_INPUT_LENGTH = 255;
 
+/**
+ * ความยาวสูงสุดของข้อความผลลัพธ์ที่ผู้ใช้กรอกตอนการตรวจจบ (นับหลังตัดช่องว่างหน้าหลัง)
+ *
+ * นับเป็นหน่วยของ JavaScript (.length) อักขระนอก BMP เช่นอีโมจิ นับเป็น 2
+ * หน้าจอใช้ค่าเดียวกันกับ maxLength ของช่องกรอก (ลอกไว้ที่ frontend ถ้าเปลี่ยนต้องแก้สองที่)
+ * ไม่ผูกกับคอลัมน์โดยตรง: outcome_text เป็น TEXT (65,535 ไบต์) กว้างกว่า 1,000 ตัวอักษรมาก
+ * เพดานนี้มีไว้กันข้อความยาวผิดปกติ ไม่ใช่ข้อจำกัดของฐานข้อมูล
+ */
+export const MAX_OUTCOME_LENGTH = 1000;
+
 // ============================================================
 // ข้อผิดพลาด
 // ============================================================
@@ -47,6 +59,20 @@ export const MAX_INPUT_LENGTH = 255;
  * message เขียนไว้ให้นักพัฒนาอ่าน หน้าจอเลือกข้อความไทยจาก code ไม่ใช่ message
  */
 export class InvalidRequestBodyError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = this.constructor.name;
+  }
+}
+
+/**
+ * body ของ POST /traversal/sessions/:id/outcome ผิดรูปแบบ
+ *
+ * แยกจาก InvalidRequestBodyError เพราะ filter ต้องแปลงเป็นรหัสคนละตัว (INVALID_OUTCOME)
+ * หน้าจอจะได้แสดงข้อความ "ข้อความผลลัพธ์ใช้ไม่ได้" ไม่ปนกับ INVALID_ACTION
+ * ที่หมายถึงหน้าจอส่งคำสั่งเดินขั้นตอนผิด
+ */
+export class InvalidOutcomeError extends Error {
   constructor(message: string) {
     super(message);
     this.name = this.constructor.name;
@@ -166,6 +192,43 @@ export function parseTraversalAction(body: unknown): TraversalAction {
   }
 }
 
+/** body ของ POST /traversal/sessions/:id/outcome */
+export interface OutcomeBody {
+  /** ข้อความผลลัพธ์ที่ผู้ใช้กรอก ตัดช่องว่างหน้าหลังแล้ว ไม่ว่าง ไม่เกิน MAX_OUTCOME_LENGTH */
+  text: string;
+}
+
+/**
+ * ตรวจ body ของการบันทึกผลลัพธ์: ต้องเป็น object ที่มี text เป็นข้อความ
+ * ไม่ว่างหลังตัดช่องว่าง และยาวไม่เกิน MAX_OUTCOME_LENGTH
+ *
+ * - ตัดช่องว่างหน้าหลังให้ ("  แก้ได้แล้ว \n" → "แก้ได้แล้ว") เก็บเฉพาะข้อความที่ตัดแล้ว
+ * - ข้อความว่างหรือมีแต่ช่องว่างถือว่าผิดรูปแบบ (ผู้ใช้ไม่กรอกก็ได้ แต่ถ้าส่งมาต้องมีเนื้อหา)
+ * - สร้าง object ใหม่จาก field text เท่านั้น field แปลกปลอมจึงไม่ผ่านไปต่อ
+ * - ตรวจแค่ "รูปร่าง" ส่วนว่า session จบแล้วหรือยัง/เคยส่งไปแล้วหรือไม่ เป็นหน้าที่ของ service
+ * - ไม่ตรวจเนื้อหา (ไม่กรองข้อมูลส่วนตัว ไม่กรองคำ) ข้อความเป็นข้อมูลบันทึกอย่างเดียว
+ */
+export function parseOutcomeBody(body: unknown): OutcomeBody {
+  if (typeof body !== 'object' || body === null || Array.isArray(body)) {
+    throw new InvalidOutcomeError('body ต้องเป็น JSON object');
+  }
+
+  const raw = (body as Record<string, unknown>).text;
+  if (typeof raw !== 'string') {
+    throw new InvalidOutcomeError('text ต้องเป็นข้อความ');
+  }
+
+  const text = raw.trim();
+  if (text === '') {
+    throw new InvalidOutcomeError('text ต้องไม่ว่าง');
+  }
+  if (text.length > MAX_OUTCOME_LENGTH) {
+    throw new InvalidOutcomeError(`text ยาวเกิน ${MAX_OUTCOME_LENGTH} ตัวอักษร`);
+  }
+
+  return { text };
+}
+
 // ============================================================
 // Response
 // ============================================================
@@ -208,4 +271,10 @@ export interface SessionResponseDto {
    * ไม่ใช่ความน่าจะเป็น หน้าจอต้องเรียกว่า "คะแนนความคล้าย"
    */
   confidence: number | null;
+  /**
+   * ข้อความผลลัพธ์ที่ผู้ใช้กรอกตอนการตรวจจบ · null = ยังไม่ได้กรอก (หรือการตรวจยังไม่จบ)
+   * เป็นข้อมูลบันทึกอย่างเดียว ไม่มีโค้ดส่วนไหนอ่านไปตัดสินขั้นถัดไปหรือด่านความปลอดภัย
+   * ไม่ใช่ข้อมูลที่ระบบ "เรียนรู้" จากมัน
+   */
+  outcome: string | null;
 }

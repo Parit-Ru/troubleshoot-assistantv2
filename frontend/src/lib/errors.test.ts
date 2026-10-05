@@ -76,6 +76,33 @@ describe('describeError — ค้นหาอาการ', () => {
   })
 })
 
+describe('describeError — บันทึกผลลัพธ์', () => {
+  it('ข้อความใช้ไม่ได้ (400 INVALID_OUTCOME) ให้แก้ข้อความแล้วบันทึกใหม่ บอกเพดานความยาว', () => {
+    const result = describeError(apiError(400, 'INVALID_OUTCOME'))
+    expect(result.title).toBe('ข้อความผลลัพธ์บันทึกไม่ได้')
+    expect(result.detail).toContain('1000')
+    expect(result.recovery).toBe('stay')
+  })
+
+  it('การตรวจยังไม่จบ (409 SESSION_NOT_COMPLETED) ให้ดึงสถานะล่าสุดมาใหม่', () => {
+    const result = describeError(apiError(409, 'SESSION_NOT_COMPLETED'))
+    expect(result.title).toBe('การตรวจนี้ยังไม่จบ')
+    expect(result.recovery).toBe('reload-session')
+  })
+
+  it('บันทึกไปแล้ว (409 OUTCOME_ALREADY_SUBMITTED) ให้ดึงข้อความที่บันทึกไว้มาดู ไม่ใช่ลองส่งใหม่', () => {
+    // ลองส่งใหม่ได้ 409 เดิมซ้ำเสมอ ผู้ใช้ต้องได้ทางไปดูของที่บันทึกไว้
+    const result = describeError(apiError(409, 'OUTCOME_ALREADY_SUBMITTED'))
+    expect(result.title).toBe('การตรวจนี้บันทึกผลไปแล้ว')
+    expect(result.recovery).toBe('reload-session')
+  })
+
+  it('ไม่ปนกับรหัสเดิมที่คล้ายกัน: SESSION_COMPLETED ของ /actions ยังเป็นข้อความเดิม', () => {
+    expect(describeError(apiError(409, 'SESSION_COMPLETED')).title).toBe('การตรวจนี้จบไปแล้ว')
+    expect(describeError(apiError(400, 'INVALID_ACTION')).title).toBe('หน้าจอไม่ตรงกับเซิร์ฟเวอร์')
+  })
+})
+
 describe('describeError — ข้อมูลขั้นตอนไม่สมบูรณ์ (500)', () => {
   // สองรหัสนี้หมายถึงข้อมูลในฐานข้อมูลผิด ผู้ใช้แก้เองไม่ได้
   // จึงแสดงรหัสไว้ให้แจ้งผู้ดูแลระบบ
@@ -123,6 +150,9 @@ describe('describeError — กติการ่วม', () => {
     apiError(400, 'INVALID_QUERY'),
     apiError(503, 'SEARCH_NOT_READY'),
     apiError(503, 'SEARCH_UNAVAILABLE'),
+    apiError(400, 'INVALID_OUTCOME'),
+    apiError(409, 'SESSION_NOT_COMPLETED'),
+    apiError(409, 'OUTCOME_ALREADY_SUBMITTED'),
     apiError(400, 'UNKNOWN_ERROR'),
     apiError(500, 'GRAPH_NODE_MISSING'),
     apiError(500, 'GRAPH_SCHEMA_UNSUPPORTED'),

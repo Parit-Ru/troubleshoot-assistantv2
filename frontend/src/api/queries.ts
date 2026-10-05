@@ -7,6 +7,7 @@ import {
   searchSymptoms,
   startSession,
   submitAction,
+  submitOutcome,
 } from './traversal'
 import type { SessionResponse, SymptomSearchResponse, TraversalAction } from './types'
 
@@ -121,6 +122,25 @@ export function useSubmitAction(sessionId: string) {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (action: TraversalAction) => submitAction(sessionId, action),
+    onSuccess: (session: SessionResponse) => {
+      queryClient.setQueryData(queryKeys.session(sessionId), session)
+    },
+  })
+}
+
+/**
+ * บันทึกข้อความผลลัพธ์ตอนการตรวจจบ
+ *
+ * เซิร์ฟเวอร์ตอบ session พร้อม outcome ที่บันทึกแล้ว เอาใส่แคชเลย
+ * ฟอร์มจึงเปลี่ยนเป็นข้อความอ่านอย่างเดียวทันที และกด F5 แล้วยังเห็นเหมือนเดิม
+ * เพราะ GET session ส่ง outcome กลับมาด้วย
+ *
+ * ถ้าเซิร์ฟเวอร์ปฏิเสธ onSuccess ไม่ทำงาน แคชไม่เปลี่ยน ฟอร์มยังอยู่พร้อมข้อความที่พิมพ์ไว้
+ */
+export function useSubmitOutcome(sessionId: string) {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (text: string) => submitOutcome(sessionId, text),
     onSuccess: (session: SessionResponse) => {
       queryClient.setQueryData(queryKeys.session(sessionId), session)
     },

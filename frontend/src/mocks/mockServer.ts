@@ -35,6 +35,13 @@ import {
   submitAction as engineSubmitAction,
 } from '../../../backend/src/traversal-engine/traversal-engine'
 
+// ตัวตรวจ body ของผลลัพธ์ตัวเดียวกับที่ controller จริงใช้ (ตัดช่องว่าง ไม่ว่าง ไม่เกินเพดาน)
+// ใช้ของ backend ตรงๆ ไม่เขียนกฎซ้ำเป็นชุดที่สอง ตามเหตุผลเดียวกับที่ใช้ engine ตัวเดียวกัน
+import {
+  InvalidOutcomeError,
+  parseOutcomeBody,
+} from '../../../backend/src/traversal/traversal.dto'
+
 import manualJson from '../../../data/manuals/samsung_ac_ar70h.json'
 import equipmentJson from '../../../data/equipment/equipment.json'
 
@@ -64,6 +71,15 @@ const graphs = new Map<string, TroubleshootingGraph>(
  * การทดสอบว่า refresh แล้วยังอยู่ขั้นเดิม ต้องรอเซิร์ฟเวอร์จริงในขั้น 10.2
  */
 const sessions = new Map<string, SessionState>()
+
+/**
+ * ข้อความผลลัพธ์ที่ผู้ใช้กรอก key = sessionId
+ *
+ * แยกจาก sessions โดยตั้งใจ เหมือนที่ backend เก็บแยกจาก SessionState ของ engine
+ * engine จึงไม่เคยเห็นผลลัพธ์ และผลลัพธ์ไม่มีทางไปเปลี่ยนขั้นตอนของเครื่องสถานะ
+ * ไม่มีรายการ = ยังไม่ได้กรอก (ตอบเป็น null)
+ */
+const outcomes = new Map<string, string>()
 
 /** รูปร่างของ data/equipment/equipment.json เฉพาะ field ที่ใช้ */
 interface EquipmentFile {
@@ -158,7 +174,7 @@ function requireSession(sessionId: string): SessionState {
 }
 
 // ============================================================
-// 5 ฟังก์ชัน ตรงกับ 5 endpoint ของ API จริง
+// ฟังก์ชันละหนึ่ง endpoint ของ API จริง (ยกเว้น /health ที่ไม่มีทางจำลอง)
 // ============================================================
 
 /** GET /traversal/graphs */
@@ -209,6 +225,8 @@ export async function startSession(graphId: string): Promise<SessionResponse> {
       equipment: equipmentFor(graph),
       // ตัวจำลองไม่มีระบบค้นหา จึงไม่มีการจับคู่ให้วัดเสมอ (เซิร์ฟเวอร์จริงคำนวณเองเมื่อได้รับ query)
       confidence: null,
+      // session ที่เพิ่งเริ่มยังไม่จบ จึงยังไม่มีผลลัพธ์
+      outcome: null,
     }
   } catch (error) {
     throw toApiError(error)
@@ -230,6 +248,8 @@ export async function getSession(sessionId: string): Promise<SessionResponse> {
       equipment: equipmentFor(graph),
       // ตัวจำลองไม่มีระบบค้นหา จึงไม่มีการจับคู่ให้วัดเสมอ (เซิร์ฟเวอร์จริงคำนวณเองเมื่อได้รับ query)
       confidence: null,
+      // กด F5 แล้วยังเห็นข้อความที่บันทึกไว้ (ไม่มีรายการ = null)
+      outcome: outcomes.get(sessionId) ?? null,
     }
   } catch (error) {
     throw toApiError(error)
@@ -260,6 +280,60 @@ export async function submitAction(
       equipment: equipmentFor(graph),
       // ตัวจำลองไม่มีระบบค้นหา จึงไม่มีการจับคู่ให้วัดเสมอ (เซิร์ฟเวอร์จริงคำนวณเองเมื่อได้รับ query)
       confidence: null,
+      // session ที่เพิ่งเดินมาถึงตอนจบยังไม่มีผลลัพธ์ (ที่จบแล้วส่ง action ไม่ได้ ถูกปฏิเสธข้างบน)
+      outcome: null,
+    }
+  } catch (error) {
+    throw toApiError(error)
+  }
+}
+
+/**
+ * POST /traversal/sessions/:id/outcome
+ *
+ * ลำดับการตรวจตรงกับ backend ทุกข้อ (controller ตรวจ body ก่อน แล้ว service ตรวจตามนี้):
+ *   1. body ผิดรูปแบบ         → 400 INVALID_OUTCOME
+ *   2. session ไม่มี          → 404 SESSION_NOT_FOUND
+ *   3. session ยังเดินอยู่     → 409 SESSION_NOT_COMPLETED
+ *   4. เคยบันทึกไปแล้ว         → 409 OUTCOME_ALREADY_SUBMITTED
+ * ถ้าเรียงต่างจากนี้ หน้าจอที่ลองกับตัวจำลองจะเจอข้อความคนละอย่างกับเซิร์ฟเวอร์จริง
+ *
+ * ไม่เรียก engine ที่เปลี่ยนสถานะเลย (ใช้ getCurrentNode อ่านขั้นปัจจุบันมาประกอบคำตอบเท่านั้น)
+ */
+export async function submitOutcome(sessionId: string, text: string): Promise<SessionResponse> {
+  await delay()
+
+  let saved: string
+  try {
+    saved = parseOutcomeBody({ text }).text
+  } catch (error) {
+    if (error instanceof InvalidOutcomeError) {
+      throw new ApiError(400, 'INVALID_OUTCOME', error.message)
+    }
+    throw error
+  }
+
+  const session = requireSession(sessionId)
+  const graph = requireGraph(session.graphId)
+
+  if (session.status !== 'completed') {
+    throw new ApiError(409, 'SESSION_NOT_COMPLETED', `session '${sessionId}' ยังไม่จบ`)
+  }
+  if (outcomes.has(sessionId)) {
+    throw new ApiError(409, 'OUTCOME_ALREADY_SUBMITTED', `session '${sessionId}' บันทึกผลไปแล้ว`)
+  }
+  outcomes.set(sessionId, saved)
+
+  try {
+    return {
+      sessionId,
+      graphId: session.graphId,
+      status: session.status,
+      node: getCurrentNode(session, graph),
+      equipment: equipmentFor(graph),
+      // ตัวจำลองไม่มีระบบค้นหา จึงไม่มีการจับคู่ให้วัดเสมอ (เซิร์ฟเวอร์จริงคำนวณเองเมื่อได้รับ query)
+      confidence: null,
+      outcome: saved,
     }
   } catch (error) {
     throw toApiError(error)
@@ -271,4 +345,6 @@ export async function abandonSession(sessionId: string): Promise<void> {
   await delay()
   requireSession(sessionId)
   sessions.delete(sessionId)
+  // เซิร์ฟเวอร์จริงลบทั้งแถว ผลลัพธ์จึงหายไปพร้อมกัน
+  outcomes.delete(sessionId)
 }

@@ -60,6 +60,25 @@ export class SessionNotFoundError extends Error {
   }
 }
 
+/**
+ * บันทึกผลลัพธ์ให้ session ที่ยังเดินอยู่ (ยังไม่ถึงสถานะสิ้นสุด) → 409 SESSION_NOT_COMPLETED
+ * ผลลัพธ์ที่ผู้ใช้กรอกมีความหมายเฉพาะตอนการตรวจจบแล้ว จึงรับเฉพาะ session ที่ status เป็น completed
+ */
+export class SessionNotCompletedError extends Error {
+  constructor(sessionId: string) {
+    super(`session '${sessionId}' ยังไม่ถึงสถานะสิ้นสุด บันทึกผลลัพธ์ไม่ได้`);
+    this.name = this.constructor.name;
+  }
+}
+
+/** session นี้เคยบันทึกผลลัพธ์ไปแล้ว ส่งซ้ำหรือแก้ไขไม่ได้ → 409 OUTCOME_ALREADY_SUBMITTED */
+export class OutcomeAlreadySubmittedError extends Error {
+  constructor(sessionId: string) {
+    super(`session '${sessionId}' บันทึกผลลัพธ์ไปแล้ว ส่งซ้ำไม่ได้`);
+    this.name = this.constructor.name;
+  }
+}
+
 @Injectable()
 export class TraversalService {
   constructor(
@@ -70,7 +89,7 @@ export class TraversalService {
   ) {}
 
   // ============================================================
-  // 5 เมธอด ตรงกับ 5 endpoint ของ TraversalController
+  // 6 เมธอด ตรงกับ 6 endpoint ของ TraversalController
   // ============================================================
 
   /**
@@ -104,7 +123,12 @@ export class TraversalService {
     // แค่ "อ่านซ้ำ" โหนดปัจจุบัน ไม่มีการเปลี่ยนสถานะ จึงไม่ต้องเขียนอะไรกลับ
     const node = getCurrentNode(session, graph);
 
-    return this.toResponse(session, node, graph);
+    // ผลลัพธ์ที่ผู้ใช้กรอกมีได้เฉพาะ session ที่จบแล้ว (saveOutcome รับเฉพาะ completed)
+    // จึงอ่านเฉพาะตอนนั้น การเดินขั้นตอนปกติไม่เสียคำสั่ง SQL เพิ่ม (ไม่ผ่าน find() และไม่ผ่าน engine)
+    const outcome =
+      session.status === 'completed' ? await this.sessionStore.findOutcome(sessionId) : null;
+
+    return this.toResponse(session, node, graph, outcome);
   }
 
   /**
@@ -145,6 +169,46 @@ export class TraversalService {
     await this.sessionStore.delete(sessionId);
   }
 
+  /**
+   * POST /traversal/sessions/:id/outcome
+   *
+   * บันทึกข้อความผลลัพธ์ที่ผู้ใช้กรอกตอนการตรวจจบ (ได้ครั้งเดียวต่อ session)
+   *
+   * ⚠️ ไม่ผ่าน submitAction() และไม่เรียก engine ใดๆ ที่เปลี่ยนสถานะ:
+   * session ที่จบแล้วถูกปฏิเสธด้วย SESSION_COMPLETED อยู่แล้ว และ resolveNextNode ต้องเป็น
+   * จุดตัดสินใจเดียวต่อไป ผลลัพธ์เป็นข้อมูลบันทึกอย่างเดียว (เหมือน confidence)
+   * เรียก getCurrentNode() เพื่อ "อ่าน" สถานะปัจจุบันมาประกอบ response เท่านั้น เหมือน getSession()
+   *
+   * ลำดับการตรวจ (แต่ละข้อใช้รหัสข้อผิดพลาดต่างกัน หน้าจอจึงแสดงข้อความถูกกรณี):
+   *   1. session ไม่มี/หมดอายุ        → SessionNotFoundError          (404 SESSION_NOT_FOUND)
+   *   2. session ยังเดินอยู่          → SessionNotCompletedError      (409 SESSION_NOT_COMPLETED)
+   *   3. เคยบันทึกไปแล้ว              → OutcomeAlreadySubmittedError  (409 OUTCOME_ALREADY_SUBMITTED)
+   *
+   * ข้อ 3 ไม่เช็คก่อนเขียน แต่ให้ saveOutcome() ตัดสินในคำสั่ง UPDATE เดียว (atomic) ถ้าได้ false
+   * ทั้งที่ข้อ 1 และ 2 ผ่านมาแล้ว แปลว่ามีผลลัพธ์อยู่แล้ว (สองคำขอพร้อมกัน ชนะได้คนเดียว)
+   * ช่องว่างเล็กน้อยที่ยอมรับ: ถ้า session หมดอายุพอดีระหว่างข้อ 1 กับ UPDATE
+   * UPDATE ยังเขียนสำเร็จ (ไม่เช็คอายุ) ซึ่งไม่มีผลเสีย
+   *
+   * text ต้องผ่านการตรวจจาก parseOutcomeBody() มาแล้ว (ตัดช่องว่าง ไม่ว่าง ไม่เกินเพดาน)
+   * คืน session ปัจจุบันพร้อมฟิลด์ outcome เป็นข้อความที่เพิ่งบันทึก
+   */
+  async submitOutcome(sessionId: string, text: string): Promise<SessionResponseDto> {
+    const session = await this.requireSession(sessionId);
+    const graph = this.requireGraph(session.graphId);
+
+    if (session.status !== 'completed') {
+      throw new SessionNotCompletedError(sessionId);
+    }
+
+    const saved = await this.sessionStore.saveOutcome(sessionId, text);
+    if (!saved) {
+      throw new OutcomeAlreadySubmittedError(sessionId);
+    }
+
+    const node = getCurrentNode(session, graph);
+    return this.toResponse(session, node, graph, text);
+  }
+
   // ============================================================
   // ตัวช่วยภายใน
   // ============================================================
@@ -172,6 +236,7 @@ export class TraversalService {
     session: SessionState,
     node: RenderedNode,
     graph: TroubleshootingGraph,
+    outcome: string | null = null,
   ): SessionResponseDto {
     return {
       sessionId: session.sessionId,
@@ -180,6 +245,11 @@ export class TraversalService {
       node,
       equipment: this.equipmentRepository.findByCategory(graph.device_category),
       confidence: session.confidence ?? null,
+      // ผลลัพธ์ที่ผู้ใช้กรอก ไม่ได้มาจาก session (SessionState ของ engine ไม่มีฟิลด์นี้)
+      // ผู้เรียกที่รู้ค่า (getSession ตอนจบ, submitOutcome) ส่งเข้ามา ที่เหลือ (start, action) เป็น null
+      // ซึ่งถูกต้อง: session ที่เพิ่งเริ่มหรือเพิ่งเดินต่อ (แม้เพิ่งถึงสถานะสิ้นสุด) ยังไม่เคยมีผลลัพธ์
+      // เพราะ saveOutcome รับเฉพาะ session ที่จบแล้ว และ action หลังจบถูกปฏิเสธอยู่แล้ว
+      outcome,
     };
   }
 

@@ -104,6 +104,24 @@ export async function submitAction(
   )
 }
 
+/**
+ * POST /traversal/sessions/:id/outcome
+ *
+ * บันทึกข้อความผลลัพธ์ตอนการตรวจจบ ได้ครั้งเดียวต่อ session
+ * เซิร์ฟเวอร์ตอบ session ปัจจุบันพร้อม outcome ที่เพิ่งบันทึก
+ * (เป็น endpoint แยกจาก /actions: ไม่เปลี่ยนสถานะ ไม่ผ่านเครื่องสถานะ)
+ */
+export async function submitOutcome(sessionId: string, text: string): Promise<SessionResponse> {
+  if (import.meta.env.VITE_USE_MOCK === 'true') {
+    const mock = await import('../mocks/mockServer')
+    return mock.submitOutcome(sessionId, text)
+  }
+  return request<SessionResponse>(
+    `/traversal/sessions/${encodeURIComponent(sessionId)}/outcome`,
+    { method: 'POST', body: { text } },
+  )
+}
+
 /** DELETE /traversal/sessions/:id */
 export async function abandonSession(sessionId: string): Promise<void> {
   if (import.meta.env.VITE_USE_MOCK === 'true') {

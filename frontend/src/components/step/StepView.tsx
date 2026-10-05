@@ -24,13 +24,26 @@ import type { StepProps } from './stepProps'
 interface StepViewProps extends StepProps {
   /** ปุ่มของสถานะสิ้นสุด ส่งต่อให้ OutcomeStep (สถานะแบบอื่นไม่ใช้) */
   outcomeActions?: ReactNode
+  /**
+   * ช่องกรอกผลลัพธ์ ส่งต่อให้ OutcomeStep เช่นกัน
+   * ไปถึงเฉพาะสถานะสิ้นสุด: ทุกแขนงข้างล่างนอกจาก isTerminal ไม่รับ prop นี้เลย
+   * ช่องกรอกจึงไม่มีทางโผล่กลางการตรวจ แม้ผู้เรียกจะส่งมาผิดที่
+   */
+  outcomeForm?: ReactNode
 }
 
-export function StepView({ outcomeActions, ...stepProps }: StepViewProps) {
+export function StepView({ outcomeActions, outcomeForm, ...stepProps }: StepViewProps) {
   const { node } = stepProps
 
   if (node.isTerminal) {
-    return <OutcomeStep node={node} manualLabel={stepProps.manualLabel} actions={outcomeActions} />
+    return (
+      <OutcomeStep
+        node={node}
+        manualLabel={stepProps.manualLabel}
+        form={outcomeForm}
+        actions={outcomeActions}
+      />
+    )
   }
 
   if (node.requiresSafetyConfirmation) {

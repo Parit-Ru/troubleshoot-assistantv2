@@ -7,9 +7,10 @@
  *
  * error ที่ต้องรู้จักมาจาก 3 แหล่ง:
  *   - traversal-engine/types.ts   (5 ชนิด: ปัญหาจากการเดินเครื่องสถานะ)
- *   - traversal.service.ts (A.5) (2 ชนิด: หากราฟ/session ไม่เจอ)
- *   - traversal.dto.ts     (A.1) (1 ชนิด: body ผิดรูปแบบ)
- * รวม 8 ชนิด + 1 แถว "อื่นๆ" ท้ายตาราง
+ *   - traversal.service.ts (A.5) (4 ชนิด: หากราฟ/session ไม่เจอ, session ยังไม่จบ, บันทึกผลลัพธ์ซ้ำ)
+ *   - traversal.dto.ts     (A.1) (2 ชนิด: body ผิดรูปแบบ, ข้อความผลลัพธ์ใช้ไม่ได้)
+ * รวม 11 ชนิด + 1 แถว "อื่นๆ" ท้ายตาราง
+ * (ส่วนของผลลัพธ์ที่ผู้ใช้กรอก: INVALID_OUTCOME 400 · SESSION_NOT_COMPLETED 409 · OUTCOME_ALREADY_SUBMITTED 409)
  *
  * ทำไมแยกฟังก์ชัน toErrorBody() ออกจากคลาส filter:
  *   ฟังก์ชันนี้เป็นตรรกะล้วน (รับ error คืน object) ทดสอบได้โดยไม่ต้องปลอม
@@ -27,8 +28,13 @@
 import { ArgumentsHost, Catch, ExceptionFilter, Logger } from '@nestjs/common';
 import type { Response } from 'express';
 
-import { InvalidRequestBodyError } from './traversal.dto';
-import { GraphNotFoundError, SessionNotFoundError } from './traversal.service';
+import { InvalidOutcomeError, InvalidRequestBodyError } from './traversal.dto';
+import {
+  GraphNotFoundError,
+  OutcomeAlreadySubmittedError,
+  SessionNotCompletedError,
+  SessionNotFoundError,
+} from './traversal.service';
 import {
   InvalidActionError,
   NodeNotFoundError,
@@ -48,7 +54,7 @@ export interface ApiErrorBody {
  * ตารางแปลง error → HTTP response ตัวจริง (ตารางข้อ 4 ของ HANDOFF)
  *
  * เรียงลำดับการเช็คตามที่อ่านง่าย ไม่ได้มีนัยเรื่องความสำคัญก่อนหลัง เพราะ error
- * ทั้ง 8 ชนิดเป็นพี่น้องกัน (extends Error หรือ TraversalError โดยตรง) ไม่มีคลาสไหน
+ * ทั้ง 11 ชนิดเป็นพี่น้องกัน (extends Error หรือ TraversalError โดยตรง) ไม่มีคลาสไหน
  * เป็น superclass ของอีกคลาส จึงสลับลำดับกันได้โดยผลไม่เปลี่ยน
  *
  * แถวสุดท้าย (else) ดักทุกอย่างที่ไม่รู้จัก — บั๊กที่ยังไม่เจอ, error จาก mysql2 เอง,
@@ -69,8 +75,19 @@ export function toErrorBody(exception: unknown): ApiErrorBody {
     // (สองแถวนี้ต่างกันแค่ "ผิดตอนไหน" แต่ผู้ใช้เห็นข้อความไทยเดียวกัน)
     return { statusCode: 400, code: 'INVALID_ACTION', message };
   }
+  if (exception instanceof InvalidOutcomeError) {
+    // ข้อความผลลัพธ์ผิดรูปแบบ (ว่าง/ยาวเกิน/ไม่ใช่ข้อความ) ใช้รหัสของตัวเอง ไม่ปนกับ INVALID_ACTION
+    return { statusCode: 400, code: 'INVALID_OUTCOME', message };
+  }
   if (exception instanceof SessionAlreadyCompletedError) {
     return { statusCode: 409, code: 'SESSION_COMPLETED', message };
+  }
+  if (exception instanceof SessionNotCompletedError) {
+    // ตรงข้ามกับ SESSION_COMPLETED: บันทึกผลลัพธ์ได้เฉพาะ session ที่จบแล้ว
+    return { statusCode: 409, code: 'SESSION_NOT_COMPLETED', message };
+  }
+  if (exception instanceof OutcomeAlreadySubmittedError) {
+    return { statusCode: 409, code: 'OUTCOME_ALREADY_SUBMITTED', message };
   }
   if (exception instanceof SessionNotFoundError) {
     return { statusCode: 404, code: 'SESSION_NOT_FOUND', message };

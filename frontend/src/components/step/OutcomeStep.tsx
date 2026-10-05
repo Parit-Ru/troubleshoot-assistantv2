@@ -18,8 +18,12 @@ import type { StepProps } from './stepProps'
  * กล่องนี้ไม่มีปุ่มของตัวเอง ปุ่ม "ตรวจอาการอื่น" กับ "เริ่มอาการนี้ใหม่" ต้องใช้
  * router และการเริ่ม session ใหม่ ซึ่งเป็นงานของหน้าตรวจอาการ (ขั้น 7)
  * จึงรับเข้ามาทาง prop actions แทน กล่องจะได้ไม่ต้องรู้จัก API
+ *
+ * ช่องกรอกผลลัพธ์ (form) รับเข้ามาทางเดียวกัน และวางอยู่เหนือปุ่ม
+ * ปุ่มทั้งสองอยู่นอกฟอร์ม จึงกดได้เสมอไม่ว่าผู้ใช้จะกรอกหรือไม่
  */
 interface OutcomeStepProps extends Pick<StepProps, 'node' | 'manualLabel'> {
+  form?: ReactNode
   actions?: ReactNode
 }
 
@@ -38,7 +42,7 @@ const OUTCOME_ICONS: Record<OutcomeKind, IconName> = {
   handoff_unknown: 'wrench',
 }
 
-export function OutcomeStep({ node, manualLabel, actions }: OutcomeStepProps) {
+export function OutcomeStep({ node, manualLabel, form, actions }: OutcomeStepProps) {
   /**
    * สถานะสิ้นสุดทุกตัวในข้อมูลมี outcomeKind (ตรวจแล้ว 29/29 สถานะ)
    * ถ้าวันหนึ่งหายไป ให้ถือเป็น handoff_unknown เพราะเป็นทางที่ปลอดภัยที่สุด
@@ -60,6 +64,7 @@ export function OutcomeStep({ node, manualLabel, actions }: OutcomeStepProps) {
       manualLabel={manualLabel}
     >
       <p className="leading-relaxed">{node.text}</p>
+      {form !== undefined && <div className="mt-5 border-t border-line pt-5">{form}</div>}
       {actions !== undefined && <div className="mt-5 space-y-3">{actions}</div>}
     </StepCard>
   )

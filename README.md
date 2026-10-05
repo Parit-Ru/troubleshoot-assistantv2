@@ -14,38 +14,40 @@
 | ส่วน | สถานะ |
 |---|---|
 | กลไกควบคุมเครื่องสถานะ (`backend/src/traversal-engine/`) | ✅ เสร็จ — เทส 86 ข้อผ่าน (รวมเทสของ `confidence` 4 ข้อ) |
-| REST API (NestJS, `backend/src/traversal/`) | ✅ เสร็จ — 5 endpoint + เทส service/DTO 23 ข้อผ่าน |
+| REST API (NestJS, `backend/src/traversal/`) | ✅ เสร็จ — 5 endpoint ที่ deploy แล้ว · endpoint ที่ 6 (`POST …/outcome` บันทึกผลลัพธ์) เขียนและทดสอบแล้ว แต่ ⬜ **ยังไม่ได้ deploy** · เทส service/DTO/filter 51 ข้อผ่าน |
 | ผังขั้นตอนของเครื่องปรับอากาศ AR70H | ✅ 13 ชุด 95 สถานะ (คู่มือหน้า 43–44) ร่างโดยใช้ LLM ช่วย แล้วตรวจแก้ทุกสถานะด้วยมือ |
 | การเดินครบทุกเส้นทางของผังขั้นตอนแอร์ | ✅ 106 เส้นทาง ไม่มีทางตัน (นิยามของ "เส้นทาง" อยู่ใน `path-coverage.spec.ts`) |
-| ฐานข้อมูล MySQL: migration, seed, `GraphRepository` | ✅ เสร็จ (migration 001–004; รันบน Aiven ครบแล้ว) |
-| หน้าเว็บ (`frontend/`) | ✅ เสร็จ เทส 55 ข้อผ่าน (7 ไฟล์) ต่อกับ REST API จริงแล้ว (เลิกใช้ตัวจำลองเป็นค่าเริ่มต้น) |
+| ฐานข้อมูล MySQL: migration, seed, `GraphRepository` | ✅ เสร็จ (migration 001–005; รันบน Aiven ครบแล้ว · 005 เพิ่มคอลัมน์ผลลัพธ์ รันเมื่อ 5 ต.ค. 2569) |
+| หน้าเว็บ (`frontend/`) | ✅ เสร็จ เทส 84 ข้อผ่าน (8 ไฟล์) ต่อกับ REST API จริงแล้ว (เลิกใช้ตัวจำลองเป็นค่าเริ่มต้น) |
 | ค้นหาอาการด้วยภาษาธรรมชาติ (`backend/src/symptom-search/` + ช่องค้นหาในหน้าเลือกอาการ) | ✅ เขียนและทดสอบแล้ว (เทส 46 ข้อผ่าน) · ✅ deploy แล้ว: backend บน Render (เปิดสวิตช์เมื่อ 3 ต.ค. 2569) และหน้าเว็บบน GitHub Pages ตรวจด้วย Chrome จริงว่าพิมพ์ "แอร์ไม่เย็น" แล้วได้ผลค้นหาจาก Render · หน่วยความจำบน Render วัดได้ ~285–312 MB จากเพดาน 512 MB (ยิงคำค้นวนประโยคเดิม ยังไม่ได้พิสูจน์ว่านิ่งหลังใช้งานนาน) · ✅ ทดสอบเขียนฐานข้อมูลจริง 1 ครั้งผ่าน API (3 ต.ค. 2569): เริ่ม session พร้อม `query` "แอร์ไม่เย็น" ได้ `confidence = 0.984` (HTTP 201) บันทึกในตาราง `sessions` บน MySQL 8.4 และ GET อ่านกลับได้ค่าเดิม แล้วลบด้วย DELETE (204) GET หลังลบได้ 404 จำนวนแถวกลับเท่าก่อนทดสอบ — ทดสอบเฉพาะ start/GET/DELETE ไม่ได้ส่ง action จึงยังไม่ได้ทดสอบด่านความปลอดภัยกับเซิร์ฟเวอร์จริง · ⬜ ยังไม่ได้ทดสอบ "กดเลือกผลค้นหาบนหน้าเว็บจริง" (รายละเอียด: `backend/docs/explained/12-deploy-symptom-search.md`) |
 | คะแนนความคล้ายของ session (`confidence`) | ✅ เซิร์ฟเวอร์คำนวณเอง เก็บในตาราง `sessions` ใช้แสดงผลอย่างเดียว ไม่ใช้ตัดสินขั้นตอนใดๆ · ไม่มีการจับคู่ให้วัด = `null` (ไม่แต่งตัวเลข) |
+| ผลลัพธ์ที่ผู้ใช้กรอกตอนจบการตรวจ (`sessions.outcome_text`) | 🟡 เขียนและทดสอบแล้วในเครื่อง (backend 183 ข้อ, frontend 84 ข้อ, ตรวจด้วย Chrome 63 ข้อกับเซิร์ฟเวอร์ปลอม) · migration 005 รันบน Aiven แล้ว · ⬜ **ยังไม่ได้ deploy และยังไม่ได้ทดสอบเต็มระบบกับ backend/ฐานข้อมูลจริง** · เป็นข้อความอิสระ ไม่บังคับกรอก บันทึกได้ครั้งเดียวต่อ session เก็บกับ session อย่างเดียว ไม่ใช้ตัดสินขั้นตอน ไม่ใช้เรียนรู้หรือคำนวณความแม่นยำ · ⚠️ ผู้ใช้อาจพิมพ์ข้อมูลส่วนตัวเอง ระบบไม่กรอง และข้อความยังอยู่ในตารางแม้ session หมดอายุ (ยังไม่มีตัวกวาด session หมดอายุ) |
 | วัดคุณภาพการค้นหา | 🟡 เกณฑ์ `MATCH_THRESHOLD = 0.55` เลือกจาก **ชุดตั้งเกณฑ์ 56 ข้อที่ AI (Claude) ร่าง ผู้พัฒนายังไม่ได้ตรวจแก้** · ⬜ ชุดรายงานผลยังว่าง (ตามแผนเก็บจากเพื่อน) จึง **ยังไม่มีตัวเลขความแม่นยำที่อ้างได้** |
 | การสาธิตด่านความปลอดภัยกับเซิร์ฟเวอร์จริง | ⬜ ยังไม่ได้เดินทดสอบจริง — สคริปต์ `backend/scripts/demo-safety-gate.ps1` **ไม่อยู่ใน repo แล้ว** (ถูกลบใน commit `bc9f910`) ต้องกู้คืนหรือเขียนใหม่ก่อนสาธิต เทสของตัวจำลองหน้าเว็บ (`mockServer.test.ts`) ตรวจด่านนี้อยู่ แต่ไม่ใช่การพิสูจน์กับเซิร์ฟเวอร์จริง |
 | LLM เรียบเรียงถ้อยคำ | ⬜ ยังไม่ได้ทำ (เป็นชั้นเสริม ถอดออกได้) |
 | ผังขั้นตอนของตู้เย็น เครื่องซักผ้า โทรทัศน์ | ⬜ ยังไม่เสร็จ — เครื่องซักผ้ามีฉบับร่างจากสคริปต์ 29 ชุด ยังไม่ผ่านการตรวจ และยังไม่ผ่าน validator |
 
-เทสทั้งหมด: backend **155 ข้อ** (9 ชุด) · frontend **55 ข้อ** (7 ไฟล์)
+เทสทั้งหมด: backend **183 ข้อ** (10 ชุด) · frontend **84 ข้อ** (8 ไฟล์)
 
 ### REST API
 
-**กลไกเครื่องสถานะ (`/traversal`) — 5 endpoint**
+**กลไกเครื่องสถานะ (`/traversal`) — 6 endpoint**
 
 - `GET /traversal/graphs`
 - `POST /traversal/sessions` — body `{ "graphId": "...", "query": "..." }` (`query` ไม่บังคับ ส่งเฉพาะเมื่อเลือกผังจากผลค้นหา เซิร์ฟเวอร์คำนวณ `confidence` เอง ไม่รับคะแนนจากหน้าจอ)
 - `GET /traversal/sessions/:id`
 - `POST /traversal/sessions/:id/actions`
+- `POST /traversal/sessions/:id/outcome` — body `{ "text": "..." }` บันทึกข้อความผลลัพธ์ที่ผู้ใช้กรอกตอนการตรวจจบ ได้ครั้งเดียวต่อ session ตอบ 200 พร้อม session ที่มี `outcome` (ไม่ผ่านกลไกเครื่องสถานะ ไม่เปลี่ยนสถานะ) **ยังไม่ได้ deploy**
 - `DELETE /traversal/sessions/:id` (คืนสถานะ 204)
 
-ทุก response ของ session มีฟิลด์ `confidence` (ตัวเลขทศนิยม 3 ตำแหน่ง หรือ `null`)
+ทุก response ของ session มีฟิลด์ `confidence` (ตัวเลขทศนิยม 3 ตำแหน่ง หรือ `null`) และฟิลด์ `outcome` (ข้อความที่ผู้ใช้บันทึกไว้ หรือ `null` ถ้ายังไม่ได้กรอกหรือการตรวจยังไม่จบ) ทั้งสองเป็นข้อมูลบันทึกอย่างเดียว ไม่ใช้ตัดสินขั้นตอนใดๆ
 
 **ค้นหาอาการ (`/symptom-search`) — 2 endpoint**
 
 - `POST /symptom-search` — body `{ "query": "..." }` ตอบ 200 พร้อมผังที่ผ่านเกณฑ์สูงสุด 3 รายการและคะแนนความคล้าย (ว่าง = ไม่มีผังที่ตรง)
 - `GET /symptom-search/status` — สถานะระบบค้นหา (`disabled`/`loading`/`ready`/`failed`) และหน่วยความจำที่ใช้ (`memoryRssMb`)
 
-รหัสข้อผิดพลาดที่ใช้ร่วมกันทั้ง backend และ frontend: `SAFETY_CONFIRMATION_REQUIRED`, `INVALID_ACTION`, `SESSION_COMPLETED`, `SESSION_NOT_FOUND`, `GRAPH_NOT_FOUND`, `GRAPH_NODE_MISSING`, `GRAPH_SCHEMA_UNSUPPORTED`, `INTERNAL_ERROR` และของการค้นหา: `INVALID_QUERY` (400), `SEARCH_NOT_READY` (503 กำลังโหลดโมเดล ลองใหม่ได้), `SEARCH_UNAVAILABLE` (503 ปิดอยู่หรือโหลดไม่สำเร็จ)
+รหัสข้อผิดพลาดที่ใช้ร่วมกันทั้ง backend และ frontend: `SAFETY_CONFIRMATION_REQUIRED`, `INVALID_ACTION`, `SESSION_COMPLETED`, `SESSION_NOT_FOUND`, `GRAPH_NOT_FOUND`, `GRAPH_NODE_MISSING`, `GRAPH_SCHEMA_UNSUPPORTED`, `INTERNAL_ERROR` ของการบันทึกผลลัพธ์: `INVALID_OUTCOME` (400), `SESSION_NOT_COMPLETED` (409 การตรวจยังไม่จบ), `OUTCOME_ALREADY_SUBMITTED` (409 บันทึกไปแล้ว) และของการค้นหา: `INVALID_QUERY` (400), `SEARCH_NOT_READY` (503 กำลังโหลดโมเดล ลองใหม่ได้), `SEARCH_UNAVAILABLE` (503 ปิดอยู่หรือโหลดไม่สำเร็จ)
 
 ## ค้นหาอาการด้วยภาษาธรรมชาติ
 
@@ -108,7 +110,7 @@
     cd backend
     npm install
     copy .env.example .env      # แล้วกรอกค่า DB_* ให้ครบ
-    npm run migrate             # migration 001–004 (004 เพิ่มคอลัมน์ confidence)
+    npm run migrate             # migration 001–005 (004 เพิ่มคอลัมน์ confidence, 005 เพิ่มคอลัมน์ผลลัพธ์)
     npm run seed
     npm run seed:equipment
     npm run start:dev           # ตรวจว่าทำงาน: http://localhost:3000/health
