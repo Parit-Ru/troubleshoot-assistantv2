@@ -141,7 +141,7 @@ export function SymptomsPage() {
 
       {/* เริ่มไม่สำเร็จ: แสดงเหนือส่วนรายการ ทุกแถวกดได้อีกครั้งเพราะ isPending กลับเป็น false
           วางนอกส่วนรายการ เพราะเริ่มจากผลค้นหาก็ล้มได้ และรายการอาจยังโหลดไม่เสร็จ */}
-      {startSession.isError && <ErrorNotice error={startSession.error} />}
+      {startSession.isError && <SymptomsErrorNotice error={startSession.error} />}
 
       <section className="space-y-6">
         <h2 className="text-lg font-semibold">เลือกจากรายการอาการ</h2>
@@ -154,11 +154,11 @@ export function SymptomsPage() {
         )}
 
         {graphs.isError && (
-          <ErrorNotice error={graphs.error}>
+          <SymptomsErrorNotice error={graphs.error}>
             <Button variant="secondary" className="mt-3" onClick={() => graphs.refetch()}>
               ลองอีกครั้ง
             </Button>
-          </ErrorNotice>
+          </SymptomsErrorNotice>
         )}
 
         {graphs.isSuccess && graphs.data.length === 0 && (
@@ -213,7 +213,7 @@ function SearchErrorNotice({ error }: { error: Error }) {
  *
  * ใช้แค่ในหน้านี้ จึงไม่แยกไฟล์ ถ้าหน้าอื่นต้องใช้ค่อยย้ายไป components
  */
-function ErrorNotice({ error, children }: { error: Error; children?: ReactNode }) {
+function SymptomsErrorNotice({ error, children }: { error: Error; children?: ReactNode }) {
   const isNetwork = error instanceof ApiError && error.code === 'NETWORK_ERROR'
 
   if (isNetwork) {

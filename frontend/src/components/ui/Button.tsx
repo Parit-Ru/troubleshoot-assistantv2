@@ -1,6 +1,6 @@
 import type { ComponentProps } from 'react'
 import { Icon } from './Icon'
-export type ButtonVariant = 'primary' | 'secondary' | 'answer' | 'text'
+type ButtonVariant ='primary' | 'secondary' | 'answer' | 'text'
 
 const VARIANT_CLASSES: Record<ButtonVariant, string> = {
   // ตัวอักษรบนปุ่มส้มต้องเป็น text-canvas เสมอ ห้าม text-white (อ่านยากบนสีส้ม)

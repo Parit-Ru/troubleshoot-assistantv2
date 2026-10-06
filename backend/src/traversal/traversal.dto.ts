@@ -11,9 +11,8 @@
  *   - เขียนเป็นฟังก์ชันธรรมดาแล้วอธิบายได้ทุกบรรทัด
  *
  * ถ้า body ผิดรูปแบบ ฟังก์ชันในไฟล์นี้โยน InvalidRequestBodyError
- * แล้ว filter (A.6) แปลงเป็น 400 INVALID_ACTION
- * ยกเว้น body ของผลลัพธ์ที่ผู้ใช้กรอก (parseOutcomeBody) ที่โยน InvalidOutcomeError
- * แล้ว filter แปลงเป็น 400 INVALID_OUTCOME แยกต่างหาก
+ * แล้ว TraversalExceptionFilter แปลงเป็น 400 INVALID_ACTION
+ * ยกเว้น body ของผลลัพธ์ (parseOutcomeBody) ที่โยน InvalidOutcomeError แล้วแปลงเป็น 400 INVALID_OUTCOME
  */
 
 import type {
@@ -34,7 +33,7 @@ import { MAX_QUERY_LENGTH } from '../symptom-search/symptom-search.dto';
  * ถ้าไม่ตั้งเพดานตรงนี้ การบันทึกประวัติจะล้มกลางทางเป็น 500
  * ทั้งที่จริงเป็นความผิดของ request (ควรเป็น 400)
  */
-export const MAX_INPUT_LENGTH = 255;
+const MAX_INPUT_LENGTH = 255;
 
 /**
  * ความยาวสูงสุดของข้อความผลลัพธ์ที่ผู้ใช้กรอกตอนการตรวจจบ (นับหลังตัดช่องว่างหน้าหลัง)
@@ -142,7 +141,7 @@ export function parseStartSessionBody(body: unknown): StartSessionBody {
 /**
  * ตรวจ body ของการส่ง action เข้า session
  *
- * body คือ TraversalAction ตรงๆ (ไม่ห่อด้วย object อื่น) ตามสัญญาข้อ 4
+ * body คือ TraversalAction ตรงๆ (ไม่ห่อด้วย object อื่น)
  *
  * ตรวจแค่ว่ารูปร่างเป็น action ที่ถูกต้องหรือไม่
  * ส่วน "action นี้ใช้กับสถานะปัจจุบันได้ไหม" (เช่น ส่ง answer ให้สถานะ input)

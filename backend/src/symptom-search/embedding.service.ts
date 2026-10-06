@@ -27,7 +27,7 @@ export const EMBEDDING_DTYPE = 'q8';
  * นับจากไฟล์นี้ขึ้นไป 2 ระดับคือ backend/ ทั้งตอนรันจาก src/ (เทส)
  * และจาก dist/ (เซิร์ฟเวอร์จริง)
  */
-export const MODEL_CACHE_DIR = path.resolve(__dirname, '../../model-slim');
+const MODEL_CACHE_DIR =path.resolve(__dirname, '../../model-slim');
 
 /** ฟังก์ชันสกัดเวกเตอร์ของ transformers.js (เฉพาะส่วนที่เราใช้) */
 type FeatureExtractor = (

@@ -12,7 +12,7 @@
 | `src/pages/HomePage.tsx` | หน้าแรก (ชั่วคราว) |
 | `src/pages/SymptomsPage.tsx` | หน้าเลือกอาการ (ชั่วคราว) |
 | `src/pages/SessionPage.tsx` | หน้าตรวจอาการ (ชั่วคราว) |
-| `src/pages/NodeGalleryPage.tsx` | หน้ารวมตัวอย่างสถานะ (ชั่วคราว) |
+| `src/pages/NodeGalleryPage.tsx` | หน้ารวมตัวอย่างสถานะ (ชั่วคราว) *(หน้านี้ถูกลบในการ refactor เฟส 5)* |
 | `src/pages/NotFoundPage.tsx` | หน้าเมื่อเปิด URL ที่ไม่มีอยู่ (ตัวจริง) |
 | `src/App.tsx` | ต่อแคชข้อมูล router และโครงหน้าเข้าด้วยกัน |
 
@@ -21,7 +21,7 @@
 เทสเดิม 15 ข้อยังผ่านทั้งหมด ขั้นนี้ไม่มีเทสอัตโนมัติเพิ่ม (ดูข้อ 11)
 
 > **ศัพท์:** เอกสารนี้ใช้คำว่า เครื่องสถานะ / สถานะ / การเปลี่ยนสถานะ ตาม PROJECT_CONTEXT ข้อ 3
-> ชื่อในโค้ดยังคงเดิม เช่น `NodeGalleryPage` และ `nodeId` — **node ในโค้ด = สถานะ**
+> ชื่อในโค้ดยังคงเดิม เช่น `NodeGalleryPage` และ `nodeId` — **node ในโค้ด = สถานะ** *(หน้านี้ถูกลบในการ refactor เฟส 5)*
 
 ---
 
@@ -50,7 +50,7 @@ App.tsx
                  ├─ /                      HomePage
                  ├─ /symptoms              SymptomsPage
                  ├─ /session/:sessionId    SessionPage
-                 ├─ /gallery               NodeGalleryPage
+                 ├─ /gallery               NodeGalleryPage  (หน้านี้ถูกลบในการ refactor เฟส 5)
                  └─ *                      NotFoundPage
 ```
 
@@ -181,7 +181,7 @@ Tailwind หาคลาสที่ต้องสร้างโดย**อ่
 | `HomePage` | `/` | ชั่วคราว |
 | `SymptomsPage` | `/symptoms` | ชั่วคราว |
 | `SessionPage` | `/session/:sessionId` | ชั่วคราว — แสดงค่า `sessionId` ที่อ่านจาก URL ด้วย `useParams()` |
-| `NodeGalleryPage` | `/gallery` | ชั่วคราว — ไม่อยู่ในเมนู |
+| `NodeGalleryPage` | `/gallery` | ชั่วคราว — ไม่อยู่ในเมนู *(หน้านี้ถูกลบในการ refactor เฟส 5)* |
 | `NotFoundPage` | `*` | ตัวจริง |
 
 ### ทำไมหน้าชั่วคราวยังไม่ดึงข้อมูล
@@ -249,7 +249,7 @@ URL ที่ผิดจะแสดงให้ผู้ใช้เห็น 
 | เรื่อง | ทำเมื่อ |
 |---|---|
 | `role="alert"` สำหรับกล่องคำเตือนความปลอดภัย | ตอนทำหน้าตรวจอาการ |
-| หน้า gallery ตัวจริงจะ import `fixtures.ts` ตรงๆ ข้อมูลตัวอย่างจะติดไปใน build จริง ต้องเลือกว่าจะเปิดหน้านี้เฉพาะโหมดจำลอง หรือยอมให้ติดไป | ตอนทำหน้า gallery |
+| หน้า gallery ตัวจริงจะ import `fixtures.ts` ตรงๆ ข้อมูลตัวอย่างจะติดไปใน build จริง ต้องเลือกว่าจะเปิดหน้านี้เฉพาะโหมดจำลอง หรือยอมให้ติดไป | ตอนทำหน้า gallery *(หน้านี้ถูกลบในการ refactor เฟส 5)* |
 | `public/favicon.svg` ยังเป็นโลโก้ของ Vite | ยังไม่กำหนด |
 | บนมือถือคำว่า "โหมดจำลอง" ขึ้นสองที่ (ป้ายสถานะและแถบฟ้า) | ถ้าต้องการ ซ่อนป้ายเฉพาะมือถือ |
 | เปลี่ยนชื่อ FixBot | **ทำแล้ว (4 ต.ค. 2569):** เปลี่ยนเป็น FixStep เฉพาะชื่อที่แสดงบนหน้าจอ ชื่อเดิม FixBot ยังเหลืออยู่ในเอกสารนอก repo (TOR, proposal, `Overview.md` ถ้ามี), ชื่อไฟล์ออกแบบ และตัวระบุภายใน (`fixbot-backend`, `DB_NAME=fixbot`, ชื่อใน `data/schemas/`, `scripts/*.py`) |

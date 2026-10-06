@@ -1,31 +1,25 @@
 /**
  * session.store.ts — อ่านและเขียนตาราง sessions กับ session_history
  *
- * หน้าที่เดียวของไฟล์นี้: เก็บและอ่าน SessionState ที่กลไกควบคุมเครื่องสถานะสร้างขึ้น
- * ไม่มีตรรกะการเปลี่ยนสถานะอยู่ที่นี่เลย
- * ใครเป็นคนตัดสินว่าขั้นถัดไปคืออะไร คำตอบคือ submitAction() ของ engine เท่านั้น
- *
+ * เก็บและอ่าน SessionState ที่ engine สร้างขึ้น ไม่มีตรรกะเปลี่ยนสถานะอยู่ที่นี่
+ * (คนตัดสินว่าขั้นถัดไปคืออะไรคือ submitAction() ของ engine เท่านั้น)
  * SQL เขียนเอง ไม่ใช้ ORM
  *
- * ข้อตกลงเรื่องเวลา (สำคัญ):
- *   ทุกการคำนวณเวลาทำใน SQL ด้วย NOW() ไม่ใช้ Date ของ JavaScript
- *   เพราะคอลัมน์ TIMESTAMP ของ MySQL ขึ้นกับ time zone ของ connection
- *   ถ้าเอาเวลาจากสองที่มาเทียบกัน อาจเห็น session หมดอายุเพี้ยนไปหลายชั่วโมง
+ * เรื่องเวลา: ทุกการคำนวณเวลาทำใน SQL ด้วย NOW() ไม่ใช้ Date ของ JavaScript
+ * เพราะคอลัมน์ TIMESTAMP ของ MySQL ขึ้นกับ time zone ของ connection
+ * ถ้าเอาเวลาจากสองที่มาเทียบกัน อาจเห็น session หมดอายุเพี้ยนไปหลายชั่วโมง
  *
- * อายุ session (ตัดสินใจแล้วในข้อ B8):
- *   24 ชั่วโมง นับจากการใช้งานครั้งล่าสุด (ต่ออายุทั้งตอนสร้างและทุกครั้งที่ update)
- *   ยาวกว่ารอบรอที่ยาวที่สุดในข้อมูล คือสถานะ n_ventilate ที่ให้เปิดพัดลมทิ้งไว้ 3–4 ชั่วโมง
- *   ซึ่งเป็นช่วงที่ไม่มี action เกิดขึ้นเลย
- *   หมายเหตุ: คอมเมนต์ใน migration 002 เขียนว่า 2 ชั่วโมง ไม่ตรงกับค่านี้
- *   (ห้ามแก้ไฟล์ migration ที่รันไปแล้ว)
+ * อายุ session 24 ชั่วโมง นับจากการใช้งานครั้งล่าสุด (ต่ออายุตอนสร้างและทุกครั้งที่ update)
+ * ยาวกว่ารอบรอที่ยาวที่สุดในข้อมูล คือสถานะ n_ventilate ที่ให้เปิดพัดลมทิ้งไว้ 3–4 ชั่วโมง
+ * ซึ่งเป็นช่วงที่ไม่มี action เกิดขึ้นเลย
+ * (คอมเมนต์ใน migration 002 เขียนว่า 2 ชั่วโมง แต่ค่าที่ใช้จริงคือค่าในไฟล์นี้
+ * และห้ามแก้ไฟล์ migration ที่รันไปแล้ว)
  *
  * ยังไม่มีตัวกวาด session หมดอายุ: แถวที่หมดอายุยังอยู่ในตารางแต่ find() มองไม่เห็น
- * ข้อมูลระดับนี้ไม่เป็นปัญหา และประวัติเหล่านี้ยังเอาไปใช้ทำหน้า Analytics ได้ในอนาคต
  *
- * ผลลัพธ์ที่ผู้ใช้กรอกตอนการตรวจจบ (outcome_text / outcome_at, migration 005):
- *   เก็บและอ่านผ่าน saveOutcome() / findOutcome() ท้ายคลาสเท่านั้น
- *   find() ไม่อ่านคอลัมน์เหล่านี้ และ SessionState (type ของกลไกควบคุมเครื่องสถานะ) ไม่มีฟิลด์นี้
- *   จึงไม่มีทางที่ engine จะได้เห็นหรืออ่านค่า outcome เป็นข้อมูลบันทึกอย่างเดียว
+ * ผลลัพธ์ที่ผู้ใช้กรอก (outcome_text / outcome_at) เก็บและอ่านผ่าน saveOutcome() / findOutcome()
+ * ท้ายคลาสเท่านั้น find() ไม่อ่านคอลัมน์เหล่านี้ และ SessionState ไม่มีฟิลด์นี้
+ * engine จึงไม่มีทางเห็นค่า outcome ซึ่งเป็นข้อมูลบันทึกอย่างเดียว
  */
 
 import { Inject, Injectable } from '@nestjs/common';
@@ -69,11 +63,7 @@ interface OutcomeRow extends RowDataPacket {
 export class SessionStore {
   constructor(@Inject(MYSQL_POOL) private readonly pool: Pool) {}
 
-  /**
-   * บันทึก session ใหม่ที่เพิ่งเริ่ม
-   *
-   * session ใหม่ยังไม่มีประวัติ (history เป็น []) จึงเขียนแค่ตาราง sessions
-   */
+  /** บันทึก session ใหม่ ยังไม่มีประวัติ (history เป็น []) จึงเขียนแค่ตาราง sessions */
   async create(session: SessionState): Promise<void> {
     await this.pool.query(
       `INSERT INTO sessions
@@ -92,13 +82,8 @@ export class SessionStore {
   }
 
   /**
-   * อ่าน session พร้อมประวัติทั้งหมด
-   *
-   * คืน undefined ถ้าไม่มี session นี้ หรือหมดอายุแล้ว
-   * (session ที่หมดอายุถือว่าเสมือนไม่มีอยู่ service จะตอบ 404 เหมือนกัน)
-   *
-   * ต้องประกอบ history กลับมาจากตาราง session_history ให้ครบ
-   * เพราะ engine ต้องการ SessionState ที่สมบูรณ์
+   * อ่าน session พร้อมประวัติทั้งหมด (engine ต้องการ SessionState ที่สมบูรณ์)
+   * คืน undefined ถ้าไม่มี session นี้ หรือหมดอายุแล้ว (ถือว่าเสมือนไม่มีอยู่ → service ตอบ 404)
    */
   async find(sessionId: string): Promise<SessionState | undefined> {
     const [sessionRows] = await this.pool.query<SessionRow[]>(
@@ -134,16 +119,15 @@ export class SessionStore {
   /**
    * บันทึกผลของ action 1 ครั้ง: สถานะปัจจุบันใหม่ + ประวัติ 1 รายการ
    *
-   * session  = session ใหม่ที่ engine คืนมา (history มีรายการของ step นี้ต่อท้ายแล้ว)
-   * step     = สถานะที่ออกจาก กับ action ที่ทำ (สิ่งที่จะบันทึกลงประวัติ)
+   * session = session ใหม่ที่ engine คืนมา (history มีรายการของ step นี้ต่อท้ายแล้ว)
+   * step    = โหนดที่ออกจาก กับ action ที่ทำ (สิ่งที่จะบันทึกลงประวัติ)
    *
    * ต้องอยู่ใน transaction เดียว: ถ้าเขียน sessions สำเร็จแต่บันทึกประวัติล้ม
    * สถานะกับประวัติจะไม่ตรงกัน การยกเลิกทั้งก้อนกันปัญหานี้
    *
-   * step_order = จำนวนรายการในประวัติก่อนหน้า = history.length - 1
-   * (เพราะ session ที่ส่งมามีรายการของ step นี้เพิ่มเข้าไปแล้ว)
-   * ตารางมี UNIQUE KEY (session_id, step_order) กันบันทึกซ้ำอยู่แล้ว
-   * request ซ้ำที่มาพร้อมกันจึงตกเป็น error ตรงนี้ (ตัดสินใจแล้วว่ารับสภาพ = 500)
+   * step_order = history.length - 1 (เพราะ session ที่ส่งมามีรายการของ step นี้เพิ่มเข้าไปแล้ว)
+   * ตารางมี UNIQUE KEY (session_id, step_order) กันบันทึกซ้ำ
+   * request ซ้ำที่มาพร้อมกันจึงล้มตรงนี้ และยอมให้ตอบ 500
    */
   async update(
     session: SessionState,
@@ -156,8 +140,7 @@ export class SessionStore {
     }
     const stepOrder = session.history.length - 1;
 
-    // ยืมการเชื่อมต่อ 1 เส้นมาใช้ตลอด transaction
-    // (คำสั่งใน transaction เดียวกันต้องวิ่งผ่าน connection เดียวกัน)
+    // คำสั่งใน transaction เดียวกันต้องวิ่งผ่าน connection เดียวกัน
     const conn = await this.pool.getConnection();
     try {
       await conn.beginTransaction();
@@ -202,11 +185,7 @@ export class SessionStore {
     }
   }
 
-  /**
-   * ลบ session (ประวัติของ session นั้นถูกลบตามไปเองด้วย ON DELETE CASCADE)
-   *
-   * ไม่มี session นี้อยู่ก็ไม่ error ให้ service ตัดสินใจเองว่าต้องเช็คก่อนหรือไม่
-   */
+  /** ลบ session (ประวัติถูกลบตามด้วย ON DELETE CASCADE) ไม่มี session นี้ก็ไม่ error */
   async delete(sessionId: string): Promise<void> {
     await this.pool.query('DELETE FROM sessions WHERE session_id = ?', [sessionId]);
   }
@@ -218,22 +197,16 @@ export class SessionStore {
   /**
    * บันทึกข้อความผลลัพธ์ของ session ที่จบแล้ว "ได้ครั้งเดียว"
    *
-   * คืน true  = บันทึกแล้ว
-   * คืน false = ไม่มีแถวที่ตรงเงื่อนไข ซึ่งเป็นได้ 3 สาเหตุ: ไม่มี session นี้ / session ยังไม่จบ
-   *             / เคยบันทึกไปแล้ว ฟังก์ชันนี้ไม่แยกสาเหตุ ให้ service ตรวจก่อนเรียก (find) แล้วถือว่า
-   *             false คือ "เคยบันทึกแล้ว"
+   * คืน true = บันทึกแล้ว · คืน false = ไม่มีแถวที่ตรงเงื่อนไข (ไม่มี session / ยังไม่จบ / เคยบันทึกแล้ว)
+   * ฟังก์ชันนี้ไม่แยกสาเหตุ service ตรวจสองข้อแรกไปแล้วก่อนเรียก จึงถือว่า false คือ "เคยบันทึกแล้ว"
    *
-   * ทำไมเงื่อนไข outcome_text IS NULL อยู่ใน UPDATE เดียวกัน (ไม่เช็คก่อนแล้วค่อยเขียน):
-   *   ถ้าสองคำขอพร้อมกันเข้ามา ฐานข้อมูลล็อกแถวทีละคำสั่ง คำขอแรกเปลี่ยน NULL เป็นข้อความ
-   *   คำขอที่สองเห็นว่าไม่ใช่ NULL แล้วจึงไม่แก้ได้ 0 แถว ผลคือมีผู้ชนะแค่คนเดียวโดยไม่ต้องมี transaction
-   *   (ถ้าเช็คก่อนแล้วค่อยเขียนเป็นสองคำสั่ง ทั้งสองคำขออาจผ่านการเช็คพร้อมกันแล้วเขียนทับกัน)
+   * เงื่อนไข outcome_text IS NULL อยู่ใน UPDATE เดียวกัน ไม่เช็คก่อนแล้วค่อยเขียน:
+   * ถ้าสองคำขอเข้ามาพร้อมกัน ฐานข้อมูลล็อกแถวทีละคำสั่ง คำขอแรกเปลี่ยน NULL เป็นข้อความ
+   * คำขอที่สองเห็นว่าไม่ใช่ NULL แล้วจึงแก้ได้ 0 แถว ได้ผู้ชนะคนเดียวโดยไม่ต้องใช้ transaction
+   * (ถ้าเช็คก่อนแล้วค่อยเขียนเป็นสองคำสั่ง ทั้งสองคำขออาจผ่านการเช็คพร้อมกันแล้วเขียนทับกัน)
    *
-   * status = 'completed' กันไว้อีกชั้นว่าจะไม่บันทึกให้ session ที่ยังเดินอยู่ แม้ service จะตรวจแล้ว
-   * ไม่เช็คอายุ session ที่นี่ (service เรียก find() ซึ่งมองไม่เห็นแถวหมดอายุไปก่อนแล้ว)
-   * ไม่ต่ออายุ session ตอนบันทึก: การกรอกผลลัพธ์ไม่ใช่ action ของเครื่องสถานะ
-   *
-   * เวลาใช้ NOW() ใน SQL ตามข้อตกลงด้านบน ไม่ใช้เวลาจาก JavaScript
-   * ค่า text ที่ส่งเข้ามาต้องผ่านการตรวจ (ตัดช่องว่าง ไม่ว่าง ไม่ยาวเกิน) จาก DTO มาแล้ว
+   * status = 'completed' กันอีกชั้นว่าจะไม่บันทึกให้ session ที่ยังเดินอยู่
+   * ไม่ต่ออายุ session ตอนบันทึก เพราะการกรอกผลลัพธ์ไม่ใช่ action ของเครื่องสถานะ
    */
   async saveOutcome(sessionId: string, text: string): Promise<boolean> {
     const [result] = await this.pool.query<ResultSetHeader>(
@@ -250,9 +223,7 @@ export class SessionStore {
 
   /**
    * อ่านข้อความผลลัพธ์ที่เคยบันทึก คืน null ถ้ายังไม่เคยกรอก หรือไม่มี session นี้ หรือหมดอายุแล้ว
-   *
-   * เป็นคำสั่งแยกจาก find() โดยตั้งใจ เพื่อให้ SessionState ที่ส่งเข้า engine ไม่มีค่านี้ปนไปเลย
-   * service เรียกเฉพาะตอน session จบแล้ว (สถานะอื่นไม่มีทางมีค่า) จึงไม่เพิ่มคำสั่งให้การเดินขั้นตอนปกติ
+   * แยกจาก find() โดยตั้งใจ เพื่อให้ SessionState ที่ส่งเข้า engine ไม่มีค่านี้ปนไปเลย
    */
   async findOutcome(sessionId: string): Promise<string | null> {
     const [rows] = await this.pool.query<OutcomeRow[]>(

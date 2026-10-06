@@ -1,5 +1,5 @@
 /**
- * traversal.module.ts — ประกอบทุกชิ้นของขั้น A เข้าเป็นโมดูลเดียว
+ * traversal.module.ts — ประกอบ controller, service และตัวอ่าน/เขียนข้อมูลของการตรวจเข้าเป็นโมดูลเดียว
  *
  * ไม่ต้อง import DatabaseModule ที่นี่ แม้ว่า EquipmentRepository และ SessionStore
  * ต้องใช้ MYSQL_POOL ก็ตาม เพราะ DatabaseModule ประกาศตัวเองเป็น @Global() ไว้แล้ว
@@ -7,7 +7,7 @@
  *
  * imports:
  *   GraphModule         — GraphRepository ตัวเดียวที่ใช้ร่วมกับงานค้นหาอาการ
- *   SymptomSearchModule — ให้ TraversalService คิดคะแนนความมั่นใจของ session (ขั้น 1.8)
+ *   SymptomSearchModule — ให้ TraversalService คิดคะแนนความมั่นใจของ session
  *
  * ไม่มี exports เพราะยังไม่มีโมดูลอื่นต้องการของจากที่นี่
  */

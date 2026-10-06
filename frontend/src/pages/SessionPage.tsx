@@ -9,17 +9,15 @@ import {
   useSubmitAction,
   useSubmitOutcome,
 } from '../api/queries'
-import { DemoPanel } from '../components/DemoPanel'
 import { EquipmentPanel } from '../components/EquipmentPanel'
 import { OutcomeForm } from '../components/OutcomeForm'
+import { SessionErrorNotice } from '../components/SessionErrorNotice'
+import { SessionHeader } from '../components/SessionHeader'
 import { PathRail } from '../components/step/PathRail'
 import { StepView } from '../components/step/StepView'
-import { Button } from '../components/ui/Button'
+import { TerminalActions } from '../components/TerminalActions'
 import { Icon } from '../components/ui/Icon'
 import { Notice } from '../components/ui/Notice'
-import { describeError } from '../lib/errors'
-import { formatScore } from '../lib/search'
-import { symptomName } from '../lib/symptoms'
 import { toTrailEntry } from '../lib/trail'
 import type { TrailEntry } from '../lib/trail'
 
@@ -65,7 +63,7 @@ function SessionView({ sessionId }: { sessionId: string }) {
   const abandon = useAbandonSession()
   const restart = useStartSession()
 
-  /** เส้นทางที่ผ่านมา เติมหลังเซิร์ฟเวอร์รับ action แล้วเท่านั้น กด F5 แล้วว่าง (D7) */
+  /** เส้นทางที่ผ่านมา เติมหลังเซิร์ฟเวอร์รับ action แล้วเท่านั้น กด F5 แล้วว่าง */
   const [trail, setTrail] = useState<TrailEntry[]>([])
 
   /**
@@ -175,7 +173,7 @@ function SessionView({ sessionId }: { sessionId: string }) {
     return (
       <div className="space-y-6">
         <h1 className="text-2xl font-semibold">ตรวจอาการ</h1>
-        <ErrorNotice error={session.error} onRefresh={handleRefresh} />
+        <SessionErrorNotice error={session.error} onRefresh={handleRefresh} />
       </div>
     )
   }
@@ -191,36 +189,18 @@ function SessionView({ sessionId }: { sessionId: string }) {
 
   return (
     <div className="space-y-6">
-      <div className="space-y-1">
-        <h1 className="text-2xl font-semibold">{summary ? symptomName(summary) : 'ตรวจอาการ'}</h1>
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <p className="text-sm text-ink-soft">
-            {summary && (
-              <>
-                {summary.brand} <code className="font-mono">{summary.modelPattern}</code>
-              </>
-            )}
-          </p>
-          {!node.isTerminal && (
-            <Button variant="text" onClick={handleAbandon} isLoading={abandon.isPending}>
-              ยกเลิกการตรวจ
-            </Button>
-          )}
-        </div>
-        {/* มีเฉพาะ session ที่เริ่มจากผลค้นหา (null/ไม่มี = เลือกจากรายการเอง ไม่แต่งตัวเลขขึ้นมา)
-            เป็นข้อมูลประกอบอย่างเดียว ไม่ได้ใช้ตัดสินขั้นตอน และไม่ใช่ความน่าจะเป็น */}
-        {confidence != null && (
-          <p className="text-sm text-ink-faint">
-            คะแนนความคล้ายกับที่พิมพ์ค้นหา <span className="font-mono">{formatScore(confidence)}</span>
-            {' '}(แสดงเป็นข้อมูลประกอบเท่านั้น ขั้นตอนถัดไปตัดสินตามคู่มือ)
-          </p>
-        )}
-      </div>
+      <SessionHeader
+        summary={summary}
+        confidence={confidence}
+        canAbandon={!node.isTerminal}
+        isAbandoning={abandon.isPending}
+        onAbandon={handleAbandon}
+      />
 
       <EquipmentPanel items={equipment} deviceCategory={summary?.deviceCategory} />
 
       {slowNotice}
-      {actionError && <ErrorNotice error={actionError} onRefresh={handleRefresh} />}
+      {actionError && <SessionErrorNotice error={actionError} onRefresh={handleRefresh} />}
 
       <PathRail entries={trail} current={node}>
         <div ref={stepRef}>
@@ -242,63 +222,15 @@ function SessionView({ sessionId }: { sessionId: string }) {
               />
             }
             outcomeActions={
-              <>
-                <Button variant="primary" className="w-full" onClick={() => navigate('/symptoms')}>
-                  ตรวจอาการอื่น
-                </Button>
-                <Button
-                  variant="secondary"
-                  className="w-full"
-                  onClick={() => handleRestart(graphId)}
-                  isLoading={restart.isPending}
-                >
-                  เริ่มอาการนี้ใหม่
-                </Button>
-              </>
+              <TerminalActions
+                onOtherSymptom={() => navigate('/symptoms')}
+                onRestart={() => handleRestart(graphId)}
+                isRestarting={restart.isPending}
+              />
             }
           />
         </div>
       </PathRail>
-
-      {/* key: ผลการสาธิตของขั้นก่อนต้องไม่ค้างมาที่ขั้นใหม่ */}
-      <DemoPanel key={node.nodeId} sessionId={sessionId} node={node} />
     </div>
-  )
-}
-
-/**
- * กล่องข้อผิดพลาดของหน้านี้ ข้อความและปุ่มมาจาก describeError()
- *   retry            → ลองอีกครั้ง
- *   reload-session   → ดึงขั้นตอนล่าสุด
- *   back-to-symptoms → เลือกอาการใหม่
- *   stay             → ไม่มีปุ่ม ผู้ใช้ทำต่อที่กล่องขั้นตอนเดิมได้เลย
- */
-function ErrorNotice({ error, onRefresh }: { error: Error; onRefresh: () => void }) {
-  const navigate = useNavigate()
-  const described = describeError(error)
-
-  return (
-    <Notice tone="danger" title={described.title}>
-      <p>{described.detail}</p>
-      {described.code !== undefined && (
-        <p className="mt-1 font-mono text-xs">รหัส: {described.code}</p>
-      )}
-
-      {described.recovery === 'retry' && (
-        <Button variant="secondary" className="mt-3" onClick={onRefresh}>
-          ลองอีกครั้ง
-        </Button>
-      )}
-      {described.recovery === 'reload-session' && (
-        <Button variant="secondary" className="mt-3" onClick={onRefresh}>
-          ดึงขั้นตอนล่าสุด
-        </Button>
-      )}
-      {described.recovery === 'back-to-symptoms' && (
-        <Button variant="secondary" className="mt-3" onClick={() => navigate('/symptoms')}>
-          เลือกอาการใหม่
-        </Button>
-      )}
-    </Notice>
   )
 }

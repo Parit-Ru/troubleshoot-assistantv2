@@ -1,11 +1,11 @@
 import type { NodeReference, RenderedNode } from '../api/types'
 
 /**
- * สถานะตัวอย่าง 8 แบบ ครบทุกแบบที่หน้าจอต้องรองรับ
+ * สถานะตัวอย่าง 4 แบบ: คำถาม คำแนะนำ ด่านความปลอดภัย และช่องกรอก (ไม่มีตัวอย่างของสถานะสิ้นสุด)
  *
  * ข้อความทุกข้อความคัดลอกจาก data/manuals/samsung_ac_ar70h.json ตรงๆ
- * ไม่มีข้อความไหนที่แต่งขึ้นเอง เพราะภาพหน้าจอจากหน้า gallery
- * จะถูกเอาไปใช้ในรายงาน และการสร้างเนื้อหาขึ้นเองขัดหลักการของโครงงาน
+ * ไม่มีข้อความไหนที่แต่งขึ้นเอง เพราะตัวอย่างเหล่านี้ถูกแสดงบนหน้าจอจริง
+ * (เช่นภาพตัวอย่างในหน้าแรก) และการสร้างเนื้อหาขึ้นเองขัดหลักการของโครงงาน
  *
  * ต่างจาก mockServer.ts ที่ดำเนินการตามเครื่องสถานะจริงเพื่อตอบว่ากดแล้วไปไหนต่อ
  * ไฟล์นี้ตอบแค่ว่ากล่องขั้นตอนแต่ละแบบหน้าตาเป็นอย่างไร
@@ -70,69 +70,3 @@ export const inputNode: RenderedNode = {
   isTerminal: false,
   reference: REFERENCE_P44,
 }
-
-/** หน้าจบแบบที่ 1 — ทำตามขั้นตอนแล้วแก้ได้จริง */
-export const userFixedNode: RenderedNode = {
-  nodeId: 'n_resolved',
-  type: 'resolution',
-  text: 'กลิ่นหายไปแล้ว — แนะนำให้ทำความสะอาดแผ่นกรองอากาศและท่อน้ำทิ้งเป็นประจำเพื่อป้องกันกลิ่นกลับมา',
-  safetyCritical: false,
-  requiresSafetyConfirmation: false,
-  isTerminal: true,
-  outcomeKind: 'user_fixed',
-  reference: REFERENCE_P44,
-}
-
-/** หน้าจบแบบที่ 2 — เครื่องไม่ได้เสีย เป็นการทำงานปกติ */
-export const normalBehaviorNode: RenderedNode = {
-  nodeId: 'n_normal',
-  type: 'resolution',
-  text: 'นี่เป็นอาการปกติ ไม่ใช่ความเสียหาย — เกิดจากไอน้ำในอากาศควบแน่นเป็นหยดน้ำที่ผิวท่อ เมื่ออุณหภูมิหรือความชื้นภายนอกเปลี่ยนแปลงมาก ไม่ต้องดำเนินการใดๆ',
-  safetyCritical: false,
-  requiresSafetyConfirmation: false,
-  isTerminal: true,
-  outcomeKind: 'normal_behavior',
-  reference: REFERENCE_P44,
-}
-
-/**
- * หน้าจบแบบที่ 3 — ส่งต่อช่างพร้อมข้อมูลเจาะจง
- *
- * ในไฟล์ผังขั้นตอน ข้อความนี้เขียนว่า {{error_code}} แต่ที่นี่เป็นคำว่า E1 แล้ว
- * เพราะเซิร์ฟเวอร์แทนค่าให้ก่อนส่งมา ไฟล์นี้จำลองสิ่งที่หน้าจอได้รับ
- * ไม่ใช่สิ่งที่อยู่ในไฟล์ผังขั้นตอน
- */
-export const handoffInformedNode: RenderedNode = {
-  nodeId: 'n_escalate_with_code',
-  type: 'escalation',
-  text: 'รหัสข้อผิดพลาด E1 บ่งชี้ปัญหาที่ต้องให้ช่างผู้เชี่ยวชาญตรวจสอบ ติดต่อศูนย์บริการ Samsung และแจ้งรหัส E1 พร้อมรุ่นเครื่อง เพื่อให้ช่างเตรียมอะไหล่ที่ถูกต้องมาได้',
-  safetyCritical: false,
-  requiresSafetyConfirmation: false,
-  isTerminal: true,
-  outcomeKind: 'handoff_informed',
-  reference: REFERENCE_P44,
-}
-
-/** หน้าจบแบบที่ 4 — คู่มือไม่ครอบคลุมกรณีนี้ ระบบยอมรับตรงๆ แทนที่จะเดา */
-export const handoffUnknownNode: RenderedNode = {
-  nodeId: 'n_escalate',
-  type: 'escalation',
-  text: 'หากน้ำรั่วจากจุดอื่นที่ไม่ใช่จุดเชื่อมต่อท่อ อาจเป็นปัญหาการติดตั้งหรือท่อน้ำทิ้งอุดตัน แนะนำให้ติดต่อศูนย์บริการ Samsung เพื่อตรวจสอบ',
-  safetyCritical: false,
-  requiresSafetyConfirmation: false,
-  isTerminal: true,
-  outcomeKind: 'handoff_unknown',
-  reference: REFERENCE_P44,
-}
-
-/** เรียงตามลำดับที่หน้า gallery จะแสดง */
-export const allFixtureNodes: RenderedNode[] = [
-  checkpointNode,
-  instructionNode,
-  safetyGateNode,
-  inputNode,
-  userFixedNode,
-  normalBehaviorNode,
-  handoffInformedNode,
-  handoffUnknownNode,
-]

@@ -8,7 +8,7 @@
  * เขียนตัวตรวจเองเป็นฟังก์ชันธรรมดา (ไม่ใช้ class-validator) เพราะ body มี field เดียว
  *
  * ถ้า body ผิดรูปแบบ parseSearchBody โยน InvalidSearchQueryError
- * แล้ว filter (ขั้น 1.7) แปลงเป็น 400 INVALID_QUERY
+ * แล้ว SymptomSearchExceptionFilter แปลงเป็น 400 INVALID_QUERY
  */
 
 import type { DeviceCategory } from '../traversal-engine/types';

@@ -181,7 +181,7 @@ filter นี้จับ error ได้เฉพาะที่เกิด "�
 | เทสอัตโนมัติ (`npm test`) | **92/92 ข้อผ่าน** (82 เดิมของ engine + 10 ใหม่ของ `traversal.service.spec.ts`) |
 | `EquipmentRepository`/`SessionStore` กับ MySQL จริง | ทดสอบแยกด้วย MySQL 8.0 จริง (migration จริง + seed จริง) รวมกรณีชน `UNIQUE KEY` (ยืนยัน rollback จริง, errno 1062) และ transaction |
 | REST API เต็มระบบ | บูต `AppModule` จริงด้วย `NestFactory`, MySQL จริง, ยิง HTTP จริง — 14/14 ข้อผ่าน รวมข้อสอบหลัก: `continue` ข้ามคำเตือน → 400 `SAFETY_CONFIRMATION_REQUIRED` → อ่านซ้ำสถานะไม่ขยับ |
-| หน้าจอจริง (`VITE_USE_MOCK=false`) | เดิน session เต็มรอบผ่านเบราว์เซอร์จริง, กด F5 กลางทางยังอยู่ขั้นเดิม, แผงสาธิต `?demo=1` ที่สถานะเบรกเกอร์ได้ 400 จากเซิร์ฟเวอร์จริง |
+| หน้าจอจริง (`VITE_USE_MOCK=false`) | เดิน session เต็มรอบผ่านเบราว์เซอร์จริง, กด F5 กลางทางยังอยู่ขั้นเดิม, แผงสาธิต `?demo=1` ที่สถานะเบรกเกอร์ได้ 400 จากเซิร์ฟเวอร์จริง *(แผงสาธิต DemoPanel และ ?demo=1 ถูกลบในการ refactor)* |
 
 ไม่ได้ทำ e2e ด้วย `supertest` ตามที่ตัดสินใจไว้ในข้อ 7 ของ HANDOFF — ใช้การทดสอบ HTTP จริงข้างต้นแทน ได้หลักฐานเดียวกันโดยไม่เพิ่ม dependency
 

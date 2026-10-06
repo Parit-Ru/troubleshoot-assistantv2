@@ -8,7 +8,7 @@
  * หน้าจอจะโกหกเรื่องด่านความปลอดภัย ซึ่งขัดหลักการหลักของโครงงาน
  *
  * ⚠️ ไฟล์นี้ต้องไม่หลุดเข้า build จริง — api/traversal.ts โหลดด้วย
- * dynamic import ใต้เงื่อนไข VITE_USE_MOCK จะพิสูจน์ในขั้น 9.3
+ * dynamic import ใต้เงื่อนไข VITE_USE_MOCK เพื่อให้ Vite ตัดทิ้งตอน build จริง
  *
  * ไฟล์นี้เป็นจุดเดียวที่ import ของใน backend และ data โดยตรง
  * ไฟล์อื่นต้องผ่าน api/types.ts เท่านั้น
@@ -68,7 +68,7 @@ const graphs = new Map<string, TroubleshootingGraph>(
 /**
  * session ทั้งหมดอยู่ในหน่วยความจำของแท็บ
  * กด F5 แล้วหายหมด ซึ่งเป็นพฤติกรรมที่ยอมรับในโหมดจำลอง
- * การทดสอบว่า refresh แล้วยังอยู่ขั้นเดิม ต้องรอเซิร์ฟเวอร์จริงในขั้น 10.2
+ * (การทดสอบว่า refresh แล้วยังอยู่ขั้นเดิม ต้องใช้เซิร์ฟเวอร์จริง)
  */
 const sessions = new Map<string, SessionState>()
 
@@ -268,7 +268,7 @@ export async function submitAction(
   try {
     // engine เป็น pure function คืน session ใหม่ ไม่แก้ของเดิม
     // ถ้า engine โยน error เช่นด่านความปลอดภัย บรรทัดนี้จะกระโดดไป catch
-    // แล้ว sessions.set ข้างล่างจะไม่ทำงาน — สถานะจึงไม่ขยับ ตรงตามที่เทสข้อ 3 ตรวจ
+    // แล้ว sessions.set ข้างล่างจะไม่ทำงาน — สถานะจึงไม่ขยับ
     const result = engineSubmitAction(session, graph, action)
     sessions.set(sessionId, result.session)
 

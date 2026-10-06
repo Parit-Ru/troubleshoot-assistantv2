@@ -67,7 +67,7 @@ OutcomeForm ── onSubmit(text ที่ตัดช่องว่างแ�
 
 `StepView` ส่ง `outcomeForm` ให้ `OutcomeStep` เท่านั้น (แขนง `node.isTerminal`) แขนงอื่นของ `StepView` (ด่านความปลอดภัย, checkpoint, input, instruction) **ไม่รับ prop นี้เลย** ฟอร์มจึงไม่มีทางโผล่กลางการตรวจ แม้ผู้เรียกจะส่งมาผิดที่ ชั้นที่สองคือเซิร์ฟเวอร์: ถ้า session ยังเดินอยู่ จะตอบ 409 `SESSION_NOT_COMPLETED` (หัวข้อ 7)
 
-หน้า `NodeGalleryPage` (หน้าดูกล่องทุกชนิดตอนพัฒนา) เรียก `StepView` โดยไม่ส่ง `outcomeForm` จึงไม่มีฟอร์มที่นั่น
+`StepView` ถูกเรียกจากหน้าตรวจอาการหน้าเดียว จึงมีฟอร์มเฉพาะที่นั่น (เดิมมีหน้า `/gallery` ดูกล่องทุกชนิดตอนพัฒนา ซึ่งเรียก `StepView` โดยไม่ส่ง `outcomeForm` หน้านั้นถูกลบในการ refactor เฟส 5)
 
 ## 4. ไม่บังคับ และปุ่มเดิมไม่ขึ้นกับฟอร์ม
 

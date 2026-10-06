@@ -1,15 +1,15 @@
 /**
- * traversal.service.ts — ต่อสาย GraphRepository + EquipmentRepository + SessionStore
- *                        เข้ากับกลไกควบคุมเครื่องสถานะ (traversal-engine)
+ * traversal.service.ts — ต่อ GraphRepository, EquipmentRepository และ SessionStore
+ *                        เข้ากับเครื่องสถานะ (traversal-engine)
  *
- * กฎที่ห้ามละเมิด (หลักการของโครงงาน): ไฟล์นี้ห้ามมีตรรกะการเปลี่ยน
- * สถานะของตัวเองแม้แต่บรรทัดเดียว ทุกการตัดสินใจว่า "ขั้นถัดไปคืออะไร" และ "action นี้
- * ใช้กับสถานะปัจจุบันได้ไหม" ต้องมาจาก startSession/getCurrentNode/submitAction ของ
- * engine เท่านั้น หน้าที่ของไฟล์นี้มีแค่: หาข้อมูลป้อนให้ engine, ส่งต่อผลลัพธ์, บันทึกผล
+ * กฎของโครงงาน: ไฟล์นี้ห้ามมีตรรกะเปลี่ยนสถานะของตัวเองแม้แต่บรรทัดเดียว
+ * การตัดสินว่า "ขั้นถัดไปคืออะไร" และ "action นี้ใช้กับสถานะปัจจุบันได้ไหม"
+ * ต้องมาจาก startSession/getCurrentNode/submitAction ของ engine เท่านั้น
+ * หน้าที่ของไฟล์นี้มีแค่: หาข้อมูลป้อนให้ engine, ส่งต่อผลลัพธ์, บันทึกผล
  *
- * จุดที่บังคับด่านความปลอดภัยจริงๆ อยู่ใน submitAction() ด้านล่าง:
- * เรียก engine ก่อนบันทึกเสมอ ถ้า engine โยน error แถวถัดไป (sessionStore.update)
- * จะไม่ถูกรันเลย จึงไม่ต้องเขียนโค้ด "ย้อนสถานะ" เมื่อเกิด error
+ * ด่านความปลอดภัยถูกบังคับที่ submitAction(): เรียก engine ก่อนบันทึกเสมอ
+ * ถ้า engine โยน error บรรทัด sessionStore.update() จะไม่ถูกรัน
+ * จึงไม่ต้องมีโค้ด "ย้อนสถานะ"
  */
 
 import { Injectable } from '@nestjs/common';
@@ -35,15 +35,11 @@ import type {
 // ============================================================
 // ข้อผิดพลาดของ service เอง
 //
-// ไม่ extends TraversalError เพราะไม่ได้มาจาก engine — engine ไม่รู้จักคำว่า
-// "session" หรือ "graph ที่ไม่มีอยู่" เลย มันรับ SessionState + TroubleshootingGraph
-// ที่มีอยู่แล้วมาทำงานเท่านั้น การหาไม่เจอเป็นเรื่องของชั้นข้อมูล (repository/store
-// คืน undefined) จึงเป็น service ที่ต้องแปลงเป็น error เอง
-// เหมือน InvalidRequestBodyError ใน traversal.dto.ts ที่ไม่ extends TraversalError
-// เช่นกัน ด้วยเหตุผลเดียวกัน
-//
-// TraversalExceptionFilter จะจับทั้งคู่ด้วย instanceof แล้วแปลงเป็น 404 GRAPH_NOT_FOUND /
-// 404 SESSION_NOT_FOUND
+// ไม่ extends TraversalError เพราะไม่ได้มาจาก engine — engine ไม่รู้จัก "session"
+// หรือ "ผังที่ไม่มีอยู่" มันรับ SessionState + TroubleshootingGraph ที่มีอยู่แล้วมาทำงานเท่านั้น
+// การหาไม่เจอเป็นเรื่องของชั้นข้อมูล (repository/store คืน undefined)
+// service จึงเป็นคนแปลงเป็น error เอง
+// TraversalExceptionFilter จับด้วย instanceof แล้วแปลงเป็นรหัส HTTP
 // ============================================================
 
 export class GraphNotFoundError extends Error {
@@ -92,12 +88,7 @@ export class TraversalService {
   // 6 เมธอด ตรงกับ 6 endpoint ของ TraversalController
   // ============================================================
 
-  /**
-   * GET /traversal/graphs
-   *
-   * ไม่ async เพราะ GraphRepository โหลดเข้าหน่วยความจำไว้หมดแล้วตอนบูต
-   * เมธอดนี้จึงไม่แตะฐานข้อมูลเลย
-   */
+  /** GET /traversal/graphs — ไม่ async เพราะผังโหลดเข้าหน่วยความจำไว้แล้วตอนบูต */
   listGraphs(): GraphSummary[] {
     return this.graphRepository.listAll();
   }
@@ -107,8 +98,8 @@ export class TraversalService {
     const graph = this.requireGraph(graphId);
     const confidence = await this.computeConfidence(graphId, query);
 
-    // engine เป็น pure function ถ้าโยน error (เช่น entry_node หาไม่เจอ)
-    // sessionStore.create() แถวถัดไปจะไม่ถูกเรียกเลย จึงไม่มี session ค้างอยู่ครึ่งๆ กลางๆ
+    // ถ้า engine โยน error (เช่น entry_node หาไม่เจอ) create() จะไม่ถูกเรียก
+    // จึงไม่มี session ค้างอยู่ครึ่งๆ กลางๆ
     const { session, node } = engineStartSession(graph, confidence);
     await this.sessionStore.create(session);
 
@@ -120,11 +111,10 @@ export class TraversalService {
     const session = await this.requireSession(sessionId);
     const graph = this.requireGraph(session.graphId);
 
-    // แค่ "อ่านซ้ำ" โหนดปัจจุบัน ไม่มีการเปลี่ยนสถานะ จึงไม่ต้องเขียนอะไรกลับ
     const node = getCurrentNode(session, graph);
 
-    // ผลลัพธ์ที่ผู้ใช้กรอกมีได้เฉพาะ session ที่จบแล้ว (saveOutcome รับเฉพาะ completed)
-    // จึงอ่านเฉพาะตอนนั้น การเดินขั้นตอนปกติไม่เสียคำสั่ง SQL เพิ่ม (ไม่ผ่าน find() และไม่ผ่าน engine)
+    // ผลลัพธ์ที่ผู้ใช้กรอกมีได้เฉพาะ session ที่จบแล้ว จึงอ่านเฉพาะตอนนั้น
+    // การเดินขั้นตอนปกติไม่เสียคำสั่ง SQL เพิ่ม และ engine ไม่เห็นค่านี้
     const outcome =
       session.status === 'completed' ? await this.sessionStore.findOutcome(sessionId) : null;
 
@@ -134,11 +124,9 @@ export class TraversalService {
   /**
    * POST /traversal/sessions/:id/actions
    *
-   * จุดที่บังคับด่านความปลอดภัยของทั้งระบบอยู่ตรงนี้:
-   * เรียก engineSubmitAction() ก่อนเสมอ ถ้ามันโยน error (เช่น
-   * SafetyConfirmationRequiredError) โค้ดจะกระโดดออกจากฟังก์ชันทันที
-   * บรรทัด sessionStore.update() ด้านล่างจะไม่ถูกรัน — session เดิมในฐานข้อมูล
-   * จึงไม่ขยับแม้แต่ก้าวเดียว โดยไม่ต้องเขียนโค้ดตรวจสอบหรือย้อนสถานะเพิ่มเติมเลย
+   * ด่านความปลอดภัยของทั้งระบบอยู่ตรงนี้: เรียก engineSubmitAction() ก่อนเสมอ
+   * ถ้ามันโยน error (เช่น SafetyConfirmationRequiredError) โค้ดออกจากฟังก์ชันทันที
+   * sessionStore.update() ไม่ถูกรัน session ในฐานข้อมูลจึงไม่ขยับ
    */
   async submitAction(sessionId: string, action: TraversalAction): Promise<SessionResponseDto> {
     const session = await this.requireSession(sessionId);
@@ -146,9 +134,8 @@ export class TraversalService {
 
     const result = engineSubmitAction(session, graph, action);
 
-    // ถึงบรรทัดนี้ได้แปลว่า engine อนุมัติ action แล้วเท่านั้น
-    // nodeId ที่บันทึกคือโหนดที่ "ออกจาก" (session ก่อนหน้า) ไม่ใช่โหนดใหม่ที่เพิ่งไปถึง
-    // ตรงกับคอมเมนต์ในตาราง session_history: "โหนดที่ผู้ใช้อยู่ตอนส่ง action นี้"
+    // ถึงบรรทัดนี้แปลว่า engine อนุมัติ action แล้ว
+    // nodeId ที่บันทึกคือโหนดที่ "ออกจาก" (ของ session ก่อนหน้า) ไม่ใช่โหนดใหม่ที่เพิ่งไปถึง
     await this.sessionStore.update(result.session, {
       nodeId: session.currentNodeId,
       action,
@@ -160,9 +147,8 @@ export class TraversalService {
   /**
    * DELETE /traversal/sessions/:id
    *
-   * ตรวจว่ามี session อยู่จริงก่อนลบ (เหมือน mockServer.ts) ผลคือยกเลิกซ้ำสอง
-   * ครั้งจะได้ 404 ในครั้งที่สอง ไม่ใช่ 204 เงียบๆ — สอดคล้องกับสัญญาที่หน้าจอ
-   * พัฒนามาด้วย mock ตัวนี้อยู่แล้ว (เทส 43 ข้อฝั่งหน้าจอผ่านด้วยพฤติกรรมนี้)
+   * ตรวจว่ามี session อยู่จริงก่อนลบ ยกเลิกซ้ำครั้งที่สองจึงได้ 404 ไม่ใช่ 204 เงียบๆ
+   * (ตรงกับพฤติกรรมของ mockServer ฝั่งหน้าจอ)
    */
   async abandonSession(sessionId: string): Promise<void> {
     await this.requireSession(sessionId);
@@ -170,27 +156,22 @@ export class TraversalService {
   }
 
   /**
-   * POST /traversal/sessions/:id/outcome
+   * POST /traversal/sessions/:id/outcome — บันทึกข้อความผลลัพธ์ตอนการตรวจจบ (ได้ครั้งเดียวต่อ session)
    *
-   * บันทึกข้อความผลลัพธ์ที่ผู้ใช้กรอกตอนการตรวจจบ (ได้ครั้งเดียวต่อ session)
+   * ไม่ผ่าน submitAction() และไม่เรียก engine ที่เปลี่ยนสถานะ: ผลลัพธ์เป็นข้อมูลบันทึกอย่างเดียว
+   * (เหมือน confidence) และ resolveNextNode ต้องเป็นจุดตัดสินใจเดียว
+   * เรียก getCurrentNode() แค่อ่านสถานะปัจจุบันมาประกอบ response เหมือน getSession()
    *
-   * ⚠️ ไม่ผ่าน submitAction() และไม่เรียก engine ใดๆ ที่เปลี่ยนสถานะ:
-   * session ที่จบแล้วถูกปฏิเสธด้วย SESSION_COMPLETED อยู่แล้ว และ resolveNextNode ต้องเป็น
-   * จุดตัดสินใจเดียวต่อไป ผลลัพธ์เป็นข้อมูลบันทึกอย่างเดียว (เหมือน confidence)
-   * เรียก getCurrentNode() เพื่อ "อ่าน" สถานะปัจจุบันมาประกอบ response เท่านั้น เหมือน getSession()
+   * ลำดับการตรวจ (แต่ละข้อใช้รหัส error ต่างกัน หน้าจอจึงแสดงข้อความถูกกรณี):
+   *   1. ไม่พบ session        → 404 SESSION_NOT_FOUND
+   *   2. session ยังเดินอยู่   → 409 SESSION_NOT_COMPLETED
+   *   3. เคยบันทึกไปแล้ว       → 409 OUTCOME_ALREADY_SUBMITTED
    *
-   * ลำดับการตรวจ (แต่ละข้อใช้รหัสข้อผิดพลาดต่างกัน หน้าจอจึงแสดงข้อความถูกกรณี):
-   *   1. session ไม่มี/หมดอายุ        → SessionNotFoundError          (404 SESSION_NOT_FOUND)
-   *   2. session ยังเดินอยู่          → SessionNotCompletedError      (409 SESSION_NOT_COMPLETED)
-   *   3. เคยบันทึกไปแล้ว              → OutcomeAlreadySubmittedError  (409 OUTCOME_ALREADY_SUBMITTED)
+   * ข้อ 3 ไม่เช็คก่อนเขียน แต่ให้ saveOutcome() ตัดสินใน UPDATE คำสั่งเดียว (atomic)
+   * ถ้าได้ false ทั้งที่ข้อ 1–2 ผ่านมาแล้ว แปลว่ามีผลลัพธ์อยู่แล้ว (สองคำขอพร้อมกัน ชนะได้คนเดียว)
+   * ถ้า session หมดอายุพอดีระหว่างข้อ 1 กับ UPDATE ก็ยังเขียนสำเร็จ ซึ่งไม่มีผลเสีย
    *
-   * ข้อ 3 ไม่เช็คก่อนเขียน แต่ให้ saveOutcome() ตัดสินในคำสั่ง UPDATE เดียว (atomic) ถ้าได้ false
-   * ทั้งที่ข้อ 1 และ 2 ผ่านมาแล้ว แปลว่ามีผลลัพธ์อยู่แล้ว (สองคำขอพร้อมกัน ชนะได้คนเดียว)
-   * ช่องว่างเล็กน้อยที่ยอมรับ: ถ้า session หมดอายุพอดีระหว่างข้อ 1 กับ UPDATE
-   * UPDATE ยังเขียนสำเร็จ (ไม่เช็คอายุ) ซึ่งไม่มีผลเสีย
-   *
-   * text ต้องผ่านการตรวจจาก parseOutcomeBody() มาแล้ว (ตัดช่องว่าง ไม่ว่าง ไม่เกินเพดาน)
-   * คืน session ปัจจุบันพร้อมฟิลด์ outcome เป็นข้อความที่เพิ่งบันทึก
+   * text ต้องผ่าน parseOutcomeBody() มาแล้ว
    */
   async submitOutcome(sessionId: string, text: string): Promise<SessionResponseDto> {
     const session = await this.requireSession(sessionId);
@@ -228,9 +209,8 @@ export class TraversalService {
   }
 
   /**
-   * ประกอบ SessionResponseDto จากชิ้นส่วนที่กระจายอยู่ 3 แหล่ง:
-   * session (สถานะ), node (ผล render จาก engine ตรงๆ ห้ามดัดแปลง),
-   * และ equipment (ผูกกับประเภทเครื่องของกราฟ ไม่ใช่ผูกกับอาการ)
+   * ประกอบ SessionResponseDto จาก session, node (ผล render จาก engine ตรงๆ ห้ามดัดแปลง)
+   * และ equipment (ผูกกับประเภทเครื่องของผัง ไม่ใช่ผูกกับอาการ)
    */
   private toResponse(
     session: SessionState,
@@ -245,16 +225,15 @@ export class TraversalService {
       node,
       equipment: this.equipmentRepository.findByCategory(graph.device_category),
       confidence: session.confidence ?? null,
-      // ผลลัพธ์ที่ผู้ใช้กรอก ไม่ได้มาจาก session (SessionState ของ engine ไม่มีฟิลด์นี้)
-      // ผู้เรียกที่รู้ค่า (getSession ตอนจบ, submitOutcome) ส่งเข้ามา ที่เหลือ (start, action) เป็น null
-      // ซึ่งถูกต้อง: session ที่เพิ่งเริ่มหรือเพิ่งเดินต่อ (แม้เพิ่งถึงสถานะสิ้นสุด) ยังไม่เคยมีผลลัพธ์
-      // เพราะ saveOutcome รับเฉพาะ session ที่จบแล้ว และ action หลังจบถูกปฏิเสธอยู่แล้ว
+      // SessionState ของ engine ไม่มีฟิลด์ผลลัพธ์ จึงให้ผู้เรียกที่รู้ค่า (getSession, submitOutcome) ส่งเข้ามา
+      // ที่เหลือ (start, action) เป็น null ซึ่งถูกต้อง: session ที่เพิ่งเริ่มหรือเพิ่งเดินต่อ
+      // (แม้เพิ่งถึงสถานะสิ้นสุด) ยังไม่เคยมีผลลัพธ์ เพราะ saveOutcome รับเฉพาะ session ที่จบแล้ว
       outcome,
     };
   }
 
   /**
-   * คะแนนความมั่นใจของ session (ขั้น 1.8)
+   * คะแนนความมั่นใจของ session
    *
    * - ไม่มี query (ผู้ใช้เลือกอาการจากรายการเอง) → null
    * - มี query → ให้ระบบค้นหาคำนวณเอง (ไม่รับตัวเลขจากหน้าจอ)

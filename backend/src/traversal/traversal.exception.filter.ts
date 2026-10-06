@@ -1,28 +1,21 @@
 /**
- * traversal.exception.filter.ts — แปลง error ทุกชนิดที่เกิดใน TraversalController
- *                                 ให้เป็น HTTP response ตามตารางข้อ 4 ของ HANDOFF
+ * traversal.exception.filter.ts — แปลง error ที่เกิดใน TraversalController ให้เป็น HTTP response
  *
  * ใช้ instanceof กับคลาส error โดยตรง ไม่จับจากข้อความ (error.message) เพราะข้อความ
  * เขียนไว้ให้นักพัฒนาอ่าน เปลี่ยนได้ตลอดโดยไม่ควรกระทบพฤติกรรมของ API
  *
- * error ที่ต้องรู้จักมาจาก 3 แหล่ง:
- *   - traversal-engine/types.ts   (5 ชนิด: ปัญหาจากการเดินเครื่องสถานะ)
- *   - traversal.service.ts (A.5) (4 ชนิด: หากราฟ/session ไม่เจอ, session ยังไม่จบ, บันทึกผลลัพธ์ซ้ำ)
- *   - traversal.dto.ts     (A.1) (2 ชนิด: body ผิดรูปแบบ, ข้อความผลลัพธ์ใช้ไม่ได้)
- * รวม 11 ชนิด + 1 แถว "อื่นๆ" ท้ายตาราง
- * (ส่วนของผลลัพธ์ที่ผู้ใช้กรอก: INVALID_OUTCOME 400 · SESSION_NOT_COMPLETED 409 · OUTCOME_ALREADY_SUBMITTED 409)
+ * error ที่ต้องรู้จักมาจาก 3 ที่: traversal-engine/types.ts (การเดินเครื่องสถานะ),
+ * traversal.service.ts (หาผัง/session ไม่เจอ, session ยังไม่จบ, บันทึกผลลัพธ์ซ้ำ)
+ * และ traversal.dto.ts (body ผิดรูปแบบ, ข้อความผลลัพธ์ใช้ไม่ได้)
  *
- * ทำไมแยกฟังก์ชัน toErrorBody() ออกจากคลาส filter:
- *   ฟังก์ชันนี้เป็นตรรกะล้วน (รับ error คืน object) ทดสอบได้โดยไม่ต้องปลอม
- *   ArgumentsHost/Response ของ NestJS เลย ส่วนคลาส filter มีหน้าที่แค่เรียกมันแล้ว
- *   เขียนผลลงไปที่ HTTP response จริง
+ * toErrorBody() แยกออกจากคลาส filter เพราะเป็นตรรกะล้วน (รับ error คืน object)
+ * ทดสอบได้โดยไม่ต้องปลอม ArgumentsHost/Response ของ NestJS
+ * ส่วนคลาส filter แค่เรียกมันแล้วเขียนผลลง HTTP response
  *
- * ขอบเขตที่รู้อยู่แล้วและยังไม่แก้ตอนนี้: filter นี้ทำงานเฉพาะ error ที่เกิด "ระหว่าง"
- * รัน route handler ของ TraversalController (ติดตั้งด้วย @UseFilters ระดับ controller
- * ใน A.7) ถ้า body เป็น JSON ที่ผิดไวยากรณ์ล้วนๆ (เช่น `{`) Express จะโยน SyntaxError
- * ออกมาจากตัว body-parser เอง ก่อนที่ Nest จะส่งต่อมาถึง route handler filter นี้จึง
- * ไม่ได้ทำงาน กรณีนี้ต่างจาก "body เป็น JSON ที่ถูกต้องแต่ field ผิด" ซึ่ง parseTraversalAction
- * ใน A.1 จะจับได้ปกติ
+ * ข้อจำกัดที่รู้อยู่: filter ทำงานเฉพาะ error ที่เกิด "ระหว่าง" รัน route handler
+ * ถ้า body เป็น JSON ที่ผิดไวยากรณ์ (เช่น `{`) Express โยน SyntaxError จาก body-parser เอง
+ * ก่อนถึง route handler filter นี้จึงไม่ทำงาน (ต่างจาก JSON ที่ถูกแต่ field ผิด
+ * ซึ่ง parseTraversalAction จับได้ตามปกติ)
  */
 
 import { ArgumentsHost, Catch, ExceptionFilter, Logger } from '@nestjs/common';
@@ -43,7 +36,7 @@ import {
   UnsupportedSchemaVersionError,
 } from '../traversal-engine/types';
 
-/** รูปร่าง response ตอน error ทุกกรณี ตรงกับ ApiErrorBody ฝั่งหน้าจอ (ตารางข้อ 4) */
+/** รูปร่าง response ตอน error ทุกกรณี ตรงกับ ApiErrorBody ฝั่งหน้าจอ */
 export interface ApiErrorBody {
   statusCode: number;
   code: string;
@@ -51,15 +44,14 @@ export interface ApiErrorBody {
 }
 
 /**
- * ตารางแปลง error → HTTP response ตัวจริง (ตารางข้อ 4 ของ HANDOFF)
+ * ตารางแปลง error → HTTP response
  *
- * เรียงลำดับการเช็คตามที่อ่านง่าย ไม่ได้มีนัยเรื่องความสำคัญก่อนหลัง เพราะ error
- * ทั้ง 11 ชนิดเป็นพี่น้องกัน (extends Error หรือ TraversalError โดยตรง) ไม่มีคลาสไหน
- * เป็น superclass ของอีกคลาส จึงสลับลำดับกันได้โดยผลไม่เปลี่ยน
+ * ลำดับการเช็คสลับกันได้ เพราะ error ทุกชนิดเป็นพี่น้องกัน (extends Error หรือ TraversalError
+ * โดยตรง) ไม่มีคลาสไหนเป็น superclass ของอีกคลาส
  *
- * แถวสุดท้าย (else) ดักทุกอย่างที่ไม่รู้จัก — บั๊กที่ยังไม่เจอ, error จาก mysql2 เอง,
+ * แถวสุดท้ายดักทุกอย่างที่ไม่รู้จัก — บั๊กที่ยังไม่เจอ, error จาก mysql2 เอง,
  * หรือ error ชนิดที่ยังไม่ได้เพิ่มเข้าตารางนี้ ต้องเป็น 500 เสมอ เพราะไม่รู้สาเหตุจริง
- * (ตัดสินใจแล้วในข้อ 9: ใช้ INTERNAL_ERROR ไม่ใช่ UNKNOWN_ERROR ที่ mock ใช้)
+ * ใช้ INTERNAL_ERROR ไม่ใช่ UNKNOWN_ERROR ที่ mock ฝั่งหน้าจอใช้
  */
 export function toErrorBody(exception: unknown): ApiErrorBody {
   const message = exception instanceof Error ? exception.message : 'ไม่ทราบสาเหตุ';
@@ -71,8 +63,8 @@ export function toErrorBody(exception: unknown): ApiErrorBody {
     return { statusCode: 400, code: 'INVALID_ACTION', message };
   }
   if (exception instanceof InvalidRequestBodyError) {
-    // body ผิดรูปแบบ ใช้ code เดียวกับ InvalidActionError ตามตารางข้อ 4
-    // (สองแถวนี้ต่างกันแค่ "ผิดตอนไหน" แต่ผู้ใช้เห็นข้อความไทยเดียวกัน)
+    // ใช้ code เดียวกับ InvalidActionError เพราะสองแถวนี้ต่างกันแค่ "ผิดตอนไหน"
+    // แต่ผู้ใช้เห็นข้อความไทยเดียวกัน
     return { statusCode: 400, code: 'INVALID_ACTION', message };
   }
   if (exception instanceof InvalidOutcomeError) {

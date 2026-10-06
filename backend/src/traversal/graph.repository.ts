@@ -15,16 +15,11 @@ import type { Pool, RowDataPacket } from 'mysql2/promise';
 
 import { MYSQL_POOL } from '../database/database.constants';
 import {
-  CheckpointNode,
   DeviceCategory,
   Difficulty,
-  EscalationNode,
-  InputNode,
   InputType,
-  InstructionNode,
   NodeType,
   OutcomeKind,
-  ResolutionNode,
   Severity,
   TroubleshootingGraph,
   TroubleshootingNode,
@@ -87,7 +82,7 @@ export interface GraphSummary {
 }
 
 /** ข้อมูลในฐานข้อมูลไม่ครบ/ไม่ถูกต้องตามที่ engine ต้องการ */
-export class GraphDataIntegrityError extends Error {
+class GraphDataIntegrityError extends Error {
   constructor(message: string) {
     super(message);
     this.name = 'GraphDataIntegrityError';
@@ -132,18 +127,6 @@ export class GraphRepository implements OnModuleInit {
       severity: g.severity,
       difficulty: g.difficulty,
     }));
-  }
-
-  /** จำนวนกราฟที่โหลดได้ — ใช้ตรวจสอบและใน /health */
-  get count(): number {
-    return this.graphs.size;
-  }
-
-  /** จำนวนโหนดรวมทุกกราฟ — ใช้ยืนยันว่าได้ครบ 95 โหนด */
-  get nodeCount(): number {
-    let total = 0;
-    for (const graph of this.graphs.values()) total += graph.nodes.length;
-    return total;
   }
 
   // ============================================================
@@ -193,9 +176,7 @@ export class GraphRepository implements OnModuleInit {
       this.graphs.set(graphRow.graph_id, this.buildGraph(graphRow, rows));
     }
 
-    this.logger.log(
-      `โหลดกราฟสำเร็จ ${this.count} กราฟ ${this.nodeCount} โหนด`,
-    );
+    this.logger.log(`โหลดกราฟสำเร็จ ${this.graphs.size} กราฟ ${nodeRows.length} โหนด`);
   }
 
   private buildGraph(row: GraphRow, nodeRows: NodeRow[]): TroubleshootingGraph {
@@ -210,7 +191,7 @@ export class GraphRepository implements OnModuleInit {
       );
     }
 
-    const nodes = nodeRows.map((n) => this.buildNode(n, row.graph_id));
+    const nodes = nodeRows.map((n) => this.buildNode(n));
 
     // entry_node ต้องชี้ไปยังโหนดที่มีอยู่จริง มิฉะนั้น session แรกจะพังทันที
     if (!nodes.some((n) => n.node_id === row.entry_node)) {
@@ -243,12 +224,12 @@ export class GraphRepository implements OnModuleInit {
   /**
    * แปลง 1 แถวเป็น 1 โหนด
    *
-   * จุดสำคัญ: คอลัมน์ในตารางใช้ร่วมกันทั้ง 5 ประเภท จึงยอมให้เป็น NULL ได้
+   * คอลัมน์ในตารางใช้ร่วมกันทั้ง 5 ประเภท จึงยอมให้เป็น NULL ได้
    * แต่ฝั่ง TypeScript แต่ละประเภทบังคับ field ของตัวเองไว้แน่นหนา
-   * required() จึงทำหน้าที่เป็นด่านแปลง "NULL ที่ยอมได้ในตาราง"
-   * ให้เป็น "error ที่ล้มตอนบูต" สำหรับช่องที่ประเภทนั้นขาดไม่ได้
+   * required() จึงเป็นด่านแปลง "NULL ที่ยอมได้ในตาราง" ให้เป็น "error ที่ล้มตอนบูต"
+   * สำหรับช่องที่ประเภทนั้นขาดไม่ได้
    */
-  private buildNode(row: NodeRow, graphId: string): TroubleshootingNode {
+  private buildNode(row: NodeRow): TroubleshootingNode {
     const base = {
       node_id: row.node_id,
       safety_critical: row.safety_critical === 1,
@@ -259,90 +240,62 @@ export class GraphRepository implements OnModuleInit {
       external_reference: parseJsonColumn<never>(row.external_reference),
     };
 
-    const need = (value: string | null, column: string): string =>
-      required(value, column, graphId, row.node_id, row.node_type);
-
     switch (row.node_type) {
-      case 'checkpoint': {
-        const node: CheckpointNode = {
+      case 'checkpoint':
+        return {
           ...base,
           type: 'checkpoint',
           question: row.text_content,
-          on_yes: need(row.on_yes, 'on_yes'),
-          on_no: need(row.on_no, 'on_no'),
+          on_yes: required(row.on_yes, 'on_yes', row),
+          on_no: required(row.on_no, 'on_no', row),
         };
-        return node;
-      }
 
-      case 'instruction': {
-        const node: InstructionNode = {
+      case 'instruction':
+        return {
           ...base,
           type: 'instruction',
           content: row.text_content,
-          next: need(row.next_node, 'next_node'),
+          next: required(row.next_node, 'next_node', row),
         };
-        return node;
-      }
 
-      case 'input': {
+      case 'input':
         // ⚠️ โหนด input ใช้ field ชื่อ 'prompt' ไม่ใช่ 'content'
-        // ถ้าใส่ผิดจะได้ string ว่างโดยไม่มี error ใดๆ (จุดพลาดที่บันทึกไว้ใน HANDOFF)
-        const node: InputNode = {
+        // ถ้าใส่ผิดจะได้ string ว่างโดยไม่มี error ใดๆ
+        return {
           ...base,
           type: 'input',
           prompt: row.text_content,
-          input_type: requiredEnum(
-            row.input_type,
-            'input_type',
-            graphId,
-            row.node_id,
-          ),
+          input_type: required(row.input_type, 'input_type', row),
           // pattern กับ on_invalid เป็น optional โดยตั้งใจ:
           // ไม่มี pattern = รับทุกค่า, ไม่มี on_invalid = วนกลับโหนดเดิม
           pattern: row.input_pattern ?? undefined,
-          store_as: need(row.store_as, 'store_as'),
-          next: need(row.next_node, 'next_node'),
+          store_as: required(row.store_as, 'store_as', row),
+          next: required(row.next_node, 'next_node', row),
           on_invalid: row.on_invalid ?? undefined,
         };
-        return node;
-      }
 
-      case 'resolution': {
-        const node: ResolutionNode = {
+      case 'resolution':
+        return {
           ...base,
           type: 'resolution',
           content: row.text_content,
-          outcome_kind: requiredEnum(
-            row.outcome_kind,
-            'outcome_kind',
-            graphId,
-            row.node_id,
-          ),
+          outcome_kind: required(row.outcome_kind, 'outcome_kind', row),
         };
-        return node;
-      }
 
-      case 'escalation': {
-        const node: EscalationNode = {
+      case 'escalation':
+        return {
           ...base,
           type: 'escalation',
           content: row.text_content,
-          outcome_kind: requiredEnum(
-            row.outcome_kind,
-            'outcome_kind',
-            graphId,
-            row.node_id,
-          ),
+          outcome_kind: required(row.outcome_kind, 'outcome_kind', row),
         };
-        return node;
-      }
 
       default: {
         // ENUM ในฐานข้อมูลกันไว้ชั้นหนึ่งแล้ว บรรทัดนี้คือด่านสุดท้าย
         // และทำให้ TypeScript ยืนยันว่าเราครอบคลุมครบทั้ง 5 ประเภท
         const unreachable: never = row.node_type;
         throw new GraphDataIntegrityError(
-          `โหนด '${row.node_id}' ในกราฟ '${graphId}' ` +
+          `โหนด '${row.node_id}' ในกราฟ '${row.graph_id}' ` +
             `มี node_type ที่ไม่รู้จัก: ${String(unreachable)}`,
         );
       }
@@ -354,34 +307,15 @@ export class GraphRepository implements OnModuleInit {
 // ตัวช่วย
 // ============================================================
 
-/** NULL ในช่องที่ประเภทโหนดนั้นขาดไม่ได้ = ข้อมูลเสีย ต้องล้มตอนบูต */
-function required(
-  value: string | null,
-  column: string,
-  graphId: string,
-  nodeId: string,
-  nodeType: NodeType,
-): string {
+/**
+ * NULL (หรือค่าว่าง) ในช่องที่ประเภทโหนดนั้นขาดไม่ได้ = ข้อมูลเสีย ต้องล้มตอนบูต
+ * เป็น generic เพื่อให้ได้ type เดิมกลับไป ทั้ง string ธรรมดาและ enum (InputType / OutcomeKind)
+ */
+function required<T extends string>(value: T | null, column: string, row: NodeRow): T {
   if (value === null || value === '') {
     throw new GraphDataIntegrityError(
-      `โหนด '${nodeId}' ในกราฟ '${graphId}' เป็น type='${nodeType}' ` +
+      `โหนด '${row.node_id}' ในกราฟ '${row.graph_id}' เป็น type='${row.node_type}' ` +
         `ซึ่งต้องมีคอลัมน์ '${column}' แต่ค่าเป็น NULL/ว่าง`,
-    );
-  }
-  return value;
-}
-
-/** เหมือน required() แต่รักษา type ของ enum ไว้ (InputType / OutcomeKind) */
-function requiredEnum<T extends string>(
-  value: T | null,
-  column: string,
-  graphId: string,
-  nodeId: string,
-): T {
-  if (value === null) {
-    throw new GraphDataIntegrityError(
-      `โหนด '${nodeId}' ในกราฟ '${graphId}' ต้องมีคอลัมน์ '${column}' ` +
-        `แต่ค่าเป็น NULL`,
     );
   }
   return value;

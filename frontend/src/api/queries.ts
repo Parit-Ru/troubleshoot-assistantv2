@@ -90,7 +90,7 @@ export function useSymptomSearch() {
 }
 
 /** ตัวแปรของการเริ่ม session query ใส่เฉพาะเมื่อเลือกมาจากผลค้นหา */
-export interface StartSessionVariables {
+interface StartSessionVariables {
   graphId: string
   query?: string
 }

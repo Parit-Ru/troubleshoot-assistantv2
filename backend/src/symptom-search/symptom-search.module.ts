@@ -4,7 +4,7 @@
  * imports GraphModule เพื่อขอยืม GraphRepository ตัวเดียวกัน
  * ไม่สร้าง repository ซ้ำ เพราะจะโหลดผังจาก MySQL สองรอบ และอาจได้ข้อมูลไม่ตรงกัน
  *
- * exports เฉพาะ SymptomSearchService ให้ TraversalModule ใช้ (ขั้น 1.8)
+ * exports เฉพาะ SymptomSearchService ให้ TraversalModule ใช้
  */
 
 import { Module } from '@nestjs/common';
