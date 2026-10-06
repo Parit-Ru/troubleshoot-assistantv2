@@ -4,7 +4,9 @@
 // และจำไว้ว่าไฟล์ไหนรันไปแล้ว เพื่อไม่ให้รันซ้ำ
 //
 //   npm run migrate           รัน migration ที่ยังไม่เคยรัน
-//   npm run migrate -- --status   ดูสถานะเฉยๆ ไม่รันอะไร
+//   node scripts/run-migrations.js --status   ดูสถานะเฉยๆ ไม่รันอะไร
+//   ⚠️ ห้ามใช้ npm run migrate -- --status บน PowerShell 5.1: มันตัด "--" ทิ้ง
+//      แล้วรัน migration จริงโดยไม่ตั้งใจ (เคยเกิดกับ migration 005)
 //
 // เขียนเป็น JavaScript ธรรมดา (ไม่ใช่ TypeScript) เพราะเป็นเครื่องมือของนักพัฒนา
 // ไม่ใช่ส่วนหนึ่งของแอป จึงไม่ต้องผ่านขั้นตอน compile
