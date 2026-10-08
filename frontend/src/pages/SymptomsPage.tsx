@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import type { ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ApiError } from '../api/http'
 import { useGraphs, useStartSession, useSymptomSearch } from '../api/queries'
+import { SlowServerNotice } from '../components/SlowServerNotice'
 import { SymptomRow } from '../components/SymptomRow'
 import { SymptomSearchForm } from '../components/SymptomSearchForm'
 import { SymptomSearchResults } from '../components/SymptomSearchResults'
@@ -13,6 +14,7 @@ import { describeError } from '../lib/errors'
 import { DEVICE_CATEGORY_LABELS } from '../lib/labels'
 import { checkQuery, normalizeQuery } from '../lib/search'
 import { groupSymptoms } from '../lib/symptoms'
+import { useSlowWait } from '../lib/useSlowWait'
 
 /**
  * หน้าเลือกอาการ
@@ -24,9 +26,6 @@ import { groupSymptoms } from '../lib/symptoms'
  * การค้นหาเป็นแค่ตัวช่วยเลือก ขั้นถัดไปในผังเป็นของเครื่องสถานะที่เซิร์ฟเวอร์เสมอ
  * กดแถวไหน = เริ่ม session ของอาการนั้น แล้วไปหน้าตรวจอาการ
  */
-
-/** รอนานเกินเท่านี้ (มิลลิวินาที) จึงบอกว่าเซิร์ฟเวอร์อาจกำลังตื่น */
-const SLOW_WAIT_MS = 4000
 
 /** แถวที่กดอยู่มาจากส่วนไหนของหน้า (ผังเดียวกันอาจอยู่ทั้งผลค้นหาและรายการ) */
 type Area = 'search' | 'list'
@@ -86,19 +85,7 @@ export function SymptomsPage() {
   }
 
   // ---------- รอนาน: เซิร์ฟเวอร์บน Render หลับเมื่อไม่มีคนใช้ ตื่นช้า ----------
-  const isWaiting = graphs.isPending || isStarting || search.isPending
-  const [isSlow, setIsSlow] = useState(false)
-
-  useEffect(() => {
-    if (!isWaiting) return
-    const timer = setTimeout(() => setIsSlow(true), SLOW_WAIT_MS)
-    // ทำงานเมื่อเลิกรอ (isWaiting เปลี่ยน) หรือออกจากหน้า
-    // ล้างนาฬิกาที่ยังไม่ครบเวลา และซ่อนกล่องรอนาน
-    return () => {
-      clearTimeout(timer)
-      setIsSlow(false)
-    }
-  }, [isWaiting])
+  const isSlow = useSlowWait(graphs.isPending || isStarting || search.isPending)
 
   return (
     <div className="space-y-6">
@@ -110,11 +97,7 @@ export function SymptomsPage() {
         </p>
       </div>
 
-      {isSlow && (
-        <Notice tone="info" title="เซิร์ฟเวอร์กำลังเริ่มทำงาน">
-          ถ้าไม่มีคนใช้มาสักพัก เซิร์ฟเวอร์ต้องตื่นก่อน อาจใช้เวลาสักครู่
-        </Notice>
-      )}
+      {isSlow && <SlowServerNotice />}
 
       {/* ค้นหา: ไม่ขึ้นกับการโหลดรายการอาการ จึงแสดงตั้งแต่แรก */}
       <SymptomSearchForm

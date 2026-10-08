@@ -27,7 +27,7 @@ export const EMBEDDING_DTYPE = 'q8';
  * นับจากไฟล์นี้ขึ้นไป 2 ระดับคือ backend/ ทั้งตอนรันจาก src/ (เทส)
  * และจาก dist/ (เซิร์ฟเวอร์จริง)
  */
-const MODEL_CACHE_DIR =path.resolve(__dirname, '../../model-slim');
+const MODEL_CACHE_DIR = path.resolve(__dirname, '../../model-slim');
 
 /** ฟังก์ชันสกัดเวกเตอร์ของ transformers.js (เฉพาะส่วนที่เราใช้) */
 type FeatureExtractor = (
@@ -42,10 +42,6 @@ export class EmbeddingService {
 
   /** true = พบไฟล์โมเดลในเครื่องก่อนโหลด (ไม่ได้พึ่งการดาวน์โหลด) */
   modelFilesFoundLocally = false;
-
-  get isLoaded(): boolean {
-    return this.extractor !== null;
-  }
 
   /**
    * โหลดโมเดลเข้าหน่วยความจำ เรียกครั้งเดียวตอนเปิดเซิร์ฟเวอร์

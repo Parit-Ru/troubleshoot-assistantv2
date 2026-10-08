@@ -25,6 +25,7 @@ import {
 
 import type {
   ManualFile,
+  RenderedNode,
   SessionState,
   TroubleshootingGraph,
 } from '../../../backend/src/traversal-engine/types'
@@ -157,6 +158,30 @@ function toApiError(error: unknown): ApiError {
   return new ApiError(500, 'UNKNOWN_ERROR', error instanceof Error ? error.message : 'ไม่ทราบสาเหตุ')
 }
 
+/**
+ * ประกอบ response ของ endpoint ที่ตอบเป็น session (เหมือน toResponse ใน traversal.service.ts)
+ *
+ * confidence เป็น null เสมอ: ตัวจำลองไม่มีระบบค้นหา จึงไม่มีการจับคู่ให้วัด
+ * (เซิร์ฟเวอร์จริงคำนวณเองเมื่อได้รับ query)
+ * outcome ใส่เฉพาะตอนที่ผู้เรียกรู้ค่า (getSession, submitOutcome) ที่เหลือเป็น null
+ */
+function toResponse(
+  session: SessionState,
+  node: RenderedNode,
+  graph: TroubleshootingGraph,
+  outcome: string | null = null,
+): SessionResponse {
+  return {
+    sessionId: session.sessionId,
+    graphId: session.graphId,
+    status: session.status,
+    node,
+    equipment: equipmentFor(graph),
+    confidence: null,
+    outcome,
+  }
+}
+
 function requireGraph(graphId: string): TroubleshootingGraph {
   const graph = graphs.get(graphId)
   if (!graph) {
@@ -217,17 +242,8 @@ export async function startSession(graphId: string): Promise<SessionResponse> {
     const { session, node } = engineStartSession(graph)
     sessions.set(session.sessionId, session)
 
-    return {
-      sessionId: session.sessionId,
-      graphId,
-      status: session.status,
-      node,
-      equipment: equipmentFor(graph),
-      // ตัวจำลองไม่มีระบบค้นหา จึงไม่มีการจับคู่ให้วัดเสมอ (เซิร์ฟเวอร์จริงคำนวณเองเมื่อได้รับ query)
-      confidence: null,
-      // session ที่เพิ่งเริ่มยังไม่จบ จึงยังไม่มีผลลัพธ์
-      outcome: null,
-    }
+    // session ที่เพิ่งเริ่มยังไม่จบ จึงยังไม่มีผลลัพธ์
+    return toResponse(session, node, graph)
   } catch (error) {
     throw toApiError(error)
   }
@@ -240,17 +256,13 @@ export async function getSession(sessionId: string): Promise<SessionResponse> {
   const graph = requireGraph(session.graphId)
 
   try {
-    return {
-      sessionId,
-      graphId: session.graphId,
-      status: session.status,
-      node: getCurrentNode(session, graph),
-      equipment: equipmentFor(graph),
-      // ตัวจำลองไม่มีระบบค้นหา จึงไม่มีการจับคู่ให้วัดเสมอ (เซิร์ฟเวอร์จริงคำนวณเองเมื่อได้รับ query)
-      confidence: null,
-      // กด F5 แล้วยังเห็นข้อความที่บันทึกไว้ (ไม่มีรายการ = null)
-      outcome: outcomes.get(sessionId) ?? null,
-    }
+    // กด F5 แล้วยังเห็นข้อความที่บันทึกไว้ (ไม่มีรายการ = null)
+    return toResponse(
+      session,
+      getCurrentNode(session, graph),
+      graph,
+      outcomes.get(sessionId) ?? null,
+    )
   } catch (error) {
     throw toApiError(error)
   }
@@ -272,17 +284,8 @@ export async function submitAction(
     const result = engineSubmitAction(session, graph, action)
     sessions.set(sessionId, result.session)
 
-    return {
-      sessionId,
-      graphId: session.graphId,
-      status: result.session.status,
-      node: result.node,
-      equipment: equipmentFor(graph),
-      // ตัวจำลองไม่มีระบบค้นหา จึงไม่มีการจับคู่ให้วัดเสมอ (เซิร์ฟเวอร์จริงคำนวณเองเมื่อได้รับ query)
-      confidence: null,
-      // session ที่เพิ่งเดินมาถึงตอนจบยังไม่มีผลลัพธ์ (ที่จบแล้วส่ง action ไม่ได้ ถูกปฏิเสธข้างบน)
-      outcome: null,
-    }
+    // session ที่เพิ่งเดินมาถึงตอนจบยังไม่มีผลลัพธ์ (ที่จบแล้วส่ง action ไม่ได้ ถูกปฏิเสธข้างบน)
+    return toResponse(result.session, result.node, graph)
   } catch (error) {
     throw toApiError(error)
   }
@@ -325,16 +328,7 @@ export async function submitOutcome(sessionId: string, text: string): Promise<Se
   outcomes.set(sessionId, saved)
 
   try {
-    return {
-      sessionId,
-      graphId: session.graphId,
-      status: session.status,
-      node: getCurrentNode(session, graph),
-      equipment: equipmentFor(graph),
-      // ตัวจำลองไม่มีระบบค้นหา จึงไม่มีการจับคู่ให้วัดเสมอ (เซิร์ฟเวอร์จริงคำนวณเองเมื่อได้รับ query)
-      confidence: null,
-      outcome: saved,
-    }
+    return toResponse(session, getCurrentNode(session, graph), graph, saved)
   } catch (error) {
     throw toApiError(error)
   }

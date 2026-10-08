@@ -7,8 +7,8 @@ Validates graph files against:
 3. v2-specific rules (input nodes, config provenance, variant coverage, template vars)
 
 Usage:
-    python validate_graph_v2.py <graph_file.json>
-    python validate_graph_v2.py --all <graphs_directory>
+    python validate_graph.py --all
+    python validate_graph.py data/manuals/<manual_name>.json
 """
 
 import json
@@ -203,47 +203,6 @@ def validate_business_rules(graph: dict) -> list[str]:
     return errors + warnings
 
 
-def validate_file(path: str, schema: dict | None) -> bool:
-    print(f"\n{'='*66}")
-    print(f"Validating: {Path(path).name}")
-    print(f"{'='*66}")
-
-    try:
-        graph = json.loads(Path(path).read_text(encoding="utf-8"))
-    except json.JSONDecodeError as e:
-        print(f"  FAIL: Invalid JSON — {e}")
-        return False
-
-    issues = []
-    if schema:
-        issues += validate_json_schema(graph, schema)
-    issues += validate_business_rules(graph)
-
-    schema_err = [i for i in issues if i.startswith("[SCHEMA]")]
-    biz_err = [i for i in issues if i.startswith("[BIZ]")]
-    warns = [i for i in issues if i.startswith("[WARN]")]
-
-    for i in schema_err + biz_err:
-        print(f"  ERROR {i}")
-    for i in warns:
-        print(f"  {i}")
-
-    if not (schema_err or biz_err):
-        nodes = graph.get("nodes", [])
-        types = {}
-        for n in nodes:
-            types[n.get("type", "?")] = types.get(n.get("type", "?"), 0) + 1
-        print(f"  PASS — {len(nodes)} nodes ({', '.join(f'{v} {k}' for k, v in sorted(types.items()))})")
-        if graph.get("config"):
-            print(f"  Config: {', '.join(graph['config'].keys())}")
-        if warns:
-            print(f"  ({len(warns)} warnings above)")
-        return True
-
-    print(f"\n  FAIL — {len(schema_err)} schema, {len(biz_err)} business, {len(warns)} warnings")
-    return False
-
-
 def validate_manual(path: str, schema: dict | None) -> dict[str, bool]:
     """
     ตรวจไฟล์คู่มือหนึ่งเล่ม โดยแตก graph แต่ละอันออกมาตรวจทีละอัน
@@ -302,7 +261,7 @@ def main():
     schema_path = script_dir.parent / "data" / "schemas" / "troubleshooting-graph.v2.schema.json"
     schema = json.loads(schema_path.read_text(encoding="utf-8")) if schema_path.exists() else None
     if schema:
-        print(f"Schema v2 loaded")
+        print("Schema v2 loaded")
 
     if not sys.argv[1:]:
         print("Usage: python validate_graph.py --all")

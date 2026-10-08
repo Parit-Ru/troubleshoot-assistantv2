@@ -12,7 +12,7 @@ import type { IconName } from './Icon'
  * ด่านความปลอดภัย (ติ๊กแล้วกด) จะประกอบในหน้า SessionPage โดยวางช่องติ๊กไว้ใน children
  */
 
-type NoticeTone ='info' | 'danger'
+type NoticeTone = 'info' | 'danger'
 
 /**
  * ชื่อคลาสของแต่ละสี เขียนเต็มทุกคำด้วยเหตุผลเดียวกับ Button.tsx

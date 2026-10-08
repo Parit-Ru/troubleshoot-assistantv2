@@ -45,11 +45,7 @@ export function startSession(
 ): { session: SessionState; node: RenderedNode } {
   assertSupportedSchema(graph);
 
-  const index = buildNodeIndex(graph);
-  const entryNode = index.get(graph.entry_node);
-  if (!entryNode) {
-    throw new NodeNotFoundError(graph.entry_node, graph.graph_id);
-  }
+  const entryNode = findNode(graph, graph.entry_node);
 
   const session: SessionState = {
     // ใช้ globalThis.crypto แทน node:crypto — เป็นมาตรฐานเว็บที่ Node 20+ มีให้เหมือนกัน
@@ -69,11 +65,7 @@ export function startSession(
 export function getCurrentNode(session: SessionState, graph: TroubleshootingGraph): RenderedNode {
   assertSupportedSchema(graph);
 
-  const index = buildNodeIndex(graph);
-  const node = index.get(session.currentNodeId);
-  if (!node) {
-    throw new NodeNotFoundError(session.currentNodeId, graph.graph_id);
-  }
+  const node = findNode(graph, session.currentNodeId);
 
   return renderNode(node, graph, session.variables);
 }
@@ -90,20 +82,13 @@ export function submitAction(
     throw new SessionAlreadyCompletedError(session.sessionId);
   }
 
-  const index = buildNodeIndex(graph);
-  const currentNode = index.get(session.currentNodeId);
-  if (!currentNode) {
-    throw new NodeNotFoundError(session.currentNodeId, graph.graph_id);
-  }
+  const currentNode = findNode(graph, session.currentNodeId);
 
   // ด่านที่สอง: หา node ถัดไป — ตรงนี้เป็นจุดเดียวที่เช็ค action ตรงกับชนิดโหนดไหม
   // และเป็นจุดที่บังคับ safety gate ด้วย
   const { nextNodeId, updatedVariables } = resolveNextNode(currentNode, action, session.variables);
 
-  const nextNode = index.get(nextNodeId);
-  if (!nextNode) {
-    throw new NodeNotFoundError(nextNodeId, graph.graph_id);
-  }
+  const nextNode = findNode(graph, nextNodeId);
 
   const nextStatus: SessionStatus = isTerminalNode(nextNode) ? 'completed' : 'in_progress';
 
@@ -116,6 +101,15 @@ export function submitAction(
   };
 
   return { session: nextSession, node: renderNode(nextNode, graph, updatedVariables) };
+}
+
+/** หาโหนดตาม id ในกราฟ ไม่พบให้โยน NodeNotFoundError */
+function findNode(graph: TroubleshootingGraph, nodeId: string): TroubleshootingNode {
+  const node = graph.nodes.find((n) => n.node_id === nodeId);
+  if (!node) {
+    throw new NodeNotFoundError(nodeId, graph.graph_id);
+  }
+  return node;
 }
 
 // ============================================================
@@ -239,14 +233,6 @@ function interpolate(text: string, variables: Record<string, string>): string {
   return text.replace(/\{\{(\w+)\}\}/g, (match, key: string) => {
     return Object.prototype.hasOwnProperty.call(variables, key) ? variables[key] : match;
   });
-}
-
-function buildNodeIndex(graph: TroubleshootingGraph): Map<string, TroubleshootingNode> {
-  const index = new Map<string, TroubleshootingNode>();
-  for (const node of graph.nodes) {
-    index.set(node.node_id, node);
-  }
-  return index;
 }
 
 /**

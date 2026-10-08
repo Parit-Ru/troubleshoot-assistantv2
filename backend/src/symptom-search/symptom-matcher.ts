@@ -121,7 +121,9 @@ export function rankGraphs(
 
   return [...best.values()].sort((x, y) => {
     if (y.score !== x.score) return y.score - x.score;
-    return x.graphId < y.graphId ? -1 : x.graphId > y.graphId ? 1 : 0;
+    if (x.graphId < y.graphId) return -1;
+    if (x.graphId > y.graphId) return 1;
+    return 0;
   });
 }
 

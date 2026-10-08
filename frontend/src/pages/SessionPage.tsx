@@ -13,13 +13,14 @@ import { EquipmentPanel } from '../components/EquipmentPanel'
 import { OutcomeForm } from '../components/OutcomeForm'
 import { SessionErrorNotice } from '../components/SessionErrorNotice'
 import { SessionHeader } from '../components/SessionHeader'
+import { SlowServerNotice } from '../components/SlowServerNotice'
 import { PathRail } from '../components/step/PathRail'
 import { StepView } from '../components/step/StepView'
 import { TerminalActions } from '../components/TerminalActions'
 import { Icon } from '../components/ui/Icon'
-import { Notice } from '../components/ui/Notice'
 import { toTrailEntry } from '../lib/trail'
 import type { TrailEntry } from '../lib/trail'
+import { useSlowWait } from '../lib/useSlowWait'
 
 /**
  * หน้าตรวจอาการ — route "/session/:sessionId"
@@ -37,9 +38,6 @@ import type { TrailEntry } from '../lib/trail'
  *   - ใส่ nodeId ลงใน URL (ปุ่ม back ของเบราว์เซอร์จะพาไปขั้นที่เซิร์ฟเวอร์ผ่านไปแล้ว)
  *   - ตรวจรูปแบบรหัสที่ผู้ใช้กรอก
  */
-
-/** รอนานเกินเท่านี้ (มิลลิวินาที) จึงบอกว่าเซิร์ฟเวอร์อาจกำลังตื่น — ค่าเดียวกับ SymptomsPage */
-const SLOW_WAIT_MS = 4000
 
 /**
  * ชั้นนอก: อ่าน sessionId จาก URL แล้วส่งต่อ พร้อม key={sessionId}
@@ -139,22 +137,7 @@ function SessionView({ sessionId }: { sessionId: string }) {
 
   // ---------- รอนาน: แบบเดียวกับ SymptomsPage ----------
   const isWaiting = session.isPending || submit.isPending || restart.isPending || saveOutcome.isPending
-  const [isSlow, setIsSlow] = useState(false)
-
-  useEffect(() => {
-    if (!isWaiting) return
-    const timer = setTimeout(() => setIsSlow(true), SLOW_WAIT_MS)
-    return () => {
-      clearTimeout(timer)
-      setIsSlow(false)
-    }
-  }, [isWaiting])
-
-  const slowNotice = isSlow && (
-    <Notice tone="info" title="เซิร์ฟเวอร์กำลังเริ่มทำงาน">
-      ถ้าไม่มีคนใช้มาสักพัก เซิร์ฟเวอร์ต้องตื่นก่อน อาจใช้เวลาสักครู่
-    </Notice>
-  )
+  const slowNotice = useSlowWait(isWaiting) && <SlowServerNotice />
 
   // ---------- ยังไม่มีข้อมูล session ----------
   if (session.isPending) {

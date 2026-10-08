@@ -12,12 +12,16 @@ function normalizePem(value: string): string {
 
 function buildPoolOptions(): mysql.PoolOptions {
   const required = ['DB_HOST', 'DB_PORT', 'DB_USER', 'DB_NAME'];
-  const missing = required.filter((key) => !process.env[key]);
+  const missing: string[] = [];
+  for (const key of required) {
+    if (!process.env[key]) {
+      missing.push(key);
+    }
+  }
 
   if (missing.length > 0) {
-    throw new Error(
-      `ไม่พบค่าใน .env: ${missing.join(', ')} — คัดลอก backend/.env.example เป็น backend/.env ก่อน`,
-    );
+    const message = `ไม่พบค่าใน .env: ${missing.join(', ')} — คัดลอก backend/.env.example เป็น backend/.env ก่อน`;
+    throw new Error(message);
   }
 
   return {
@@ -38,6 +42,7 @@ function buildPoolOptions(): mysql.PoolOptions {
       : undefined,
   };
 }
+
 @Global()
 @Module({
   providers: [
@@ -46,7 +51,7 @@ function buildPoolOptions(): mysql.PoolOptions {
       provide: MYSQL_POOL,
 
       // ฟังก์ชันที่ NestJS เรียกครั้งเดียวตอนเปิดเซิร์ฟเวอร์
-      // ค่าที่คืนออกมาถูกเก็บไว้แจกทุกคน 
+      // ค่าที่คืนออกมาถูกเก็บไว้แจกทุกคน
       useFactory: async (): Promise<mysql.Pool> => {
         const logger = new Logger('DatabaseModule');
         const options = buildPoolOptions();
